@@ -9,13 +9,36 @@
   <p>Silakan gunakan QR Code atau metode pembayaran GoPay di bawah ini untuk melakukan donasi:</p>
   
   <h2>QR Code</h2>
-  <img src="link_qr_code.png" alt="QR Code">
+  <img id="qrCode" src="link_qr_code.png" alt="QR Code">
+  <button onclick="downloadQRCode()">Download QR Code</button>
   
   <h2>GoPay</h2>
   <p>Scan QR Code GoPay di bawah ini atau gunakan nomor telepon GoPay untuk donasi:</p>
   <img src="link_qr_code_gopay.png" alt="QR Code GoPay">
-  <p>Nomor GoPay: 08XXXXXXXXXX</p>
+  <input type="text" id="gopayNumber" value="08XXXXXXXXXX">
+  <button onclick="copyGoPayNumber()">Copy GoPay Number</button>
   
   <p>Terima kasih atas dukungan dan donasi Anda!</p>
+  
+  <script>
+    function copyGoPayNumber() {
+      const gopayNumber = document.getElementById('gopayNumber');
+      gopayNumber.select();
+      document.execCommand('copy');
+      alert('Nomor GoPay berhasil disalin!');
+    }
+
+    function downloadQRCode() {
+      const qrCode = document.getElementById('qrCode');
+      const url = qrCode.src;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'QR_Code.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      alert('QR Code berhasil diunduh');
+    }
+  </script>
 </body>
 </html>
