@@ -1,211 +1,86 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>minji assistan't</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Portofolio Veey</title>
+    <link rel="stylesheet" href="style.css">
+    <!----Font awesome cdn  font icon css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <style>
+        /* Mencegah scroll horizontal */
         body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: 'Arial', sans-serif;
             overflow-x: hidden;
         }
-
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            animation: fadeIn 2s;
-            background: linear-gradient(
-                104.04deg,
-                #1472ff -4%,
-                #47a9ff 23%,
-                #adc3ff 50%,
-                #ffadc9 77%,
-                #ff476b 104%
-            );
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            max-width: fit-content;
-            transition: transform 0.3s;
-        }
-
-        .hero h1:hover {
-            transform: scale(1.05); /* Efek zoom saat hover */
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            animation: fadeIn 2s 0.5s forwards;
-        }
-
-        .btn-custom {
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-            color: #ffffff;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 30px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            border: none;
-        }
-
-        .btn-custom:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 198, 255, 0.5);
-        }
-
-            .btn-join-group {
-    color: #ffffff; /* Teks berwarna putih */
-    font-size: 0.9rem; /* Ukuran font kecil */
-    text-decoration: none; /* Hilangkan garis bawah */
-    margin-top: 10px; /* Jarak dari tombol sebelumnya */
-    padding: 5px 10px;
-    display: inline-block;
-}
-
-.btn-join-group:hover {
-    color: #cccccc; /* Warna teks saat hover */
-}
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Loading style */
-.loading {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(18, 18, 18, 0.9);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-}
-
-.loader {
-    width: 120px;
-    height: 22px;
-    border-radius: 40px;
-    color: #0072ff; /* Warna diganti sesuai preferensi */
-    border: 2px solid;
-    position: relative;
-    overflow: hidden;
-}
-
-.loader::before {
-    content: "";
-    position: absolute;
-    margin: 2px;
-    width: 14px;
-    top: 0;
-    bottom: 0;
-    left: -20px;
-    border-radius: inherit;
-    background: currentColor;
-    box-shadow: -10px 0 12px 3px currentColor;
-    clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 95%, -30px 50%);
-    animation: l14 1s infinite linear;
-}
-
-@keyframes l14 {
-    100% {
-        left: calc(100% + 20px);
-    }
-}
-
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem; /* Ukuran font lebih kecil di perangkat kecil */
-            }
-
-            .hero p {
-                font-size: 1rem; /* Ukuran font lebih kecil di perangkat kecil */
-            }
-
-            .btn-custom {
-                padding: 10px 20px; /* Padding lebih kecil di perangkat kecil */
-                font-size: 1rem; /* Ukuran font lebih kecil di perangkat kecil */
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero h1 {
-                font-size: 2rem; /* Ukuran font lebih kecil di perangkat sangat kecil */
-            }
-
-            .hero p {
-                font-size: 0.9rem; /* Ukuran font lebih kecil di perangkat sangat kecil */
-            }
-        }
-      
-
-
     </style>
 </head>
-
 <body>
-    <div class="hero">
-        <h1>Welcome to Minji Assistan't</h1>
-        <p>MINJI adalah asisten kecerdasan buatan yang dirancang untuk memberikan solusi cerdas dan inovatif dalam memberikan jawaban yang tepat dan informasi terkini secara real-time.</p>
-        <a href="#" id="join-button" class="btn btn-custom">
-            Get Started <i class="fas fa-arrow-right"></i>
-        </a>
-      <a href="https://chat.whatsapp.com/IqHpZUH8ogP47T7gFkGULt" class="btn-join-group">
-    Join Group
-</a>
+     <div class="hero-header">
+        <div class="wrapper">
+            <header>
+                <div class="logo">
+                    <i class="fa-solid fa-s"></i>
+                    <div class="logo-text">Veey</div>
+                </div>
+                <nav>
+                    <div class="togglebtn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <ul class="navlinks">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="https://wa.me/6285692242286">Chat AI</a></li>
+                        <li><a href="https://wa.me/6281931940265">Contact</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="container">
+                 <div class="hero-pic">
+                    <img src="images/main_photo.jpg" alt="profile pic">
+                 </div>
+                 <div class="hero-text">
+                    <h5>Hi I'm <span class="input">Frontend Developer</span></h5>
+                    <h1>Veey</h1>
+                    <p> Saya hanya seorang pria berumur 22 tahun yang cuman hobby coding aja disaat ada waktu senjang. Saya baru mempelajari Html, Css, Dan JavaScrip. Saya masih sangat awam di dunia progamer dan masih banyak lagi yang harus saya pelajari jadi mohon saran dan bantuannya kepada para senior.
+                    </p>
+                    
+                    <div class="btn-group">
+                       <a href="https://wa.me/6285692242286" class="btn active">Chat AI</a>
+                       <a href="https://wa.me/6281931940265" class="btn active">Contact</a>
+                    </div>
 
-    </div>
+                    <div class="social">
+                        <a href="https://www.facebook.com"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://youtube.com/"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://instagram.com/"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://tiktok.com/"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#"><i class="fa-brands fa-pintrest"></i></a>
+                    </div>
+                 </div>
+            </div>
+        </div>
+     </div>
+     <!---typed js for typing text effect-->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.10/typed.min.js"></script>
+     <script>
+        /** creating button click show hide navbar **/
+        var togglebtn=document.querySelector(".togglebtn");
+        var nav=document.querySelector(".navlinks");
+        var links=document.querySelector(".navlinks li");
 
-    <div class="loading" id="loading">
-        <div class="loader"></div>
-    </div>
+        togglebtn.addEventListener("click", function(){
+            this.classList.toggle("click");
+            nav.classList.toggle("open");
+        })
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script>
-        document.getElementById('join-button').addEventListener('click', function (event) {
-            event.preventDefault(); // Mencegah default link
-            document.getElementById('loading').style.display = 'flex'; // Tampilkan efek loading
-            setTimeout(function () {
-                window.location.href = 'https://wa.me/6285692242286?text=Hai'; // Redirect setelah 3 detik
-              document.getElementById('loading').style.display = 'none';
-            }, 3000);
-        });
-    </script>
+        var typed=new Typed(".input",{
+            strings:["Frontend Developer","Like Yoo-Jung","Web Developer"],
+            typedSpeed:70,
+            backSpeed:55,
+            loop:true
+        })
+     </script>
 </body>
-
 </html>
