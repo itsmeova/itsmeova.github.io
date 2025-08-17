@@ -1,126 +1,143 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minji Bot - Pricing</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEFU – API · Pricing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #a78bfa;
-      --bg: #f9fafb;
-      --text: #111827;
-      --border: #e5e7eb;
+      --bg:#0b0b11;
+      --panel:#0f0f17;
+      --muted:#a0a0b8;
+      --text:#e7e7f3;
+      --primary:#a78bfa;
+      --success:#22c55e;
+      --border:#241f39;
     }
-
-    * { margin:0; padding:0; box-sizing:border-box; font-family:sans-serif; }
-
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
       background: var(--bg);
+      font-family: Inter, sans-serif;
       color: var(--text);
-      line-height: 1.6;
+      padding-bottom: 60px; /* supaya konten tidak ketutup bottom nav */
     }
-
-    /* Navbar */
-    nav {
-      background:white;
-      border-bottom:1px solid var(--border);
-      padding:15px 20px;
+    .topbar {
       display:flex;
       justify-content:space-between;
       align-items:center;
+      padding:14px 18px;
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;background:var(--panel);
     }
-    nav .logo { font-size:1.2rem; font-weight:bold; color:var(--primary); }
-
-    /* Main Content */
-    main {
-      padding:20px;
-      text-align:center;
+    .brand {
+      font-weight:800;font-size:20px;
     }
-    main h2 { margin-bottom:20px; font-size:1.5rem; }
-
-    /* Cards */
-    .cards {
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
-      gap:20px;
+    .brand .nefu { color:#22e58b; }
+    .brand .api {
+      background:linear-gradient(90deg, #ff2bd1, #8b5cf6);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+    .hero { text-align:center; padding:20px; }
+    .hero h1 { font-size:28px; margin-bottom:6px; }
+    .hero p { color:var(--muted); }
+    .grid {
+      display:grid; gap:18px; max-width:800px; margin:0 auto; padding:0 18px;
     }
     .card {
-      background:white;
+      background:var(--panel);
       border:1px solid var(--border);
-      border-radius:15px;
-      padding:20px;
-      text-align:center;
+      border-radius:16px;
+      padding:18px;
     }
-    .card h3 { margin-bottom:10px; }
-    .price { font-size:1.5rem; font-weight:bold; margin-bottom:5px; }
-    .meta { font-size:.9rem; color:gray; margin-bottom:10px; }
-    .feature { margin-bottom:15px; }
-
-    /* Buttons */
+    .card h3 { color:#9aa0ff; font-size:14px; margin-bottom:6px; }
+    .price { font-size:32px; font-weight:700; }
+    .meta { font-size:14px; color:var(--muted); margin-bottom:10px; }
+    .feature { font-size:14px; margin:8px 0 14px; }
+    .feature span { color:#cfd0ff; }
     .btn {
       display:block;
       width:100%;
       text-align:center;
-      padding:12px;
+      padding:10px;
       border-radius:12px;
       font-weight:700;
       cursor:pointer;
-      text-decoration:none;
-      transition: all 0.2s ease;
     }
-
-    .btn-primary {
-      background: var(--primary);
-      color:#000;
-      border:none;
+    .btn-primary { background:var(--primary); color:#000; border:none; }
+    .btn-outline { border:1px solid var(--border); background:transparent; color:var(--text); }
+    /* bottom nav */
+    .bottom-nav {
+      position:fixed;
+      bottom:0;left:0;right:0;
+      background:var(--panel);
+      border-top:1px solid var(--border);
+      display:flex; justify-content:space-around;
+      padding:8px 0;
     }
-    .btn-primary:hover {
-      background: #c4b5fd;
+    .bottom-nav button {
+      background:none;border:none;color:var(--muted);
+      font-size:12px;display:flex;flex-direction:column;align-items:center;cursor:pointer;
     }
-    .btn-primary:active {
-      background: #8b5cf6;
-      transform: scale(0.98);
-    }
+    .bottom-nav button.active { color:var(--primary); }
+    .bottom-nav svg { width:20px;height:20px;margin-bottom:4px; }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">Minji Bot</div>
-  </nav>
+  <!-- topbar -->
+  <div class="topbar">
+    <div class="brand"><span class="nefu">NEFU</span> – <span class="api">API</span></div>
+    <div>☾</div>
+  </div>
 
-  <main>
-    <h2>Paket Harga</h2>
-    <div class="cards">
-      <!-- Paket SYUPER SSS -->
-      <div class="card">
-        <h3>SYUPER SSS</h3>
-        <div class="price">Rp 50.000</div>
-        <div class="meta">Permanen</div>
-        <div class="feature">✓ <span>Unlimited Limit Request</span></div>
-        <a href="https://wa.me/6281234567890?text=Halo,%20saya%20mau%20pesan%20paket%20SYUPER%20SSS" 
-           class="btn btn-primary" target="_blank">Pesan Sekarang</a>
-      </div>
+  <!-- hero -->
+  <div class="hero">
+    <h1>Pricing Plans</h1>
+    <p>Pilih paket yang sesuai dengan kebutuhan Anda.</p>
+  </div>
 
-      <!-- Paket SSS -->
-      <div class="card">
-        <h3>SSS</h3>
-        <div class="price">Rp 30.000</div>
-        <div class="meta">Per Bulan</div>
-        <div class="feature">✓ <span>Unlimited Limit Request</span></div>
-        <a href="https://wa.me/6281234567890?text=Halo,%20saya%20mau%20pesan%20paket%20SSS" 
-           class="btn btn-primary" target="_blank">Pesan Sekarang</a>
-      </div>
-
-      <!-- Paket SS -->
-      <div class="card">
-        <h3>SS</h3>
-        <div class="price">Rp 25.000</div>
-        <div class="meta">Per Bulan</div>
-        <div class="feature">✓ <span>5000 / hari Limit Request</span></div>
-        <a href="https://wa.me/6281234567890?text=Halo,%20saya%20mau%20pesan%20paket%20SS" 
-           class="btn btn-primary" target="_blank">Pesan Sekarang</a>
-      </div>
+  <!-- pricing cards -->
+  <div class="grid">
+    <div class="card">
+      <h3>SYUPER SSS</h3>
+      <div class="price">Rp 50.000</div>
+      <div class="meta">Permanen</div>
+      <div class="feature">✓ <span>Unlimited Limit Request</span></div>
+      <button class="btn btn-primary">Pesan Sekarang</button>
     </div>
-  </main>
+
+    <div class="card">
+      <h3>SSS</h3>
+      <div class="price">Rp 30.000</div>
+      <div class="meta">Per Bulan</div>
+      <div class="feature">✓ <span>Unlimited Limit Request</span></div>
+      <button class="btn btn-outline">Pesan Sekarang</button>
+    </div>
+
+    <div class="card">
+      <h3>SS</h3>
+      <div class="price">Rp 25.000</div>
+      <div class="meta">Per Bulan</div>
+      <div class="feature">✓ <span>5000 / hari Limit Request</span></div>
+      <button class="btn btn-outline">Pesan Sekarang</button>
+    </div>
+  </div>
+
+  <!-- bottom nav -->
+  <div class="bottom-nav">
+    <button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V9.5z"/></svg>
+      Home
+    </button>
+    <button class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 21h16M4 10h16M4 6h16M4 14h16"/></svg>
+      Pricing
+    </button>
+    <button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a7.5 7.5 0 0 1 13 0"/></svg>
+      Profile
+    </button>
+  </div>
 </body>
 </html>
