@@ -12,7 +12,6 @@
       --muted:#a0a0b8;
       --text:#e7e7f3;
       --primary:#a78bfa;
-      --success:#22c55e;
       --border:#241f39;
     }
     * { box-sizing: border-box; margin:0; padding:0; }
@@ -30,9 +29,7 @@
       border-bottom:1px solid var(--border);
       position:sticky;top:0;background:var(--panel);
     }
-    .brand {
-      font-weight:800;font-size:20px;
-    }
+    .brand { font-weight:800;font-size:20px; }
     .brand .nefu { color:#22e58b; }
     .brand .api {
       background:linear-gradient(90deg, #ff2bd1, #8b5cf6);
@@ -56,6 +53,8 @@
     .meta { font-size:14px; color:var(--muted); margin-bottom:10px; }
     .feature { font-size:14px; margin:8px 0 14px; }
     .feature span { color:#cfd0ff; }
+
+    /* tombol */
     .btn {
       display:block;
       width:100%;
@@ -64,9 +63,17 @@
       border-radius:12px;
       font-weight:700;
       cursor:pointer;
+      text-decoration:none;
+      transition: all 0.2s;
     }
     .btn-primary { background:var(--primary); color:#000; border:none; }
     .btn-outline { border:1px solid var(--border); background:transparent; color:var(--text); }
+    .btn.active {
+      background:var(--primary);
+      color:#000;
+      border:none;
+    }
+
     /* bottom nav */
     .bottom-nav {
       position:fixed;
@@ -98,31 +105,32 @@
   </div>
 
   <!-- pricing cards -->
-<div class="grid">
-  <div class="card">
-    <h3>SYUPER SSS</h3>
-    <div class="price">Rp 50.000</div>
-    <div class="meta">Permanen</div>
-    <div class="feature">✓ <span>Unlimited Limit Request</span></div>
-    <a href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20pesan%20paket%20Rp50K" target="_blank" class="btn btn-primary">Pesan Sekarang</a>
+  <div class="grid">
+    <div class="card">
+      <h3>SYUPER SSS</h3>
+      <div class="price">Rp 50.000</div>
+      <div class="meta">Permanen</div>
+      <div class="feature">✓ <span>Unlimited Limit Request</span></div>
+      <a href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20pesan%20paket%20Rp50K" class="btn btn-primary">Pesan Sekarang</a>
+    </div>
+
+    <div class="card">
+      <h3>SSS</h3>
+      <div class="price">Rp 30.000</div>
+      <div class="meta">Per Bulan</div>
+      <div class="feature">✓ <span>Unlimited Limit Request</span></div>
+      <a href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20pesan%20paket%20Rp30K" class="btn btn-outline">Pesan Sekarang</a>
+    </div>
+
+    <div class="card">
+      <h3>SS</h3>
+      <div class="price">Rp 25.000</div>
+      <div class="meta">Per Bulan</div>
+      <div class="feature">✓ <span>5000 / hari Limit Request</span></div>
+      <a href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20pesan%20paket%20Rp25K" class="btn btn-outline">Pesan Sekarang</a>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>SSS</h3>
-    <div class="price">Rp 30.000</div>
-    <div class="meta">Per Bulan</div>
-    <div class="feature">✓ <span>Unlimited Limit Request</span></div>
-    <a href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20pesan%20paket%20Rp30K" target="_blank" class="btn btn-outline">Pesan Sekarang</a>
-  </div>
-
-  <div class="card">
-    <h3>SS</h3>
-    <div class="price">Rp 25.000</div>
-    <div class="meta">Per Bulan</div>
-    <div class="feature">✓ <span>5000 / hari Limit Request</span></div>
-    <a href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20pesan%20paket%20Rp25K" target="_blank" class="btn btn-outline">Pesan Sekarang</a>
-  </div>
-</div>
   <!-- bottom nav -->
   <div class="bottom-nav">
     <button>
@@ -138,5 +146,16 @@
       Profile
     </button>
   </div>
+
+  <script>
+    // aktifkan efek tombol
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        buttons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
