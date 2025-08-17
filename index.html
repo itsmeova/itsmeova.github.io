@@ -1,41 +1,101 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About - Minji Bot</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minji Bot</title>
+    <link rel="icon" type="image/png" href="https://tmpfiles.org/dl/3093076/a5n8sndsih.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="logo">Veey</div>
-  </header>
-
-  <!-- About Section -->
-  <main class="main-content">
-    <section class="section active" id="about">
-      <div class="about-section">
-        <div class="about-text">
-          <h1>Minji Bot</h1>
-          <p>
-            WhatsApp Bot adalah program komputer yang dirancang untuk secara otomatis menjawab pertanyaan pelanggan, berbagi konten, dan mengirim pemberitahuan mengenai pesanan, pembayaran, serta pengiriman di WhatsApp.
-          </p>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">Veey</div>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
         </div>
-        <div class="about-image">
-          <img src="https://i.ibb.co.com/ym3mV0vW/IMG-20250812-WA0066.jpg" alt="WhatsApp Bot Image">
+    </header>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Side Menu -->
+    <nav class="side-menu" id="sideMenu">
+        <a href="index.html" class="menu-item">About Me</a>
+        <a href="harga.html" class="menu-item">Harga Bot</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- About Section -->
+        <section class="section active" id="about">
+            <div class="about-section">
+                <div class="about-text">
+                    <h1>Minji Bot</h1>
+                    <p>
+                        WhatsApp Bot adalah program komputer yang dirancang untuk secara otomatis menjawab pertanyaan pelanggan tentang produk dan layanan Anda, berbagi konten, dan mengirim pemberitahuan mengenai pesanan, pembayaran, pengiriman di WhatsApp.
+                    </p>
+                </div>
+                <div class="about-image">
+                    <img src="https://i.ibb.co.com/ym3mV0vW/IMG-20250812-WA0066.jpg" alt="WhatsApp Bot Image">
+                </div>
+            </div>
+
+            <div class="wa-button">
+                <a href="https://chat.whatsapp.com/FWW2bFYI8H4Kl5jzK3bNkr" target="_blank" class="order-btn">Bot WhatsApp</a>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-section">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                        <h3>Respon Otomatis 24/7</h3>
+                        <p>Bot siap menjawab pertanyaan pelanggan kapan pun secara otomatis.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-credit-card"></i></div>
+                        <h3>Terintegrasi Pembayaran</h3>
+                        <p>Bisa dikoneksikan dengan sistem pembayaran untuk konfirmasi otomatis.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-play-circle"></i></div>
+                        <h3>Kirim Gambar, Tombol, & Video</h3>
+                        <p>Mendukung pesan interaktif untuk promosi dan support.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <h3>Multi-Device Support</h3>
+                        <p>Bisa digunakan di beberapa perangkat tanpa logout.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-download"></i></div>
+                        <h3>Downloader Multimedia</h3>
+                        <p>Download konten dari YouTube, Instagram, dll.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                        <h3>Kecerdasan Buatan (AI)</h3>
+                        <p>Dilengkapi AI untuk menjawab pertanyaan kompleks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://github.com/" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://wa.me/6281931940265" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="footer-text"><p>© Veey 2025</p></div>
         </div>
-      </div>
-
-      <div class="wa-button">
-        <a href="harga.html" class="order-btn">Lihat Harga</a>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p>Minji</p>
-  </footer>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
