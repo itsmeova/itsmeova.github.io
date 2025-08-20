@@ -270,3 +270,34 @@ body {
   text-align:center;
   color:var(--muted);
 }
+
+/* Default = dark mode */
+body {
+  background: #121212;
+  color: #fff;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Light mode aktif */
+body.light-mode {
+  background: #f8f9fa;
+  color: #222;
+}
+
+/* Tombol theme */
+.theme-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+body.light-mode .theme-btn {
+  background: #ddd;
+  color: #222;
+}
