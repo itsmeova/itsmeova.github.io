@@ -28,11 +28,9 @@ const sections = document.querySelectorAll(".section");
 
 buttons.forEach(btn => {
   btn.addEventListener("click", () => {
-    // reset tombol
     buttons.forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    // tampilkan section sesuai target
     const target = btn.getAttribute("data-target");
     sections.forEach(sec => {
       sec.classList.toggle("active", sec.id === target);
@@ -44,42 +42,27 @@ buttons.forEach(btn => {
 
 // ✅ Theme toggle (dark / light mode)
 const themeBtn = document.getElementById("themeToggle");
-themeBtn.addEventListener("click", () => {
-  document.body.classList.toggle("light-mode");
-  themeBtn.textContent = document.body.classList.contains("light-mode") ? "☀️" : "☾";
-});
+if (themeBtn) {
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+    themeBtn.textContent = document.body.classList.contains("light-mode") ? "☀️" : "☾";
+  });
+}
 
-// ✅ Tabs untuk metode pembayaran (QRIS / Transfer)
+// ✅ Tabs untuk metode pembayaran (QRIS / E-Wallet)
 const tabButtons = document.querySelectorAll(".tab-btn");
 const tabContents = document.querySelectorAll(".tab-content");
 
 tabButtons.forEach(tab => {
   tab.addEventListener("click", () => {
+    // reset tombol
     tabButtons.forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
 
+    // tampilkan tab sesuai target
     const target = tab.getAttribute("data-target");
     tabContents.forEach(c => {
       c.style.display = (c.id === target) ? "block" : "none";
     });
   });
 });
-
-// ✅ Fungsi untuk switch tab E-Wallet / QRIS
-function showTab(tabId) {
-  // sembunyikan semua tab-content
-  document.querySelectorAll(".tab-content").forEach(el => {
-    el.style.display = "none";
-  });
-
-  // reset semua tombol tab
-  document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  // tampilkan tab yang dipilih
-  document.getElementById(tabId).style.display = "block";
-
-  // aktifkan tombol yang dipilih
-  document.querySelector(`.tab-btn[onclick="showTab('${tabId}')"]`).classList.add("active");
-}
