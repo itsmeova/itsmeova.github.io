@@ -66,3 +66,7 @@ tabButtons.forEach(tab => {
     });
   });
 });
+
+document.getElementById("waBtn").href = 
+  "https://wa.me/6281931940265?text=" + 
+  encodeURIComponent("Halo admin, saya sudah transfer Rp10.000 via Dana. Mohon dicek 🙏");
