@@ -79,50 +79,59 @@
 
   <!-- Payment Section -->
   <div id="payment" class="section">
-    <div class="hero">
-      <h1 class="title">Payment EPIN HOST 🦅</h1>
-      <p class="desc">Gunakan metode pembayaran berikut untuk melanjutkan.</p>
+  <div class="pay-info">
+    <h2>Gunakan metode pembayaran berikut untuk melanjutkan.</h2>
+
+    <!-- Tabs -->
+    <div class="method-tabs">
+      <button class="tab-btn active" data-tab="dana">DANA</button>
+      <button class="tab-btn" data-tab="gopay">GoPay</button>
+      <button class="tab-btn" data-tab="pulsa">Pulsa</button>
+      <button class="tab-btn" data-tab="qris">QRIS</button>
     </div>
-    <div class="pay-info">
-      <!-- Tombol Metode -->
-      <div class="pay-method">
-        <button class="pay-btn" onclick="copyText('dana')">DANA</button>
-        <button class="pay-btn" onclick="copyText('gopay')">GoPay</button>
-        <button class="pay-btn" onclick="downloadQRIS()">QRIS</button>
+
+    <!-- DANA -->
+    <div class="pay-method tab-content active" id="dana">
+      <strong>DANA</strong>
+      <div class="pay-row">
+        <span id="danaNumber">081234567890</span>
+        <button class="copy-btn" onclick="copyText('danaNumber')">Copy</button>
       </div>
-
-      <!-- Nomor Dana, Gopay, Pulsa -->
-      <div style="margin: 15px 0;">
-        <p><strong>DANA:</strong> <span id="dana">081234567890</span> 
-          <button class="copy-btn" onclick="copyText('dana')">Copy</button>
-        </p>
-        <p><strong>GoPay:</strong> <span id="gopay">089876543210</span> 
-          <button class="copy-btn" onclick="copyText('gopay')">Copy</button>
-        </p>
-        <p><strong>Pulsa:</strong> <span id="pulsa">087712345678</span> 
-          <button class="copy-btn" onclick="copyText('pulsa')">Copy</button>
-        </p>
-      </div>
-
-      <!-- QRIS -->
-      <div class="qris-section">
-        <p><strong>QRIS:</strong></p>
-        <img src="https://cdn.wbk.digital/files/1754836884443.QRIS.png" alt="QRIS" width="220" style="border-radius:10px; margin:10px 0;">
-        <br>
-        <a href="https://cdn.wbk.digital/files/1754836884443.QRIS.png" download class="qris-btn">Unduh QRIS</a>
-      </div>
-
-      <!-- Info -->
-      <p class="desc">
-        Setelah transfer, mohon kirimkan bukti pembayaran ke 
-        <strong>EPIN HOST 🦅</strong> melalui WhatsApp.
-      </p>
-
-      <!-- WhatsApp -->
-      <a href="https://wa.me/62XXXXXXXXXXX" class="wa-btn">Hubungi WhatsApp</a>
     </div>
+
+    <!-- GoPay -->
+    <div class="pay-method tab-content" id="gopay">
+      <strong>GoPay</strong>
+      <div class="pay-row">
+        <span id="gopayNumber">089876543210</span>
+        <button class="copy-btn" onclick="copyText('gopayNumber')">Copy</button>
+      </div>
+    </div>
+
+    <!-- Pulsa -->
+    <div class="pay-method tab-content" id="pulsa">
+      <strong>Pulsa</strong>
+      <div class="pay-row">
+        <span id="pulsaNumber">087712345678</span>
+        <button class="copy-btn" onclick="copyText('pulsaNumber')">Copy</button>
+      </div>
+    </div>
+
+    <!-- QRIS -->
+    <div class="pay-method tab-content" id="qris">
+      <strong>QRIS</strong>
+      <div class="qris-box">
+        <img src="qris.png" alt="QRIS" class="qris-img">
+        <a href="qris.png" download class="btn btn-outline">Unduh QRIS</a>
+      </div>
+    </div>
+
+    <p class="note">
+      Setelah transfer, mohon kirimkan bukti pembayaran ke <b>EPIN HOST 🦅</b> melalui WhatsApp.
+    </p>
+    <a href="https://wa.me/6281234567890" class="wa-btn">Hubungi WhatsApp</a>
   </div>
-
+  </div>
   <!-- bottom nav -->
   <div class="bottom-nav">
     <button class="active" data-target="home" type="button">
