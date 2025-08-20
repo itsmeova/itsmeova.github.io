@@ -64,3 +64,19 @@ themeBtn.addEventListener("click", () => {
   document.body.classList.toggle("light-mode");
   themeBtn.textContent = document.body.classList.contains("light-mode") ? "☀️" : "☾";
 });
+
+// tab payment
+const tabBtns = document.querySelectorAll(".tab-btn");
+const tabContents = document.querySelectorAll(".tab-content");
+
+tabBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    // reset
+    tabBtns.forEach(b => b.classList.remove("active"));
+    tabContents.forEach(c => c.classList.remove("active"));
+
+    // aktifkan
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  });
+});
