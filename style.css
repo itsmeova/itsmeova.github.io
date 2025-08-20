@@ -217,3 +217,24 @@ body.light-mode .badge { background:#dc2626; }
   background: #16a34a;
   color: #fff;
 }
+
+/* Toast notif */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(40px);
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: 0.3s;
+  z-index: 999;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
