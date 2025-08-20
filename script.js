@@ -64,3 +64,22 @@ tabButtons.forEach(tab => {
     });
   });
 });
+
+// ✅ Fungsi untuk switch tab E-Wallet / QRIS
+function showTab(tabId) {
+  // sembunyikan semua tab-content
+  document.querySelectorAll(".tab-content").forEach(el => {
+    el.style.display = "none";
+  });
+
+  // reset semua tombol tab
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  // tampilkan tab yang dipilih
+  document.getElementById(tabId).style.display = "block";
+
+  // aktifkan tombol yang dipilih
+  document.querySelector(`.tab-btn[onclick="showTab('${tabId}')"]`).classList.add("active");
+}
