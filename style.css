@@ -176,3 +176,44 @@ body.light-mode {
 }
 body.light-mode .brand .nefu { color:#16a34a; }
 body.light-mode .badge { background:#dc2626; }
+
+/* Tombol Payment */
+.pay-btn, 
+.qris-btn, 
+.wa-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #22e58b, #00c896);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  margin: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.25s ease;
+  box-shadow: 0 0 10px rgba(34, 229, 139, 0.5), 0 0 20px rgba(0, 200, 150, 0.3);
+}
+.pay-btn:hover, 
+.qris-btn:hover, 
+.wa-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 14px rgba(34, 229, 139, 0.8), 0 0 28px rgba(0, 200, 150, 0.6);
+}
+
+/* Tombol Copy kecil */
+.copy-btn {
+  background: #22e58b;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+.copy-btn:hover {
+  background: #16a34a;
+  color: #fff;
+}
