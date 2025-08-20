@@ -80,30 +80,46 @@
   <!-- Payment Section -->
   <div id="payment" class="section">
     <div class="hero">
-      <h1 class="title">Info Pembayaran</h1>
+      <h1 class="title">Minji ^ Pay</h1>
       <p class="desc">Gunakan metode pembayaran berikut untuk melanjutkan.</p>
     </div>
     <div class="pay-info">
-      <h2>Metode Pembayaran</h2>
+      <!-- Tombol Metode -->
       <div class="pay-method">
-        <strong>QRIS</strong>
-        <img src="https://cdn.wbk.digital/files/1754836884443.QRIS.png" alt="QRIS" width="200">
+        <button class="pay-btn" onclick="copyText('dana')">DANA</button>
+        <button class="pay-btn" onclick="copyText('gopay')">GoPay</button>
+        <button class="pay-btn" onclick="downloadQRIS()">QRIS</button>
       </div>
-      <div class="pay-method">
-        <strong>Dana</strong>
-        <span id="dana">08</span>
-        <button class="copy-btn" onclick="copyText('dana')">Copy</button>
+
+      <!-- Nomor Dana, Gopay, Pulsa -->
+      <div style="margin: 15px 0;">
+        <p><strong>DANA:</strong> <span id="dana">08</span> 
+          <button class="copy-btn" onclick="copyText('dana')">Copy</button>
+        </p>
+        <p><strong>GoPay:</strong> <span id="gopay">08</span> 
+          <button class="copy-btn" onclick="copyText('gopay')">Copy</button>
+        </p>
+        <p><strong>Pulsa:</strong> <span id="pulsa">08</span> 
+          <button class="copy-btn" onclick="copyText('pulsa')">Copy</button>
+        </p>
       </div>
-      <div class="pay-method">
-        <strong>Gopay</strong>
-        <span id="gopay">08</span>
-        <button class="copy-btn" onclick="copyText('gopay')">Copy</button>
+
+      <!-- QRIS -->
+      <div class="qris-section">
+        <p><strong>QRIS:</strong></p>
+        <img src="https://cdn.wbk.digital/files/1754836884443.QRIS.png" alt="QRIS" width="220" style="border-radius:10px; margin:10px 0;">
+        <br>
+        <a href="https://cdn.wbk.digital/files/1754836884443.QRIS.png" download class="qris-btn">Unduh QRIS</a>
       </div>
-      <div class="pay-method">
-        <strong>Pulsa</strong>
-        <span id="pulsa">08</span>
-        <button class="copy-btn" onclick="copyText('pulsa')">Copy</button>
-      </div>
+
+      <!-- Info -->
+      <p class="desc">
+        Setelah transfer, mohon kirimkan bukti pembayaran ke 
+        <strong>Veey</strong> melalui WhatsApp.
+      </p>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/62XXXXXXXXXXX" class="wa-btn">Hubungi WhatsApp</a>
     </div>
   </div>
 
@@ -130,6 +146,16 @@
     </button>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    function copyText(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert(id.toUpperCase() + " berhasil disalin: " + text);
+      });
+    }
+    function downloadQRIS() {
+      window.open("https://cdn.wbk.digital/files/1754836884443.QRIS.png", "_blank");
+    }
+  </script>
 </body>
 </html>
