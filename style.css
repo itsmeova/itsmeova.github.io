@@ -143,39 +143,35 @@ body {
 .bottom-nav button.active { color:var(--primary); }
 .bottom-nav svg { width:20px;height:20px;margin-bottom:4px; }
 
-/* Section control */
-.section { display:none; }
-.section.active { display:block; }
-
-/* Payment */
-.pay-info { max-width:500px; margin:20px auto; padding:18px; background:var(--panel); border:1px solid var(--border); border-radius:16px; }
-.pay-info h2 { font-size:20px; margin-bottom:12px; text-align:center; }
-.pay-method { margin:16px 0; }
-.pay-method strong { color:#9aa0ff; display:block; margin-bottom:4px; }
-.pay-method span { display:inline-block; margin-right:8px; }
-.copy-btn {
-  background: var(--primary);
-  color:#000;
-  border:none;
-  border-radius:8px;
-  padding:4px 10px;
-  cursor:pointer;
-  font-size:12px;
-  transition:0.2s;
+/* Section Control */
+.section { 
+  display: none; 
+  width: 100%;
 }
-.copy-btn:hover { opacity:0.85; }
-
-/* Light mode override */
-body.light-mode {
-  --bg:#f9f9ff;
-  --panel:#ffffff;
-  --muted:#555577;
-  --text:#1a1a22;
-  --primary:#6d28d9;
-  --border:#ddd;
+.section.active { 
+  display: block; 
 }
-body.light-mode .brand .nefu { color:#16a34a; }
-body.light-mode .badge { background:#dc2626; }
+
+/* Toast notif */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(40px);
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: 0.3s;
+  z-index: 999;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
 /* Tombol Payment */
 .pay-btn, 
@@ -201,7 +197,7 @@ body.light-mode .badge { background:#dc2626; }
   box-shadow: 0 0 14px rgba(34, 229, 139, 0.8), 0 0 28px rgba(0, 200, 150, 0.6);
 }
 
-/* Tombol Copy kecil */
+/* Tombol Copy */
 .copy-btn {
   background: #22e58b;
   color: #000;
@@ -216,25 +212,4 @@ body.light-mode .badge { background:#dc2626; }
 .copy-btn:hover {
   background: #16a34a;
   color: #fff;
-}
-
-/* Toast notif */
-.toast {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(40px);
-  background: var(--panel);
-  color: var(--text);
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-  opacity: 0;
-  transition: 0.3s;
-  z-index: 999;
-}
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
 }
