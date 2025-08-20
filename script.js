@@ -29,9 +29,7 @@ function showToast(msg) {
   toast.textContent = msg;
   document.body.appendChild(toast);
 
-  setTimeout(() => {
-    toast.classList.add("show");
-  }, 50);
+  setTimeout(() => toast.classList.add("show"), 50);
 
   setTimeout(() => {
     toast.classList.remove("show");
