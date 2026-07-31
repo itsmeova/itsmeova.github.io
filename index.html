@@ -1,152 +1,227 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Minji</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Budgeting Tracker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-  <!-- topbar -->
-  <div class="topbar">
-    <div class="brand"><span class="nefu">MINJI</span> – <span class="api">BOT</span></div>
-    <button id="themeToggle" class="theme-btn">☾</button>
-  </div>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
 
-  <!-- Home Section -->
-  <div id="home" class="section active">
-    <div class="hero">
-      <div class="hero-bg"></div>
-      <h1 class="title">Minji Bot</h1>
-      <p class="desc">
-        WhatsApp Bot yang membantu Anda menjawab pertanyaan pelanggan, 
-        mengirim notifikasi, serta mendukung berbagai fitur canggih 
-        seperti AI, download media, hingga integrasi pembayaran.
-      </p>
-      <img src="https://nefu.life/Akd6bA.jpg" 
-           alt="WhatsApp Bot" class="hero-img" />
-      <a href="https://whatsapp.com/channel/0029ValInwl4dTnAaF80OZ3s" target="_blank" class="wa-btn">
-        🚀 Coba Bot WhatsApp
-      </a>
+    <!-- Container Utama -->
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6">
+        
+        <!-- Judul Aplikasi -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">💰 Budget Tracker</h1>
+            <p class="text-gray-600 text-sm mt-1">Kelola keuangan harian Anda dengan mudah dan praktis</p>
+        </header>
+
+        <!-- Kartu Ringkasan (Balance, Income, Expense) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-blue-500">
+                <h2 class="text-gray-500 text-sm font-semibold uppercase">Total Saldo</h2>
+                <p id="balance" class="text-2xl font-bold text-gray-800 mt-1">Rp 0</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500">
+                <h2 class="text-gray-500 text-sm font-semibold uppercase">Pemasukan</h2>
+                <p id="total-income" class="text-2xl font-bold text-green-600 mt-1">Rp 0</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-red-500">
+                <h2 class="text-gray-500 text-sm font-semibold uppercase">Pengeluaran</h2>
+                <p id="total-expense" class="text-2xl font-bold text-red-600 mt-1">Rp 0</p>
+            </div>
+        </div>
+
+        <!-- Grid Bagian Form dan Grafik -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            
+            <!-- Form Tambah Transaksi -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Tambah Transaksi Baru</h3>
+                <form id="transaction-form" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-1" for="description">Keterangan</label>
+                        <input type="text" id="description" placeholder="Contoh: Gaji, Belanja Bulanan..." required
+                            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-1" for="amount">Jumlah (Rp)</label>
+                        <input type="number" id="amount" placeholder="Contoh: 50000" required
+                            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-1" for="type">Tipe Transaksi</label>
+                        <select id="type" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                            <option value="income">Pemasukan (Income)</option>
+                            <option value="expense">Pengeluaran (Expense)</option>
+                        </select>
+                    </div>
+                    <button type="submit" 
+                        class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-sm">
+                        Tambah Transaksi
+                    </button>
+                </form>
+            </div>
+
+            <!-- Grafik Visual -->
+            <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center justify-center">
+                <h3 class="text-lg font-bold text-gray-800 mb-2 self-start">Statistik Keuangan</h3>
+                <div class="w-full h-64 flex justify-center items-center">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Riwayat Transaksi -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Riwayat Transaksi</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b text-gray-600 text-sm">
+                            <th class="py-2 px-3">Keterangan</th>
+                            <th class="py-2 px-3">Jumlah</th>
+                            <th class="py-2 px-3">Tipe</th>
+                            <th class="py-2 px-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-list" class="text-sm text-gray-700">
+                        <!-- Data transaksi akan dimasukkan lewat JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <p id="no-transaction" class="text-center text-gray-500 text-sm py-4 hidden">Belum ada transaksi yang dicatat.</p>
+        </div>
+
     </div>
-  </div>
 
-  <!-- Pricing Section -->
-  <div id="pricing" class="section">
-    <div class="hero">
-      <h1>Pricing Plans</h1>
-      <p>Pilih paket yang sesuai dengan kebutuhan Anda.</p>
-    </div>
-    <div class="grid">
-      <!-- Starter -->
-      <div class="card">
-        <h3>Starter</h3>
-        <div class="price">Rp 10.000</div>
-        <div class="meta">1 Bulan</div>
-        <div class="feature">✓ <span>Limit 500 Request</span></div>
-        <div class="feature">✓ <span>Akses Semua Fitur</span></div>
-        <div class="feature">✗ <span>Support Prioritas</span></div>
-        <div class="feature">✓ <span>Join 1 Grup</span></div>    
-        <a href="https://wa.me/6281931940265?text=Pesan%20Starter" class="btn btn-outline">Pesan Sekarang</a>
-      </div>
-      
-      <!-- Pro -->
-      <div class="card">
-        <span class="badge">🔥 Best Deal</span>
-        <h3>Pro</h3>
-        <div class="price">Rp 25.000</div>
-        <div class="meta">Permanen</div>
-        <div class="feature">✓ <span>Unlimited Request</span></div>
-        <div class="feature">✓ <span>Akses Semua Fitur</span></div>
-        <div class="feature">✓ <span>Prioritas Update</span></div>
-        <div class="feature">✓ <span>Join 2 Grup</span></div>    
-        <a href="https://wa.me/6281931940265?text=Pesan%20Pro" class="btn btn-outline">Pesan Sekarang</a>
-      </div>
-      
-      <!-- Enterprise -->
-      <div class="card">
-        <h3>Enterprise</h3>
-        <div class="price">Rp 45.000</div>
-        <div class="meta">1 Tahun</div>
-        <div class="feature">✓ <span>Unlimited Request</span></div>
-        <div class="feature">✓ <span>Akses Semua Premium</span></div>
-        <div class="feature">✓ <span>Support Prioritas 24/7</span></div>
-        <div class="feature">✓ <span>Konsultasi Custom</span></div>
-        <div class="feature">✓ <span>Join 5 Grup</span></div>    
-        <a href="https://wa.me/6281931940265?text=Pesan%20Enterprise" class="btn btn-outline">Pesan Sekarang</a>
-      </div>
-    </div>
-  </div>
+    <!-- Script JavaScript -->
+    <script>
+        // Ambil data dari localStorage atau buat array kosong
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-  <!-- Payment Section -->
-  <div class="section" id="payment">
-  <h2 style="text-align:center; margin:20px 0;">Pilih Metode Pembayaran</h2>
+        const balanceEl = document.getElementById('balance');
+        const totalIncomeEl = document.getElementById('total-income');
+        const totalExpenseEl = document.getElementById('total-expense');
+        const transactionListEl = document.getElementById('transaction-list');
+        const noTransactionEl = document.getElementById('no-transaction');
+        const formEl = document.getElementById('transaction-form');
+        
+        let myChart = null;
 
-  <!-- Tabs -->
-  <div class="method-tabs">
-    <button class="tab-btn active" data-target="ewallet">E-Wallet</button>
-    <button class="tab-btn" data-target="qris">QRIS</button>
-  </div>
+        // Fungsi format mata uang Rupiah
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        }
 
-  <!-- E-Wallet -->
-  <div id="ewallet" class="tab-content" style="display:block;">
-    <div class="pay-row">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="https://cdn.wbk.digital/files/download.jpeg" alt="DANA" style="width:22px;height:22px;">
-        <span id="danaNumber">Qris Only</span>
-      </div>
-      <button class="copy-btn" onclick="copyText('danaNumber')">📋 Copy</button>
-    </div>
+        // Fungsi Update UI & LocalStorage
+        function updateUI() {
+            transactionListEl.innerHTML = '';
+            let totalIncome = 0;
+            let totalExpense = 0;
 
-    <div class="pay-row">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="https://cdn.wbk.digital/files/images.jpeg" alt="GoPay" style="width:22px;height:22px;">
-        <span id="gopayNumber">Qris Only</span>
-      </div>
-      <button class="copy-btn" onclick="copyText('gopayNumber')">📋 Copy</button>
-    </div>
-  </div>
+            if (transactions.length === 0) {
+                noTransactionEl.classList.remove('hidden');
+            } else {
+                noTransactionEl.classList.add('hidden');
+                transactions.forEach((trx, index) => {
+                    if (trx.type === 'income') {
+                        totalIncome += Number(trx.amount);
+                    } else {
+                        totalExpense += Number(trx.amount);
+                    }
 
-  <!-- QRIS -->
-  <div id="qris" class="tab-content" style="display:none;">
-    <div class="qris-box">
-      <img src="https://nefu.life/ExLjB-.jpg" alt="QRIS" class="qris-img" />
-      <a href="https://nefu.life/ExLjB-.jpg" download class="qris-btn">⬇️ Unduh QRIS</a>
-    </div>
-  </div>
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b hover:bg-gray-50';
+                    tr.innerHTML = `
+                        <td class="py-3 px-3">${trx.description}</td>
+                        <td class="py-3 px-3 font-semibold ${trx.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                            ${trx.type === 'income' ? '+' : '-'} ${formatRupiah(trx.amount)}
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="px-2 py-1 text-xs rounded-full ${trx.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                ${trx.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-center">
+                            <button onclick="deleteTransaction(${index})" class="text-red-500 hover:text-red-700 text-xs font-semibold bg-red-50 px-2 py-1 rounded">Hapus</button>
+                        </td>
+                    `;
+                    transactionListEl.appendChild(tr);
+                });
+            }
 
-  <!-- Catatan -->
-  <p class="note">
-    Setelah transfer, mohon kirim bukti pembayaran ke <b>Veey</b> via WhatsApp.
-  </p>
+            const balance = totalIncome - totalExpense;
 
-  <!-- Tombol WA -->
-  <a id="waBtn" class="wa-btn" target="_blank">💬 Konfirmasi via WhatsApp</a>
-  </div>
-  <!-- bottom nav -->
-  <div class="bottom-nav">
-    <button class="active" data-target="home" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V9.5z"/>
-      </svg>
-      Home
-    </button>
-    <button data-target="pricing" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M4 21h16M4 10h16M4 6h16M4 14h16"/>
-      </svg>
-      Pricing
-    </button>
-    <button data-target="payment" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <rect x="2" y="6" width="20" height="14" rx="2" ry="2"/>
-        <line x1="16" y1="10" x2="20" y2="10"/>
-      </svg>
-      Payment
-    </button>
-  </div>
+            balanceEl.innerText = formatRupiah(balance);
+            totalIncomeEl.innerText = formatRupiah(totalIncome);
+            totalExpenseEl.innerText = formatRupiah(totalExpense);
 
-  <script src="script.js" defer></script>
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            updateChart(totalIncome, totalExpense);
+        }
+
+        // Tambah Transaksi Baru
+        formEl.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const description = document.getElementById('description').value;
+            const amount = document.getElementById('amount').value;
+            const type = document.getElementById('type').value;
+
+            const newTransaction = {
+                description,
+                amount: parseFloat(amount),
+                type
+            };
+
+            transactions.push(newTransaction);
+            formEl.reset();
+            updateUI();
+        });
+
+        // Hapus Transaksi
+        function deleteTransaction(index) {
+            transactions.splice(index, 1);
+            updateUI();
+        }
+
+        // Inisialisasi & Update Grafik Chart.js
+        function updateChart(income, expense) {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pemasukan', 'Pengeluaran'],
+                    datasets: [{
+                        data: [income, expense],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Jalankan saat pertama kali dimuat
+        updateUI();
+    </script>
 </body>
-        </html>
+</html>
