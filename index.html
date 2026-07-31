@@ -3,227 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Money, Budget & Investment Tracker</title>
+    <title>Wealth & Money Tracker Pro</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+<body class="bg-slate-50 text-slate-800 antialiased">
 
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Wrapper Utama -->
+    <div class="min-h-screen flex flex-col">
         
-        <!-- Header -->
-        <header class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800"><i class="fa-solid fa-chart-line text-indigo-600 mr-2"></i>Wealth & Money Tracker</h1>
-                <p class="text-sm text-gray-500">Kelola keuangan, budget, wishlist, dan portofolio investasi/saham Anda</p>
-            </div>
-            <div class="mt-4 md:mt-0 flex gap-2">
-                <button onclick="exportData()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition"><i class="fa-solid fa-download mr-1"></i> Ekspor</button>
-                <label class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer">
-                    <i class="fa-solid fa-upload mr-1"></i> Impor <input type="file" id="importFile" class="hidden" onchange="importData(event)">
-                </label>
+        <!-- Navbar / Header -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 backdrop-blur-md bg-white/80">
+            <div class="container mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-200">
+                        <i class="fa-solid fa-chart-line text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight text-slate-900">WealthTracker <span class="text-xs bg-indigo-100 text-indigo-700 py-0.5 px-2 rounded-full font-semibold">PRO</span></h1>
+                        <p class="text-xs text-slate-500">Kelola keuangan, budget, wishlist, & portofolio saham</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                        <i class="fa-solid fa-download text-slate-500"></i> Ekspor Data
+                    </button>
+                    <label class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-upload text-slate-500"></i> Impor Data 
+                        <input type="file" id="importFile" class="hidden" onchange="importData(event)">
+                    </label>
+                </div>
             </div>
         </header>
 
-        <!-- Kartu Ringkasan Utama -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-indigo-500">
-                <p class="text-xs text-gray-500 font-medium uppercase">Total Saldo Kas</p>
-                <h3 id="totalSaldo" class="text-xl font-bold text-gray-800 mt-1">Rp 0</h3>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-emerald-500">
-                <p class="text-xs text-gray-500 font-medium uppercase">Total Pemasukan</p>
-                <h3 id="totalPemasukan" class="text-xl font-bold text-emerald-600 mt-1">Rp 0</h3>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-rose-500">
-                <p class="text-xs text-gray-500 font-medium uppercase">Total Pengeluaran</p>
-                <h3 id="totalPengeluaran" class="text-xl font-bold text-rose-600 mt-1">Rp 0</h3>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-500">
-                <p class="text-xs text-gray-500 font-medium uppercase">Nilai Aset Saham</p>
-                <h3 id="totalAset" class="text-xl font-bold text-blue-600 mt-1">Rp 0</h3>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-amber-500">
-                <p class="text-xs text-gray-500 font-medium uppercase">Sisa Budget</p>
-                <h3 id="sisaBudget" class="text-xl font-bold text-gray-800 mt-1">Rp 0</h3>
-            </div>
-        </div>
-
-        <!-- Grid Konten Utama -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Konten Utama -->
+        <main class="container mx-auto px-6 py-8 flex-grow max-w-7xl space-y-8">
             
-            <!-- Kolom Kiri: Form Transaksi & Budget -->
-            <div class="space-y-8 lg:col-span-1">
+            <!-- Kartu Ringkasan Statistik -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+                <!-- Saldo Kas -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+                    <div class="absolute -right-3 -bottom-3 text-indigo-50 opacity-50 group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-wallet text-7xl"></i>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Saldo Kas</p>
+                    <h3 id="totalSaldo" class="text-2xl font-bold text-slate-900 mt-2">Rp 0</h3>
+                    <div class="mt-2 text-xs text-indigo-600 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> Kas likuid tersedia
+                    </div>
+                </div>
+
+                <!-- Total Pemasukan -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+                    <div class="absolute -right-3 -bottom-3 text-emerald-50 opacity-50 group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-arrow-trend-up text-7xl"></i>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pemasukan</p>
+                    <h3 id="totalPemasukan" class="text-2xl font-bold text-emerald-600 mt-2">Rp 0</h3>
+                    <div class="mt-2 text-xs text-emerald-600 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-up"></i> Arus kas masuk
+                    </div>
+                </div>
+
+                <!-- Total Pengeluaran -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+                    <div class="absolute -right-3 -bottom-3 text-rose-50 opacity-50 group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-arrow-trend-down text-7xl"></i>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pengeluaran</p>
+                    <h3 id="totalPengeluaran" class="text-2xl font-bold text-rose-600 mt-2">Rp 0</h3>
+                    <div class="mt-2 text-xs text-rose-600 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-down"></i> Arus kas keluar
+                    </div>
+                </div>
+
+                <!-- Nilai Aset Saham -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+                    <div class="absolute -right-3 -bottom-3 text-blue-50 opacity-50 group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-chart-pie text-7xl"></i>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nilai Aset Saham</p>
+                    <h3 id="totalAset" class="text-2xl font-bold text-blue-600 mt-2">Rp 0</h3>
+                    <div class="mt-2 text-xs text-blue-600 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-shield-halved"></i> Portofolio investasi
+                    </div>
+                </div>
+
+                <!-- Sisa Budget -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition sm:col-span-2 lg:col-span-1">
+                    <div class="absolute -right-3 -bottom-3 text-amber-50 opacity-50 group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-bullseye text-7xl"></i>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Sisa Budget</p>
+                    <h3 id="sisaBudget" class="text-2xl font-bold text-slate-900 mt-2">Rp 0</h3>
+                    <div class="mt-2 text-xs text-amber-600 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-clock"></i> Batas bulanan
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Utama Layout (Kiri: Form Input | Kanan: Data & Grafik) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                <!-- Form Transaksi -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-wallet text-indigo-500 mr-2"></i>Catat Transaksi</h2>
-                    <form id="transactionForm" onsubmit="addTransaction(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Tipe</label>
-                            <select id="type" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                <option value="pemasukan">Pemasukan</option>
-                                <option value="pengeluaran">Pengeluaran</option>
-                            </select>
+                <!-- Kolom Kiri: Form Menu Aksi -->
+                <div class="space-y-6 lg:col-span-1">
+                    
+                    <!-- Form Transaksi -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center gap-2 mb-5">
+                            <div class="bg-indigo-50 text-indigo-600 p-2 rounded-lg">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <h2 class="font-bold text-slate-900">Catat Transaksi</h2>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Keterangan</label>
-                            <input type="text" id="description" required placeholder="Contoh: Gaji, Makan Siang" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <form id="transactionForm" onsubmit="addTransaction(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Tipe Transaksi</label>
+                                <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                                    <option value="pemasukan">Pemasukan</option>
+                                    <option value="pengeluaran">Pengeluaran</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Keterangan</label>
+                                <input type="text" id="description" required placeholder="Contoh: Gaji Bulanan, Makan Siang" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Jumlah (Rp)</label>
+                                <input type="number" id="amount" required min="1" placeholder="Contoh: 50000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Kategori</label>
+                                <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                                    <option value="Umum">Umum</option>
+                                    <option value="Makanan">Makanan & Minuman</option>
+                                    <option value="Transportasi">Transportasi</option>
+                                    <option value="Belanja">Belanja</option>
+                                    <option value="Hiburan">Hiburan</option>
+                                    <option value="Tagihan">Tagihan & Utilitas</option>
+                                    <option value="Investasi">Investasi / Saham</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-indigo-100 text-sm">Simpan Transaksi</button>
+                        </form>
+                    </div>
+
+                    <!-- Budget Bulanan -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center gap-2 mb-5">
+                            <div class="bg-amber-50 text-amber-600 p-2 rounded-lg">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <h2 class="font-bold text-slate-900">Budget Bulanan</h2>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Jumlah (Rp)</label>
-                            <input type="number" id="amount" required min="1" placeholder="Contoh: 50000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <form onsubmit="setBudget(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Batas Pengeluaran (Rp)</label>
+                                <input type="number" id="budgetLimit" required min="0" placeholder="Contoh: 3000000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            </div>
+                            <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 rounded-xl transition text-sm">Atur Budget</button>
+                        </form>
+                    </div>
+
+                    <!-- Wishlist Target -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center gap-2 mb-5">
+                            <div class="bg-rose-50 text-rose-600 p-2 rounded-lg">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <h2 class="font-bold text-slate-900">Tambah Wishlist</h2>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kategori</label>
-                            <select id="category" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                <option value="Umum">Umum</option>
-                                <option value="Makanan">Makanan & Minuman</option>
-                                <option value="Transportasi">Transportasi</option>
-                                <option value="Belanja">Belanja</option>
-                                <option value="Hiburan">Hiburan</option>
-                                <option value="Tagihan">Tagihan & Utilitas</option>
-                                <option value="Investasi">Investasi / Saham</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Simpan Transaksi</button>
-                    </form>
+                        <form onsubmit="addWishlist(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Nama Barang / Target</label>
+                                <input type="text" id="wishName" required placeholder="Contoh: Laptop Baru, Liburan" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Target Harga (Rp)</label>
+                                <input type="number" id="wishTarget" required min="1" placeholder="Contoh: 10000000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Terkumpul Saat Ini (Rp)</label>
+                                <input type="number" id="wishSaved" required min="0" value="0" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            </div>
+                            <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-rose-100 text-sm">Simpan Wishlist</button>
+                        </form>
+                    </div>
+
                 </div>
 
-                <!-- Budget Bulanan -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-bullseye text-amber-500 mr-2"></i>Budget Bulanan</h2>
-                    <form onsubmit="setBudget(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Batas Pengeluaran (Rp)</label>
-                            <input type="number" id="budgetLimit" required min="0" placeholder="Contoh: 3000000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                <!-- Kolom Kanan: Grafik, Portofolio, Wishlist List, Riwayat -->
+                <div class="space-y-6 lg:col-span-2">
+                    
+                    <!-- Grafik Pengeluaran -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <h2 class="font-bold text-slate-900 mb-4">Statistik Pengeluaran Kategori</h2>
+                        <div class="relative h-64 flex justify-center items-center">
+                            <canvas id="expenseChart"></canvas>
                         </div>
-                        <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-medium py-2.5 rounded-xl transition text-sm">Atur Budget</button>
-                    </form>
-                </div>
+                    </div>
 
-                <!-- Form Wishlist / Target Keinginan -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-gift text-rose-500 mr-2"></i>Tambah Wishlist</h2>
-                    <form onsubmit="addWishlist(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nama Barang / Target</label>
-                            <input type="text" id="wishName" required placeholder="Contoh: Laptop Baru, Liburan" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <!-- Portofolio Investasi & Saham -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-center mb-5">
+                            <div class="flex items-center gap-2">
+                                <div class="bg-blue-50 text-blue-600 p-2 rounded-lg">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+                                <h2 class="font-bold text-slate-900">Portofolio Saham & Investasi</h2>
+                            </div>
+                            <button onclick="openStockModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-md shadow-blue-100 flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i> Tambah Saham
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Target Harga (Rp)</label>
-                            <input type="number" id="wishTarget" required min="1" placeholder="Contoh: 10000000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[11px] font-semibold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/50">
+                                        <th class="py-3 px-4 rounded-l-xl">Kode / Ticker</th>
+                                        <th class="py-3 px-4">Lembar</th>
+                                        <th class="py-3 px-4">Harga Beli / Kini</th>
+                                        <th class="py-3 px-4">Total & Gain/Loss</th>
+                                        <th class="py-3 px-4 text-center rounded-r-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stockList" class="text-sm divide-y divide-slate-100">
+                                    <!-- Data Saham -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Terkumpul Saat Ini (Rp)</label>
-                            <input type="number" id="wishSaved" required min="0" value="0" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+
+                    <!-- Daftar Wishlist / Target Tabungan -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center gap-2 mb-5">
+                            <div class="bg-rose-50 text-rose-600 p-2 rounded-lg">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <h2 class="font-bold text-slate-900">Daftar Wishlist & Target</h2>
                         </div>
-                        <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Simpan Wishlist</button>
-                    </form>
+                        <div id="wishlistContainer" class="space-y-4">
+                            <!-- Data Wishlist -->
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Transaksi -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-center mb-5">
+                            <h2 class="font-bold text-slate-900">Riwayat Transaksi</h2>
+                            <button onclick="clearAllData()" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition">Reset Semua Data</button>
+                        </div>
+                        <div class="overflow-x-auto max-h-80 overflow-y-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[11px] font-semibold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/50">
+                                        <th class="py-3 px-4 rounded-l-xl">Tanggal & Keterangan</th>
+                                        <th class="py-3 px-4">Kategori</th>
+                                        <th class="py-3 px-4">Jumlah</th>
+                                        <th class="py-3 px-4 text-center rounded-r-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionList" class="text-sm divide-y divide-slate-100">
+                                    <!-- Data Transaksi -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
-            <!-- Kolom Kanan: Grafik, Portofolio Saham, Wishlist, Riwayat -->
-            <div class="space-y-8 lg:col-span-2">
-                
-                <!-- Grafik Pengeluaran -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Statistik Pengeluaran Kategori</h2>
-                    <div class="relative h-64 flex justify-center items-center">
-                        <canvas id="expenseChart"></canvas>
-                    </div>
-                </div>
+        </main>
 
-                <!-- Portofolio Investasi & Saham -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-chart-pie text-blue-500 mr-2"></i>Portofolio Saham & Investasi</h2>
-                        <button onclick="openStockModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition"><i class="fa-solid fa-plus mr-1"></i> Tambah Saham</button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="text-xs text-gray-400 uppercase border-b">
-                                    <th class="py-2 px-3">Kode & Nama</th>
-                                    <th class="py-2 px-3">Lembar</th>
-                                    <th class="py-2 px-3">Avg Buy / Current</th>
-                                    <th class="py-2 px-3">Total Nilai & Gain/Loss</th>
-                                    <th class="py-2 px-3 text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stockList" class="text-sm divide-y">
-                                <!-- Data Saham -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Daftar Wishlist -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-list-check text-rose-500 mr-2"></i>Wishlist & Target Tabungan</h2>
-                    <div id="wishlistContainer" class="space-y-4">
-                        <!-- Data Wishlist -->
-                    </div>
-                </div>
-
-                <!-- Riwayat Transaksi -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-bold text-gray-800">Riwayat Transaksi</h2>
-                        <button onclick="clearAllData()" class="text-xs text-rose-500 hover:underline font-medium">Reset Semua Data</button>
-                    </div>
-                    <div class="overflow-x-auto max-h-80 overflow-y-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="text-xs text-gray-400 uppercase border-b">
-                                    <th class="py-2 px-3">Tanggal & Keterangan</th>
-                                    <th class="py-2 px-3">Kategori</th>
-                                    <th class="py-2 px-3">Jumlah</th>
-                                    <th class="py-2 px-3 text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactionList" class="text-sm divide-y">
-                                <!-- Data Transaksi -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+            <div class="container mx-auto px-6 text-center text-xs text-slate-400">
+                WealthTracker Pro &copy; 2026 &bull; Dibuat dengan antarmuka modern & responsif
             </div>
-
-        </div>
+        </footer>
 
     </div>
 
     <!-- Modal Tambah Saham -->
-    <div id="stockModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-50 px-4">
-        <div class="bg-white p-6 rounded-2xl w-full max-w-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Tambah Portofolio Saham</h3>
+    <div id="stockModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl border border-slate-100">
+            <h3 class="text-lg font-bold text-slate-900 mb-5">Tambah Portofolio Saham</h3>
             <form onsubmit="addStock(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kode Saham (Ticker)</label>
-                    <input type="text" id="stockTicker" required placeholder="Contoh: BBCA, BBRI" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Kode Saham (Ticker)</label>
+                    <input type="text" id="stockTicker" required placeholder="Contoh: BBCA, BBRI" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Jumlah Lembar Saham</label>
-                    <input type="number" id="stockShares" required min="1" placeholder="Contoh: 1000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Jumlah Lembar Saham</label>
+                    <input type="number" id="stockShares" required min="1" placeholder="Contoh: 1000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Harga Pembelian Rata-rata (Avg Buy)</label>
-                    <input type="number" id="stockAvgPrice" required min="1" placeholder="Contoh: 8500" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Harga Beli Rata-rata (Avg Buy)</label>
+                    <input type="number" id="stockAvgPrice" required min="1" placeholder="Contoh: 8500" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Harga Pasar Saat Ini (Current Price)</label>
-                    <input type="number" id="stockCurrentPrice" required min="1" placeholder="Contoh: 9000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Harga Pasar Saat Ini (Current Price)</label>
+                    <input type="number" id="stockCurrentPrice" required min="1" placeholder="Contoh: 9000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
                 </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="closeStockModal()" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2.5 rounded-xl transition text-sm">Batal</button>
-                    <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Simpan</button>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeStockModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl transition text-sm">Batal</button>
+                    <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-md shadow-blue-100">Simpan</button>
                 </div>
             </form>
         </div>
@@ -358,7 +452,7 @@
             listEl.innerHTML = '';
 
             if (transactions.length === 0) {
-                listEl.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-400">Belum ada transaksi tercatat.</td></tr>`;
+                listEl.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">Belum ada transaksi tercatat.</td></tr>`;
             }
 
             transactions.slice().reverse().forEach(t => {
@@ -366,20 +460,20 @@
                 else totalExpense += t.amount;
 
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 transition';
+                row.className = 'hover:bg-slate-50/80 transition';
                 row.innerHTML = `
-                    <td class="py-3 px-3">
-                        <div class="font-medium text-gray-800">${t.description}</div>
-                        <div class="text-xs text-gray-400">${t.date}</div>
+                    <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-800">${t.description}</div>
+                        <div class="text-[11px] text-slate-400">${t.date}</div>
                     </td>
-                    <td class="py-3 px-3">
-                        <span class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full text-xs font-medium">${t.category}</span>
+                    <td class="py-3 px-4">
+                        <span class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full text-xs font-semibold">${t.category}</span>
                     </td>
-                    <td class="py-3 px-3 font-semibold ${t.type === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">
+                    <td class="py-3 px-4 font-bold ${t.type === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">
                         ${t.type === 'pemasukan' ? '+' : '-'} ${formatRupiah(t.amount)}
                     </td>
-                    <td class="py-3 px-3 text-center">
-                        <button onclick="deleteTransaction(${t.id})" class="text-gray-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="deleteTransaction(${t.id})" class="text-slate-300 hover:text-rose-600 transition p-1"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
                 listEl.appendChild(row);
@@ -394,7 +488,7 @@
             stockListEl.innerHTML = '';
 
             if (stocks.length === 0) {
-                stockListEl.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Belum ada portofolio saham.</td></tr>`;
+                stockListEl.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">Belum ada portofolio saham.</td></tr>`;
             }
 
             stocks.forEach(s => {
@@ -405,22 +499,22 @@
                 totalAssetValue += currentVal;
 
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 transition';
+                row.className = 'hover:bg-slate-50/80 transition';
                 row.innerHTML = `
-                    <td class="py-3 px-3 font-bold text-gray-800">${s.ticker}</td>
-                    <td class="py-3 px-3 text-sm text-gray-600">${s.shares.toLocaleString()} lbr</td>
-                    <td class="py-3 px-3 text-xs">
-                        <div>Beli: ${formatRupiah(s.avgPrice)}</div>
-                        <div>Kini: ${formatRupiah(s.currentPrice)}</div>
+                    <td class="py-3 px-4 font-bold text-slate-800">${s.ticker}</td>
+                    <td class="py-3 px-4 text-sm text-slate-600 font-medium">${s.shares.toLocaleString()} lbr</td>
+                    <td class="py-3 px-4 text-xs">
+                        <div class="text-slate-500">Beli: ${formatRupiah(s.avgPrice)}</div>
+                        <div class="text-slate-800 font-semibold">Kini: ${formatRupiah(s.currentPrice)}</div>
                     </td>
-                    <td class="py-3 px-3">
-                        <div class="font-semibold text-gray-800">${formatRupiah(currentVal)}</div>
-                        <div class="text-xs font-medium ${profitLoss >= 0 ? 'text-emerald-600' : 'text-rose-600'}">
+                    <td class="py-3 px-4">
+                        <div class="font-bold text-slate-800">${formatRupiah(currentVal)}</div>
+                        <div class="text-xs font-semibold ${profitLoss >= 0 ? 'text-emerald-600' : 'text-rose-600'}">
                             ${profitLoss >= 0 ? '+' : ''}${formatRupiah(profitLoss)} (${profitLossPct.toFixed(2)}%)
                         </div>
                     </td>
-                    <td class="py-3 px-3 text-center">
-                        <button onclick="deleteStock(${s.id})" class="text-gray-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="deleteStock(${s.id})" class="text-slate-300 hover:text-rose-600 transition p-1"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
                 stockListEl.appendChild(row);
@@ -430,29 +524,29 @@
             const wishContainer = document.getElementById('wishlistContainer');
             wishContainer.innerHTML = '';
             if (wishlists.length === 0) {
-                wishContainer.innerHTML = `<p class="text-center text-sm text-gray-400 py-2">Belum ada wishlist tercatat.</p>`;
+                wishContainer.innerHTML = `<p class="text-center text-sm text-slate-400 py-3">Belum ada wishlist tercatat.</p>`;
             }
 
             wishlists.forEach(w => {
                 const progress = Math.min((w.saved / w.target) * 100, 100);
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'bg-gray-50 p-4 rounded-xl border border-gray-100';
+                itemDiv.className = 'bg-slate-50/70 p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition';
                 itemDiv.innerHTML = `
                     <div class="flex justify-between items-center mb-2">
-                        <span class="font-bold text-gray-800 text-sm">${w.name}</span>
+                        <span class="font-bold text-slate-800 text-sm">${w.name}</span>
                         <div class="flex gap-2">
-                            <button onclick="addWishSaving(${w.id})" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-1 rounded-lg transition">+ Tabung</button>
-                            <button onclick="deleteWishlist(${w.id})" class="text-xs text-rose-500 hover:underline">Hapus</button>
+                            <button onclick="addWishSaving(${w.id})" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1 rounded-lg transition font-semibold shadow-sm">+ Tabung</button>
+                            <button onclick="deleteWishlist(${w.id})" class="text-xs text-rose-500 hover:underline font-medium px-1">Hapus</button>
                         </div>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-500 mb-1">
-                        <span>Terkumpul: ${formatRupiah(w.saved)}</span>
-                        <span>Target: ${formatRupiah(w.target)}</span>
+                    <div class="flex justify-between text-xs font-medium text-slate-500 mb-1.5">
+                        <span>Terkumpul: <strong class="text-slate-700">${formatRupiah(w.saved)}</strong></span>
+                        <span>Target: <strong class="text-slate-700">${formatRupiah(w.target)}</strong></span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-rose-500 h-2.5 rounded-full" style="width: ${progress}%"></div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                        <div class="bg-gradient-to-r from-rose-500 to-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
                     </div>
-                    <div class="text-right text-[10px] text-gray-400 mt-1">${progress.toFixed(1)}% tercapai</div>
+                    <div class="text-right text-[11px] font-semibold text-slate-400 mt-1">${progress.toFixed(1)}% tercapai</div>
                 `;
                 wishContainer.appendChild(itemDiv);
             });
@@ -465,7 +559,7 @@
             
             const sisaBudgetEl = document.getElementById('sisaBudget');
             sisaBudgetEl.innerText = formatRupiah(sisaBudget);
-            sisaBudgetEl.className = `text-xl font-bold mt-1 ${sisaBudget < 0 ? 'text-rose-600' : 'text-gray-800'}`;
+            sisaBudgetEl.className = `text-2xl font-bold mt-2 ${sisaBudget < 0 ? 'text-rose-600' : 'text-slate-900'}`;
 
             updateChart();
         }
@@ -488,15 +582,16 @@
                     labels: labels.length > 0 ? labels : ['Belum ada pengeluaran'],
                     datasets: [{
                         data: data.length > 0 ? data : [1],
-                        backgroundColor: data.length > 0 ? ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#3b82f6'] : ['#e5e7eb'],
-                        borderWidth: 0
+                        backgroundColor: data.length > 0 ? ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#3b82f6'] : ['#e2e8f0'],
+                        borderWidth: 0,
+                        hoverOffset: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11, family: 'Inter' } } }
                     }
                 }
             });
