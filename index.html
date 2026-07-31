@@ -3,225 +3,553 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Budgeting Tracker</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Aplikasi Money, Budget & Investment Tracker</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
 
-    <!-- Container Utama -->
-    <div class="container mx-auto max-w-4xl p-4 sm:p-6">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
         
-        <!-- Judul Aplikasi -->
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">💰 Budget Tracker</h1>
-            <p class="text-gray-600 text-sm mt-1">Kelola keuangan harian Anda dengan mudah dan praktis</p>
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800"><i class="fa-solid fa-chart-line text-indigo-600 mr-2"></i>Wealth & Money Tracker</h1>
+                <p class="text-sm text-gray-500">Kelola keuangan, budget, wishlist, dan portofolio investasi/saham Anda</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-2">
+                <button onclick="exportData()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition"><i class="fa-solid fa-download mr-1"></i> Ekspor</button>
+                <label class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer">
+                    <i class="fa-solid fa-upload mr-1"></i> Impor <input type="file" id="importFile" class="hidden" onchange="importData(event)">
+                </label>
+            </div>
         </header>
 
-        <!-- Kartu Ringkasan (Balance, Income, Expense) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-blue-500">
-                <h2 class="text-gray-500 text-sm font-semibold uppercase">Total Saldo</h2>
-                <p id="balance" class="text-2xl font-bold text-gray-800 mt-1">Rp 0</p>
+        <!-- Kartu Ringkasan Utama -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-indigo-500">
+                <p class="text-xs text-gray-500 font-medium uppercase">Total Saldo Kas</p>
+                <h3 id="totalSaldo" class="text-xl font-bold text-gray-800 mt-1">Rp 0</h3>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500">
-                <h2 class="text-gray-500 text-sm font-semibold uppercase">Pemasukan</h2>
-                <p id="total-income" class="text-2xl font-bold text-green-600 mt-1">Rp 0</p>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-emerald-500">
+                <p class="text-xs text-gray-500 font-medium uppercase">Total Pemasukan</p>
+                <h3 id="totalPemasukan" class="text-xl font-bold text-emerald-600 mt-1">Rp 0</h3>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-red-500">
-                <h2 class="text-gray-500 text-sm font-semibold uppercase">Pengeluaran</h2>
-                <p id="total-expense" class="text-2xl font-bold text-red-600 mt-1">Rp 0</p>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-rose-500">
+                <p class="text-xs text-gray-500 font-medium uppercase">Total Pengeluaran</p>
+                <h3 id="totalPengeluaran" class="text-xl font-bold text-rose-600 mt-1">Rp 0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-500">
+                <p class="text-xs text-gray-500 font-medium uppercase">Nilai Aset Saham</p>
+                <h3 id="totalAset" class="text-xl font-bold text-blue-600 mt-1">Rp 0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-amber-500">
+                <p class="text-xs text-gray-500 font-medium uppercase">Sisa Budget</p>
+                <h3 id="sisaBudget" class="text-xl font-bold text-gray-800 mt-1">Rp 0</h3>
             </div>
         </div>
 
-        <!-- Grid Bagian Form dan Grafik -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <!-- Grid Konten Utama -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- Form Tambah Transaksi -->
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Tambah Transaksi Baru</h3>
-                <form id="transaction-form" class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 text-sm font-semibold mb-1" for="description">Keterangan</label>
-                        <input type="text" id="description" placeholder="Contoh: Gaji, Belanja Bulanan..." required
-                            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-semibold mb-1" for="amount">Jumlah (Rp)</label>
-                        <input type="number" id="amount" placeholder="Contoh: 50000" required
-                            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-semibold mb-1" for="type">Tipe Transaksi</label>
-                        <select id="type" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                            <option value="income">Pemasukan (Income)</option>
-                            <option value="expense">Pengeluaran (Expense)</option>
-                        </select>
-                    </div>
-                    <button type="submit" 
-                        class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-sm">
-                        Tambah Transaksi
-                    </button>
-                </form>
-            </div>
-
-            <!-- Grafik Visual -->
-            <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center justify-center">
-                <h3 class="text-lg font-bold text-gray-800 mb-2 self-start">Statistik Keuangan</h3>
-                <div class="w-full h-64 flex justify-center items-center">
-                    <canvas id="expenseChart"></canvas>
+            <!-- Kolom Kiri: Form Transaksi & Budget -->
+            <div class="space-y-8 lg:col-span-1">
+                
+                <!-- Form Transaksi -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-wallet text-indigo-500 mr-2"></i>Catat Transaksi</h2>
+                    <form id="transactionForm" onsubmit="addTransaction(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Tipe</label>
+                            <select id="type" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="pemasukan">Pemasukan</option>
+                                <option value="pengeluaran">Pengeluaran</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Keterangan</label>
+                            <input type="text" id="description" required placeholder="Contoh: Gaji, Makan Siang" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Jumlah (Rp)</label>
+                            <input type="number" id="amount" required min="1" placeholder="Contoh: 50000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kategori</label>
+                            <select id="category" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="Umum">Umum</option>
+                                <option value="Makanan">Makanan & Minuman</option>
+                                <option value="Transportasi">Transportasi</option>
+                                <option value="Belanja">Belanja</option>
+                                <option value="Hiburan">Hiburan</option>
+                                <option value="Tagihan">Tagihan & Utilitas</option>
+                                <option value="Investasi">Investasi / Saham</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Simpan Transaksi</button>
+                    </form>
                 </div>
+
+                <!-- Budget Bulanan -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-bullseye text-amber-500 mr-2"></i>Budget Bulanan</h2>
+                    <form onsubmit="setBudget(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Batas Pengeluaran (Rp)</label>
+                            <input type="number" id="budgetLimit" required min="0" placeholder="Contoh: 3000000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-medium py-2.5 rounded-xl transition text-sm">Atur Budget</button>
+                    </form>
+                </div>
+
+                <!-- Form Wishlist / Target Keinginan -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-gift text-rose-500 mr-2"></i>Tambah Wishlist</h2>
+                    <form onsubmit="addWishlist(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nama Barang / Target</label>
+                            <input type="text" id="wishName" required placeholder="Contoh: Laptop Baru, Liburan" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Target Harga (Rp)</label>
+                            <input type="number" id="wishTarget" required min="1" placeholder="Contoh: 10000000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Terkumpul Saat Ini (Rp)</label>
+                            <input type="number" id="wishSaved" required min="0" value="0" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Simpan Wishlist</button>
+                    </form>
+                </div>
+
             </div>
 
-        </div>
+            <!-- Kolom Kanan: Grafik, Portofolio Saham, Wishlist, Riwayat -->
+            <div class="space-y-8 lg:col-span-2">
+                
+                <!-- Grafik Pengeluaran -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4">Statistik Pengeluaran Kategori</h2>
+                    <div class="relative h-64 flex justify-center items-center">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
 
-        <!-- Riwayat Transaksi -->
-        <div class="bg-white p-6 rounded-xl shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Riwayat Transaksi</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b text-gray-600 text-sm">
-                            <th class="py-2 px-3">Keterangan</th>
-                            <th class="py-2 px-3">Jumlah</th>
-                            <th class="py-2 px-3">Tipe</th>
-                            <th class="py-2 px-3 text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transaction-list" class="text-sm text-gray-700">
-                        <!-- Data transaksi akan dimasukkan lewat JavaScript -->
-                    </tbody>
-                </table>
+                <!-- Portofolio Investasi & Saham -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-chart-pie text-blue-500 mr-2"></i>Portofolio Saham & Investasi</h2>
+                        <button onclick="openStockModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition"><i class="fa-solid fa-plus mr-1"></i> Tambah Saham</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-xs text-gray-400 uppercase border-b">
+                                    <th class="py-2 px-3">Kode & Nama</th>
+                                    <th class="py-2 px-3">Lembar</th>
+                                    <th class="py-2 px-3">Avg Buy / Current</th>
+                                    <th class="py-2 px-3">Total Nilai & Gain/Loss</th>
+                                    <th class="py-2 px-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockList" class="text-sm divide-y">
+                                <!-- Data Saham -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Daftar Wishlist -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-list-check text-rose-500 mr-2"></i>Wishlist & Target Tabungan</h2>
+                    <div id="wishlistContainer" class="space-y-4">
+                        <!-- Data Wishlist -->
+                    </div>
+                </div>
+
+                <!-- Riwayat Transaksi -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-800">Riwayat Transaksi</h2>
+                        <button onclick="clearAllData()" class="text-xs text-rose-500 hover:underline font-medium">Reset Semua Data</button>
+                    </div>
+                    <div class="overflow-x-auto max-h-80 overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-xs text-gray-400 uppercase border-b">
+                                    <th class="py-2 px-3">Tanggal & Keterangan</th>
+                                    <th class="py-2 px-3">Kategori</th>
+                                    <th class="py-2 px-3">Jumlah</th>
+                                    <th class="py-2 px-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionList" class="text-sm divide-y">
+                                <!-- Data Transaksi -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
-            <p id="no-transaction" class="text-center text-gray-500 text-sm py-4 hidden">Belum ada transaksi yang dicatat.</p>
+
         </div>
 
     </div>
 
-    <!-- Script JavaScript -->
+    <!-- Modal Tambah Saham -->
+    <div id="stockModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-50 px-4">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Tambah Portofolio Saham</h3>
+            <form onsubmit="addStock(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kode Saham (Ticker)</label>
+                    <input type="text" id="stockTicker" required placeholder="Contoh: BBCA, BBRI" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Jumlah Lembar Saham</label>
+                    <input type="number" id="stockShares" required min="1" placeholder="Contoh: 1000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Harga Pembelian Rata-rata (Avg Buy)</label>
+                    <input type="number" id="stockAvgPrice" required min="1" placeholder="Contoh: 8500" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Harga Pasar Saat Ini (Current Price)</label>
+                    <input type="number" id="stockCurrentPrice" required min="1" placeholder="Contoh: 9000" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeStockModal()" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2.5 rounded-xl transition text-sm">Batal</button>
+                    <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Logika Aplikasi -->
     <script>
-        // Ambil data dari localStorage atau buat array kosong
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let monthlyBudget = JSON.parse(localStorage.getItem('monthlyBudget')) || 0;
+        let wishlists = JSON.parse(localStorage.getItem('wishlists')) || [];
+        let stocks = JSON.parse(localStorage.getItem('stocks')) || [];
+        let expenseChart = null;
 
-        const balanceEl = document.getElementById('balance');
-        const totalIncomeEl = document.getElementById('total-income');
-        const totalExpenseEl = document.getElementById('total-expense');
-        const transactionListEl = document.getElementById('transaction-list');
-        const noTransactionEl = document.getElementById('no-transaction');
-        const formEl = document.getElementById('transaction-form');
-        
-        let myChart = null;
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('budgetLimit').value = monthlyBudget;
+            updateUI();
+        });
 
-        // Fungsi format mata uang Rupiah
         function formatRupiah(number) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         }
 
-        // Fungsi Update UI & LocalStorage
-        function updateUI() {
-            transactionListEl.innerHTML = '';
-            let totalIncome = 0;
-            let totalExpense = 0;
-
-            if (transactions.length === 0) {
-                noTransactionEl.classList.remove('hidden');
-            } else {
-                noTransactionEl.classList.add('hidden');
-                transactions.forEach((trx, index) => {
-                    if (trx.type === 'income') {
-                        totalIncome += Number(trx.amount);
-                    } else {
-                        totalExpense += Number(trx.amount);
-                    }
-
-                    const tr = document.createElement('tr');
-                    tr.className = 'border-b hover:bg-gray-50';
-                    tr.innerHTML = `
-                        <td class="py-3 px-3">${trx.description}</td>
-                        <td class="py-3 px-3 font-semibold ${trx.type === 'income' ? 'text-green-600' : 'text-red-600'}">
-                            ${trx.type === 'income' ? '+' : '-'} ${formatRupiah(trx.amount)}
-                        </td>
-                        <td class="py-3 px-3">
-                            <span class="px-2 py-1 text-xs rounded-full ${trx.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                                ${trx.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}
-                            </span>
-                        </td>
-                        <td class="py-3 px-3 text-center">
-                            <button onclick="deleteTransaction(${index})" class="text-red-500 hover:text-red-700 text-xs font-semibold bg-red-50 px-2 py-1 rounded">Hapus</button>
-                        </td>
-                    `;
-                    transactionListEl.appendChild(tr);
-                });
-            }
-
-            const balance = totalIncome - totalExpense;
-
-            balanceEl.innerText = formatRupiah(balance);
-            totalIncomeEl.innerText = formatRupiah(totalIncome);
-            totalExpenseEl.innerText = formatRupiah(totalExpense);
-
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-            updateChart(totalIncome, totalExpense);
-        }
-
-        // Tambah Transaksi Baru
-        formEl.addEventListener('submit', function(e) {
+        // Transaksi
+        function addTransaction(e) {
             e.preventDefault();
-            const description = document.getElementById('description').value;
-            const amount = document.getElementById('amount').value;
             const type = document.getElementById('type').value;
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
 
             const newTransaction = {
+                id: Date.now(),
+                type,
                 description,
-                amount: parseFloat(amount),
-                type
+                amount,
+                category,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
             };
 
             transactions.push(newTransaction);
-            formEl.reset();
-            updateUI();
-        });
+            saveAndRefresh();
+            document.getElementById('transactionForm').reset();
+        }
 
-        // Hapus Transaksi
-        function deleteTransaction(index) {
-            transactions.splice(index, 1);
+        function deleteTransaction(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveAndRefresh();
+        }
+
+        // Budget
+        function setBudget(e) {
+            e.preventDefault();
+            monthlyBudget = parseFloat(document.getElementById('budgetLimit').value);
+            localStorage.setItem('monthlyBudget', JSON.stringify(monthlyBudget));
+            updateUI();
+            alert('Budget berhasil diperbarui!');
+        }
+
+        // Wishlist
+        function addWishlist(e) {
+            e.preventDefault();
+            const name = document.getElementById('wishName').value;
+            const target = parseFloat(document.getElementById('wishTarget').value);
+            const saved = parseFloat(document.getElementById('wishSaved').value);
+
+            const newWish = { id: Date.now(), name, target, saved };
+            wishlists.push(newWish);
+            saveAndRefresh();
+            e.target.reset();
+            document.getElementById('wishSaved').value = 0;
+        }
+
+        function deleteWishlist(id) {
+            wishlists = wishlists.filter(w => w.id !== id);
+            saveAndRefresh();
+        }
+
+        function addWishSaving(id) {
+            const tambah = parseFloat(prompt("Masukkan jumlah uang yang ingin ditambahkan ke tabungan wishlist ini (Rp):", 0));
+            if (!tambah || isNaN(tambah) || tambah <= 0) return;
+            
+            wishlists = wishlists.map(w => {
+                if (w.id === id) {
+                    w.saved += tambah;
+                }
+                return w;
+            });
+            saveAndRefresh();
+        }
+
+        // Saham / Investasi
+        function openStockModal() {
+            document.getElementById('stockModal').classList.remove('hidden');
+        }
+
+        function closeStockModal() {
+            document.getElementById('stockModal').classList.add('hidden');
+        }
+
+        function addStock(e) {
+            e.preventDefault();
+            const ticker = document.getElementById('stockTicker').value.toUpperCase();
+            const shares = parseFloat(document.getElementById('stockShares').value);
+            const avgPrice = parseFloat(document.getElementById('stockAvgPrice').value);
+            const currentPrice = parseFloat(document.getElementById('stockCurrentPrice').value);
+
+            const newStock = { id: Date.now(), ticker, shares, avgPrice, currentPrice };
+            stocks.push(newStock);
+            saveAndRefresh();
+            closeStockModal();
+            e.target.reset();
+        }
+
+        function deleteStock(id) {
+            stocks = stocks.filter(s => s.id !== id);
+            saveAndRefresh();
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('monthlyBudget', JSON.stringify(monthlyBudget));
+            localStorage.setItem('wishlists', JSON.stringify(wishlists));
+            localStorage.setItem('stocks', JSON.stringify(stocks));
             updateUI();
         }
 
-        // Inisialisasi & Update Grafik Chart.js
-        function updateChart(income, expense) {
-            const ctx = document.getElementById('expenseChart').getContext('2d');
-            
-            if (myChart) {
-                myChart.destroy();
+        function updateUI() {
+            // Transaksi & Kas
+            let totalIncome = 0;
+            let totalExpense = 0;
+            const listEl = document.getElementById('transactionList');
+            listEl.innerHTML = '';
+
+            if (transactions.length === 0) {
+                listEl.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-400">Belum ada transaksi tercatat.</td></tr>`;
             }
 
-            myChart = new Chart(ctx, {
+            transactions.slice().reverse().forEach(t => {
+                if (t.type === 'pemasukan') totalIncome += t.amount;
+                else totalExpense += t.amount;
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="py-3 px-3">
+                        <div class="font-medium text-gray-800">${t.description}</div>
+                        <div class="text-xs text-gray-400">${t.date}</div>
+                    </td>
+                    <td class="py-3 px-3">
+                        <span class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full text-xs font-medium">${t.category}</span>
+                    </td>
+                    <td class="py-3 px-3 font-semibold ${t.type === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">
+                        ${t.type === 'pemasukan' ? '+' : '-'} ${formatRupiah(t.amount)}
+                    </td>
+                    <td class="py-3 px-3 text-center">
+                        <button onclick="deleteTransaction(${t.id})" class="text-gray-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                listEl.appendChild(row);
+            });
+
+            const totalSaldo = totalIncome - totalExpense;
+            const sisaBudget = monthlyBudget - totalExpense;
+
+            // Saham
+            let totalAssetValue = 0;
+            const stockListEl = document.getElementById('stockList');
+            stockListEl.innerHTML = '';
+
+            if (stocks.length === 0) {
+                stockListEl.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Belum ada portofolio saham.</td></tr>`;
+            }
+
+            stocks.forEach(s => {
+                const currentVal = s.shares * s.currentPrice;
+                const buyVal = s.shares * s.avgPrice;
+                const profitLoss = currentVal - buyVal;
+                const profitLossPct = buyVal > 0 ? (profitLoss / buyVal) * 100 : 0;
+                totalAssetValue += currentVal;
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="py-3 px-3 font-bold text-gray-800">${s.ticker}</td>
+                    <td class="py-3 px-3 text-sm text-gray-600">${s.shares.toLocaleString()} lbr</td>
+                    <td class="py-3 px-3 text-xs">
+                        <div>Beli: ${formatRupiah(s.avgPrice)}</div>
+                        <div>Kini: ${formatRupiah(s.currentPrice)}</div>
+                    </td>
+                    <td class="py-3 px-3">
+                        <div class="font-semibold text-gray-800">${formatRupiah(currentVal)}</div>
+                        <div class="text-xs font-medium ${profitLoss >= 0 ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${profitLoss >= 0 ? '+' : ''}${formatRupiah(profitLoss)} (${profitLossPct.toFixed(2)}%)
+                        </div>
+                    </td>
+                    <td class="py-3 px-3 text-center">
+                        <button onclick="deleteStock(${s.id})" class="text-gray-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                stockListEl.appendChild(row);
+            });
+
+            // Wishlist
+            const wishContainer = document.getElementById('wishlistContainer');
+            wishContainer.innerHTML = '';
+            if (wishlists.length === 0) {
+                wishContainer.innerHTML = `<p class="text-center text-sm text-gray-400 py-2">Belum ada wishlist tercatat.</p>`;
+            }
+
+            wishlists.forEach(w => {
+                const progress = Math.min((w.saved / w.target) * 100, 100);
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'bg-gray-50 p-4 rounded-xl border border-gray-100';
+                itemDiv.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-gray-800 text-sm">${w.name}</span>
+                        <div class="flex gap-2">
+                            <button onclick="addWishSaving(${w.id})" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-1 rounded-lg transition">+ Tabung</button>
+                            <button onclick="deleteWishlist(${w.id})" class="text-xs text-rose-500 hover:underline">Hapus</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mb-1">
+                        <span>Terkumpul: ${formatRupiah(w.saved)}</span>
+                        <span>Target: ${formatRupiah(w.target)}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-rose-500 h-2.5 rounded-full" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="text-right text-[10px] text-gray-400 mt-1">${progress.toFixed(1)}% tercapai</div>
+                `;
+                wishContainer.appendChild(itemDiv);
+            });
+
+            // Render Kartu Atas
+            document.getElementById('totalSaldo').innerText = formatRupiah(totalSaldo);
+            document.getElementById('totalPemasukan').innerText = formatRupiah(totalIncome);
+            document.getElementById('totalPengeluaran').innerText = formatRupiah(totalExpense);
+            document.getElementById('totalAset').innerText = formatRupiah(totalAssetValue);
+            
+            const sisaBudgetEl = document.getElementById('sisaBudget');
+            sisaBudgetEl.innerText = formatRupiah(sisaBudget);
+            sisaBudgetEl.className = `text-xl font-bold mt-1 ${sisaBudget < 0 ? 'text-rose-600' : 'text-gray-800'}`;
+
+            updateChart();
+        }
+
+        function updateChart() {
+            const expenseData = {};
+            transactions.filter(t => t.type === 'pengeluaran').forEach(t => {
+                expenseData[t.category] = (expenseData[t.category] || 0) + t.amount;
+            });
+
+            const labels = Object.keys(expenseData);
+            const data = Object.values(expenseData);
+
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            if (expenseChart) expenseChart.destroy();
+
+            expenseChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Pemasukan', 'Pengeluaran'],
+                    labels: labels.length > 0 ? labels : ['Belum ada pengeluaran'],
                     datasets: [{
-                        data: [income, expense],
-                        backgroundColor: ['#22c55e', '#ef4444'],
-                        borderWidth: 1
+                        data: data.length > 0 ? data : [1],
+                        backgroundColor: data.length > 0 ? ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#3b82f6'] : ['#e5e7eb'],
+                        borderWidth: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
                     }
                 }
             });
         }
 
-        // Jalankan saat pertama kali dimuat
-        updateUI();
+        function clearAllData() {
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh data keuangan dan portofolio?')) {
+                localStorage.clear();
+                transactions = [];
+                monthlyBudget = 0;
+                wishlists = [];
+                stocks = [];
+                document.getElementById('budgetLimit').value = '';
+                updateUI();
+            }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ transactions, monthlyBudget, wishlists, stocks }));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "wealth_tracker_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    transactions = parsed.transactions || [];
+                    monthlyBudget = parsed.monthlyBudget || 0;
+                    wishlists = parsed.wishlists || [];
+                    stocks = parsed.stocks || [];
+                    
+                    localStorage.setItem('transactions', JSON.stringify(transactions));
+                    localStorage.setItem('monthlyBudget', JSON.stringify(monthlyBudget));
+                    localStorage.setItem('wishlists', JSON.stringify(wishlists));
+                    localStorage.setItem('stocks', JSON.stringify(stocks));
+                    
+                    document.getElementById('budgetLimit').value = monthlyBudget;
+                    updateUI();
+                    alert('Data berhasil diimpor!');
+                } catch (err) {
+                    alert('Format file tidak valid!');
+                }
+            };
+            reader.readAsText(file);
+        }
     </script>
 </body>
 </html>
