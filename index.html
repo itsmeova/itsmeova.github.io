@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Finance PRO + AI Assistant — Ultimate Wealth Hub</title>
+    <title>My Finance PRO + Voice AI — Ultimate Wealth Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -59,6 +59,12 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        .mic-active { animation: pulse-ring 1.5s infinite; }
+        }
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
@@ -86,12 +92,15 @@
     <!-- Mobile Frame Container -->
     <div class="max-w-md mx-auto min-h-screen flex flex-col justify-between relative shadow-2xl overflow-hidden border-x border-slate-900">
         
-        <!-- Top Header -->
+        <!-- Top Header with Voice Note Quick Button -->
         <header class="w-full px-6 pt-6 pb-2 flex justify-between items-center z-10 no-print">
             <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">
-                My Finance PRO <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30">AI+</span>
+                My Finance PRO <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">Voice AI</span>
             </h1>
             <div class="flex items-center gap-2">
+                <button onclick="startVoiceRecognition()" id="micHeaderBtn" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/30 hover:scale-105 transition active:scale-95" title="Perintah Suara / VN">
+                    <i class="fa-solid fa-microphone text-sm"></i>
+                </button>
                 <button onclick="switchTab('settings')" class="w-10 h-10 rounded-2xl bg-slate-900/80 border border-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-800 transition active:scale-95">
                     <i class="fa-solid fa-gear text-sm"></i>
                 </button>
@@ -101,18 +110,32 @@
         <!-- Main Dynamic Views -->
         <main class="px-6 py-4 space-y-6 flex-grow">
             
-            <!-- TAB 1: HOME (Dashboard & AI Insights) -->
+            <!-- TAB 1: HOME (Dashboard & Voice Assistant Prompt) -->
             <div id="tab-home" class="space-y-6 tab-content">
                 <div>
                     <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
                         Selamat Pagi, ymori! 👋
                     </h2>
-                    <p class="text-xs text-slate-400 font-medium">Ringkasan kekayaan & analisis kecerdasan buatan</p>
+                    <p class="text-xs text-slate-400 font-medium">Ketuk ikon mikrofon di atas untuk mencatat via suara</p>
+                </div>
+
+                <!-- Voice Note Floating Banner -->
+                <div onclick="startVoiceRecognition()" class="card-ai p-4 rounded-3xl flex items-center justify-between cursor-pointer hover:border-purple-500/50 transition group">
+                    <div class="flex items-center gap-3">
+                        <div id="micBannerIcon" class="w-10 h-10 rounded-2xl bg-purple-600/20 text-purple-400 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                            <i class="fa-solid fa-microphone-lines"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-200">Asisten Suara Pintar (Voice Note)</h4>
+                            <p class="text-[11px] text-slate-400">Contoh: "Beli gorengan 5 ribu" atau "Nabung 50rb"</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
                 </div>
 
                 <!-- AI Smart Insights Banner -->
-                <div class="card-ai p-5 rounded-3xl relative overflow-hidden space-y-2">
-                    <div class="flex items-center gap-2 text-blue-400 font-extrabold text-xs">
+                <div class="card-app p-5 rounded-3xl relative overflow-hidden space-y-2 border-l-4 border-l-purple-500">
+                    <div class="flex items-center gap-2 text-purple-400 font-extrabold text-xs">
                         <i class="fa-solid fa-wand-magic-sparkles"></i> AI Financial Insights
                     </div>
                     <p id="aiInsightText" class="text-xs text-slate-300 leading-relaxed font-medium">
@@ -147,20 +170,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Financial Health Score Widget -->
-                <div class="card-app p-5 rounded-3xl flex items-center justify-between">
-                    <div class="flex items-center gap-3.5">
-                        <div id="healthScoreBadge" class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 font-extrabold text-base flex items-center justify-center border border-emerald-500/20">
-                            85
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Skor Kesehatan Finansial</span>
-                            <h4 id="healthScoreStatus" class="text-xs font-bold text-emerald-400">Sangat Sehat</h4>
-                        </div>
-                    </div>
-                    <button onclick="switchTab('ai')" class="text-xs bg-purple-600/20 text-purple-300 px-3 py-1.5 rounded-xl font-bold">Tanya AI</button>
                 </div>
 
                 <!-- 2x2 Grid Cards -->
@@ -216,8 +225,8 @@
             <div id="tab-transactions" class="space-y-6 tab-content hidden">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h2 class="text-lg font-bold">Transaksi & AI OCR</h2>
-                        <p class="text-xs text-slate-400">Pencatatan kas, dompet, & pindai struk AI</p>
+                        <h2 class="text-lg font-bold">Transaksi & Dompet</h2>
+                        <p class="text-xs text-slate-400">Pencatatan kas, dompet, tagihan, & hutang</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="openOcrModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-xl text-xs font-bold transition shadow-lg active:scale-95" title="Pindai Struk AI">
@@ -229,7 +238,6 @@
                     </div>
                 </div>
 
-                <!-- Wallet Bar -->
                 <div class="card-app p-4 rounded-3xl space-y-3">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Daftar Dompet / Akun</span>
@@ -238,7 +246,6 @@
                     <div id="walletListDetail" class="space-y-2 max-h-36 overflow-y-auto"></div>
                 </div>
 
-                <!-- Search & Filter -->
                 <div class="card-app p-4 rounded-3xl space-y-3">
                     <div class="flex gap-2">
                         <input type="text" id="searchTxInput" oninput="updateUI()" placeholder="Cari transaksi..." class="w-full custom-input rounded-xl p-2.5 text-xs font-semibold focus:outline-none">
@@ -248,7 +255,6 @@
                     </div>
                 </div>
 
-                <!-- Submenu -->
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="openRecurringModal()" class="card-app p-3 rounded-2xl text-left hover:border-purple-500/40 transition flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-repeat"></i></div>
@@ -266,7 +272,6 @@
                     </button>
                 </div>
 
-                <!-- Transaction List -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
                         <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> Riwayat Transaksi
@@ -274,7 +279,6 @@
                     <div id="transactionList" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
                 </div>
 
-                <!-- Recurring Bills -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -285,7 +289,6 @@
                     <div id="recurringListContainer" class="space-y-3 max-h-48 overflow-y-auto"></div>
                 </div>
 
-                <!-- Debts -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -402,7 +405,7 @@
                 </div>
             </div>
 
-            <!-- TAB 5: AI FINANCIAL ADVISOR (Asisten AI) -->
+            <!-- TAB 5: AI FINANCIAL ADVISOR -->
             <div id="tab-ai" class="space-y-6 tab-content hidden">
                 <div>
                     <h2 class="text-lg font-bold flex items-center gap-2">
@@ -418,7 +421,7 @@
                         </div>
                     </div>
                     <div class="flex gap-2 pt-2">
-                        <input type="text" id="aiUserQuery" placeholder="Tulis pertanyaan (misal: 'Bagaimana pengeluaranku?')..." class="w-full custom-input rounded-xl p-3 text-xs font-semibold focus:outline-none">
+                        <input type="text" id="aiUserQuery" placeholder="Tulis pertanyaan..." class="w-full custom-input rounded-xl p-3 text-xs font-semibold focus:outline-none">
                         <button type="button" onclick="sendAiQuery()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-3 rounded-xl text-xs font-bold active:scale-95 shadow-md">Kirim</button>
                     </div>
                     <div class="flex flex-wrap gap-1.5 pt-1">
@@ -524,7 +527,6 @@
     </div>
 
     <!-- Modals -->
-    <!-- Modal Transaksi -->
     <div id="transactionModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-purple-400"></i> Catat Transaksi</h3><button onclick="closeTransactionModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -540,7 +542,6 @@
         </div>
     </div>
 
-    <!-- Modal AI OCR Scanner Simulator -->
     <div id="ocrModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4 text-center">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-camera text-blue-400"></i> AI Pindai Struk</h3><button onclick="closeOcrModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -554,7 +555,6 @@
         </div>
     </div>
 
-    <!-- Modal Wallet Baru -->
     <div id="walletModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-wallet text-purple-400"></i> Tambah Dompet / Akun</h3><button onclick="closeWalletModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -566,7 +566,6 @@
         </div>
     </div>
 
-    <!-- Modal Recurring Bills -->
     <div id="recurringModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-repeat text-purple-400"></i> Tagihan Rutin / Langganan</h3><button onclick="closeRecurringModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -579,7 +578,6 @@
         </div>
     </div>
 
-    <!-- Modal Debt -->
     <div id="debtModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-hand-holding-dollar text-amber-400"></i> Catat Hutang / Piutang</h3><button onclick="closeDebtModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -593,7 +591,6 @@
         </div>
     </div>
 
-    <!-- Modal Multi-Asset Investment -->
     <div id="assetModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-chart-line text-purple-400"></i> Tambah Portofolio Aset</h3><button onclick="closeAssetModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -609,7 +606,6 @@
         </div>
     </div>
 
-    <!-- Modal Wishlist -->
     <div id="wishlistModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-gift text-purple-400"></i> Target Wishlist</h3><button onclick="closeWishlistModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
@@ -622,7 +618,7 @@
         </div>
     </div>
 
-    <!-- Script Logic -->
+    <!-- Script Logic with Web Speech API & NLP Voice Parsing -->
     <script>
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         let wallets = JSON.parse(localStorage.getItem('wallets')) || [
@@ -652,6 +648,126 @@
             populateWalletsDropdown();
             updateUI();
         });
+
+        // 🎙️ Voice Note / Speech Recognition Implementation
+        function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Maaf, browser Anda tidak mendukung fitur perintah suara.');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            const micBtn = document.getElementById('micHeaderBtn');
+            const micBanner = document.getElementById('micBannerIcon');
+            micBtn.classList.add('mic-active', 'bg-rose-500');
+            if(micBanner) micBanner.classList.add('mic-active', 'bg-rose-500/30', 'text-rose-400');
+
+            alert('🎤 Mendengarkan... Silakan sebutkan transaksi (Contoh: "Beli gorengan 5 ribu" atau "Nabung 50rb")');
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const speechText = event.results[0][0].transcript.toLowerCase();
+                processVoiceCommand(speechText);
+            };
+
+            recognition.onerror = function(event) {
+                alert('Gagal mendengarkan suara. Coba ulangi kembali.');
+                resetMicState();
+            };
+
+            recognition.onend = function() {
+                resetMicState();
+            };
+        }
+
+        function resetMicState() {
+            const micBtn = document.getElementById('micHeaderBtn');
+            const micBanner = document.getElementById('micBannerIcon');
+            if(micBtn) micBtn.classList.remove('mic-active', 'bg-rose-500');
+            if(micBanner) micBanner.classList.remove('mic-active', 'bg-rose-500/30', 'text-rose-400');
+        }
+
+        // 🧠 NLP Parser untuk Perintah Suara Bahasa Indonesia
+        function processVoiceCommand(text) {
+            console.log("Voice Transcript:", text);
+            let type = "pengeluaran";
+            if (text.includes("nabung") || text.includes("pemasukan") || text.includes("gaji") || text.includes("terima")) {
+                type = "pemasukan";
+            }
+
+            // Ekstraksi Nominal Angka / Kata ("5 ribu", "50rb", "1 juta", "50000")
+            let amount = 0;
+            const cleanText = text.replace(/\./g, '');
+            
+            // Cek kata "ribu"
+            if (cleanText.includes("ribu") || cleanText.includes("rb")) {
+                const matches = cleanText.match(/(\d+)\s*(ribu|rb)/);
+                if (matches) {
+                    amount = parseInt(matches[1]) * 1000;
+                }
+            } 
+            // Cek kata "juta"
+            else if (cleanText.includes("juta")) {
+                const matches = cleanText.match(/(\d+)\s*(juta)/);
+                if (matches) {
+                    amount = parseInt(matches[1]) * 1000000;
+                }
+            } 
+            // Cek angka biasa
+            else {
+                const matches = cleanText.match(/\d+/);
+                if (matches) {
+                    amount = parseInt(matches[0]);
+                }
+            }
+
+            if (amount <= 0) {
+                alert(`Suara dikenali: "${text}", tetapi nominal uang tidak terdeteksi.`);
+                return;
+            }
+
+            // Tentukan kategori otomatis berdasarkan teks
+            let category = "Umum";
+            if (text.includes("makan") || text.includes("gorengan") || text.includes("minum") || text.includes("kopi")) category = "Makanan";
+            else if (text.includes("bensin") || text.includes("transport") || text.includes("ojek")) category = "Transportasi";
+            else if (text.includes("belanja") || text.includes("beli")) category = "Belanja";
+            else if (text.includes("gaji") || text.includes("nabung")) category = "Investasi";
+
+            const description = text.charAt(0).toUpperCase() + text.slice(1);
+            const defaultWallet = wallets[0].id;
+            const rawDate = new Date().toISOString().split('T')[0];
+            const formattedDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            // Simpan transaksi otomatis
+            transactions.push({
+                id: Date.now(),
+                type,
+                walletId: defaultWallet,
+                description,
+                amount,
+                category,
+                rawDate,
+                date: formattedDate
+            });
+
+            // Potong / tambah saldo dompet
+            wallets = wallets.map(w => {
+                if(w.id === defaultWallet) {
+                    w.balance = type === 'pemasukan' ? w.balance + amount : w.balance - amount;
+                }
+                return w;
+            });
+            localStorage.setItem('wallets', JSON.stringify(wallets));
+            saveAndRefresh();
+
+            alert(`✨ VN Berhasil Dicatat Otomatis!\n📝 "${description}"\n💰 ${formatRupiah(amount)} (${type.toUpperCase()})`);
+        }
 
         function verifyPin() {
             const entered = document.getElementById('unlockPinInput').value;
@@ -740,13 +856,11 @@
         function openOcrModal() { document.getElementById('ocrModal').classList.remove('hidden'); }
         function closeOcrModal() { document.getElementById('ocrModal').classList.add('hidden'); }
 
-        // AI OCR Simulation
         function simulateAiOcr(e) {
             const file = e.target.files[0];
             if(!file) return;
             setTimeout(() => {
                 closeOcrModal();
-                // Mock AI extraction result
                 const mockAmount = Math.floor(Math.random() * 150000) + 15000;
                 document.getElementById('description').value = "Belanja Supermarket (AI Scan)";
                 document.getElementById('amount').value = mockAmount;
@@ -756,7 +870,6 @@
             }, 1000);
         }
 
-        // AI Chatbot Logic
         function askAiPreset(q) {
             document.getElementById('aiUserQuery').value = q;
             sendAiQuery();
@@ -777,11 +890,11 @@
                 let totalExp = transactions.filter(t=>t.type==='pengeluaran').reduce((a,b)=>a+b.amount,0);
 
                 if(q.toLowerCase().includes('kondisi') || q.toLowerCase().includes('analisis')) {
-                    reply = `Analisis AI: Total pemasukan Anda saat ini ${formatRupiah(totalInc)} dan total pengeluaran ${formatRupiah(totalExp)}. ${totalInc >= totalExp ? 'Arus kas Anda positif, pertahankan!' : 'Perhatian: Pengeluaran Anda melebihi pemasukan!'}`;
+                    reply = `Analisis AI: Total pemasukan Anda saat ini ${formatRupiah(totalInc)} dan total pengeluaran ${formatRupiah(totalExp)}.`;
                 } else if(q.toLowerCase().includes('wishlist') || q.toLowerCase().includes('target')) {
-                    reply = `Tips AI: Anda memiliki ${wishlists.length} target wishlist. Coba sisihkan minimal 20% dari pemasukan bulanan secara otomatis ke dompet terpisah agar target cepat terkumpul.`;
+                    reply = `Tips AI: Anda memiliki ${wishlists.length} target wishlist. Coba sisihkan minimal 20% dari pemasukan bulanan.`;
                 } else if(q.toLowerCase().includes('boros') || q.toLowerCase().includes('kategori')) {
-                    reply = `Analisis AI: Pengeluaran terbesar Anda cenderung berada pada kategori Makanan dan Belanja. Coba terapkan aturan ketat di kategori ini minggu depan.`;
+                    reply = `Analisis AI: Pengeluaran terbesar Anda cenderung berada pada kategori Makanan dan Belanja.`;
                 }
 
                 chatContainer.innerHTML += `<div class="bg-blue-600/10 border border-blue-500/20 p-3 rounded-2xl text-slate-200"><strong>AI Assistant:</strong> ${reply}</div>`;
@@ -1001,18 +1114,14 @@
             sisaEl.innerText = formatRupiah(sisaBudget);
             sisaEl.className = `text-base font-extrabold mt-1 ${sisaBudget < 0 ? 'text-rose-400' : 'text-purple-300'}`;
 
-            // AI Smart Insights Generator
             let insightMsg = "Keuangan Anda stabil. Pertahankan kebiasaan menabung secara rutin setiap bulan.";
             if(totalExpense > totalIncome && totalIncome > 0) {
                 insightMsg = "⚠️ Peringatan AI: Pengeluaran Anda bulan ini melebihi pemasukan. Kurangi pengeluaran tersier!";
             } else if(monthlyBudget > 0 && totalExpense > (monthlyBudget * 0.8)) {
-                insightMsg = "💡 Tips AI: Pengeluaran Anda hampir mencapai batas budget bulanan. Harap lebih berhati-hati.";
-            } else if(transactions.length > 0) {
-                insightMsg = "✨ Bagus! Rasio tabungan Anda berada di jalur yang aman untuk mencapai target kebebasan finansial.";
+                insightMsg = "💡 Tips AI: Pengeluaran Anda hampir mencapai batas budget bulanan.";
             }
             document.getElementById('aiInsightText').innerText = insightMsg;
 
-            // Wallet Summary & Detail
             const walletSum = document.getElementById('walletSummaryContainer');
             const walletDet = document.getElementById('walletListDetail');
             if(walletSum) walletSum.innerHTML = '';
@@ -1025,21 +1134,6 @@
                     walletDet.innerHTML += `<div class="flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 text-xs"><span class="font-bold text-slate-200">${w.name}</span><div class="flex items-center gap-2"><span class="font-extrabold text-purple-300">${formatRupiah(w.balance)}</span><button onclick="deleteWallet('${w.id}')" class="text-slate-600 hover:text-rose-400"><i class="fa-solid fa-xmark"></i></button></div></div>`;
                 }
             });
-
-            // Financial Health Score
-            let healthScore = 80;
-            if(totalIncome > 0) {
-                const savingsRate = ((totalIncome - totalExpense) / totalIncome) * 100;
-                if(savingsRate < 10) healthScore -= 30;
-                else if(savingsRate < 20) healthScore -= 15;
-            }
-            if(monthlyBudget > 0 && totalExpense > monthlyBudget) healthScore -= 20;
-            healthScore = Math.max(10, Math.min(100, healthScore));
-            document.getElementById('healthScoreBadge').innerText = healthScore;
-            const hStatus = document.getElementById('healthScoreStatus');
-            if(healthScore >= 75) { hStatus.innerText = "Sangat Sehat"; hStatus.className = "text-xs font-bold text-emerald-400"; }
-            else if(healthScore >= 50) { hStatus.innerText = "Cukup Sehat"; hStatus.className = "text-xs font-bold text-amber-400"; }
-            else { hStatus.innerText = "Perlu Perhatian"; hStatus.className = "text-xs font-bold text-rose-400"; }
 
             let totalTarget = 0, totalSaved = 0;
             wishlists.forEach(w => { totalTarget += w.target; totalSaved += w.saved; });
@@ -1249,7 +1343,7 @@
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ transactions, wallets, monthlyBudget, wishlists, assets, recurringBills, debts, categories }));
             const dl = document.createElement('a');
-            dl.setAttribute("href", dataStr); dl.setAttribute("download", "my_finance_pro_ai_backup.json");
+            dl.setAttribute("href", dataStr); dl.setAttribute("download", "my_finance_voice_backup.json");
             document.body.appendChild(dl); dl.click(); dl.remove();
         }
 
