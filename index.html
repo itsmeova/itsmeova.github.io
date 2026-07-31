@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Finance PRO — Ultimate Wealth Hub</title>
+    <title>My Finance PRO + AI Assistant — Ultimate Wealth Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -40,6 +40,10 @@
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.85) 0%, rgba(76, 29, 149, 0.9) 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 10px 30px -5px rgba(124, 58, 237, 0.4);
+        }
+        .card-ai {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%);
+            border: 1px solid rgba(147, 51, 234, 0.3);
         }
         .custom-input {
             background-color: #0b0f19;
@@ -85,7 +89,7 @@
         <!-- Top Header -->
         <header class="w-full px-6 pt-6 pb-2 flex justify-between items-center z-10 no-print">
             <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">
-                My Finance PRO
+                My Finance PRO <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30">AI+</span>
             </h1>
             <div class="flex items-center gap-2">
                 <button onclick="switchTab('settings')" class="w-10 h-10 rounded-2xl bg-slate-900/80 border border-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-800 transition active:scale-95">
@@ -97,16 +101,26 @@
         <!-- Main Dynamic Views -->
         <main class="px-6 py-4 space-y-6 flex-grow">
             
-            <!-- TAB 1: HOME (Dashboard) -->
+            <!-- TAB 1: HOME (Dashboard & AI Insights) -->
             <div id="tab-home" class="space-y-6 tab-content">
                 <div>
                     <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
                         Selamat Pagi, ymori! 👋
                     </h2>
-                    <p class="text-xs text-slate-400 font-medium">Ringkasan kekayaan & kesehatan finansial</p>
+                    <p class="text-xs text-slate-400 font-medium">Ringkasan kekayaan & analisis kecerdasan buatan</p>
                 </div>
 
-                <!-- Hero Card (Total Kekayaan Bersih / Net Worth) -->
+                <!-- AI Smart Insights Banner -->
+                <div class="card-ai p-5 rounded-3xl relative overflow-hidden space-y-2">
+                    <div class="flex items-center gap-2 text-blue-400 font-extrabold text-xs">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> AI Financial Insights
+                    </div>
+                    <p id="aiInsightText" class="text-xs text-slate-300 leading-relaxed font-medium">
+                        Menganalisis pola pengeluaran Anda...
+                    </p>
+                </div>
+
+                <!-- Hero Card (Total Net Worth) -->
                 <div class="card-hero p-6 rounded-3xl relative overflow-hidden">
                     <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
                     <div>
@@ -135,17 +149,6 @@
                     </div>
                 </div>
 
-                <!-- Multi-Wallet Quick Overview -->
-                <div class="card-app p-5 rounded-3xl space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Dompet & Rekening</span>
-                        <button onclick="switchTab('transactions')" class="text-[10px] text-purple-400 font-bold hover:underline">Kelola</button>
-                    </div>
-                    <div id="walletSummaryContainer" class="grid grid-cols-3 gap-2">
-                        <!-- Dynamic Wallets -->
-                    </div>
-                </div>
-
                 <!-- Financial Health Score Widget -->
                 <div class="card-app p-5 rounded-3xl flex items-center justify-between">
                     <div class="flex items-center gap-3.5">
@@ -157,7 +160,7 @@
                             <h4 id="healthScoreStatus" class="text-xs font-bold text-emerald-400">Sangat Sehat</h4>
                         </div>
                     </div>
-                    <button onclick="switchTab('settings')" class="text-slate-400 hover:text-white text-xs"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button onclick="switchTab('ai')" class="text-xs bg-purple-600/20 text-purple-300 px-3 py-1.5 rounded-xl font-bold">Tanya AI</button>
                 </div>
 
                 <!-- 2x2 Grid Cards -->
@@ -200,7 +203,7 @@
                     </div>
                 </div>
 
-                <!-- Net Worth Trend Growth Chart -->
+                <!-- Net Worth Growth Chart -->
                 <div class="card-app p-5 rounded-3xl space-y-3">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Grafik Pertumbuhan Net Worth</h3>
                     <div class="relative h-48 flex justify-center items-center">
@@ -209,19 +212,24 @@
                 </div>
             </div>
 
-            <!-- TAB 2: TRANSACTIONS & SEARCH & BILLS & DEBTS -->
+            <!-- TAB 2: TRANSACTIONS & SCANNER & BILLS -->
             <div id="tab-transactions" class="space-y-6 tab-content hidden">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h2 class="text-lg font-bold">Transaksi & Dompet</h2>
-                        <p class="text-xs text-slate-400">Pencatatan kas, dompet, tagihan, & hutang</p>
+                        <h2 class="text-lg font-bold">Transaksi & AI OCR</h2>
+                        <p class="text-xs text-slate-400">Pencatatan kas, dompet, & pindai struk AI</p>
                     </div>
-                    <button onclick="openTransactionModal()" class="bg-purple-600 hover:bg-purple-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-purple-600/30 active:scale-95">
-                        <i class="fa-solid fa-plus mr-1"></i> Catat
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="openOcrModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-xl text-xs font-bold transition shadow-lg active:scale-95" title="Pindai Struk AI">
+                            <i class="fa-solid fa-camera"></i>
+                        </button>
+                        <button onclick="openTransactionModal()" class="bg-purple-600 hover:bg-purple-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-lg active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i> Catat
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Wallet Management Bar -->
+                <!-- Wallet Bar -->
                 <div class="card-app p-4 rounded-3xl space-y-3">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Daftar Dompet / Akun</span>
@@ -230,7 +238,7 @@
                     <div id="walletListDetail" class="space-y-2 max-h-36 overflow-y-auto"></div>
                 </div>
 
-                <!-- Search & Filter Bar -->
+                <!-- Search & Filter -->
                 <div class="card-app p-4 rounded-3xl space-y-3">
                     <div class="flex gap-2">
                         <input type="text" id="searchTxInput" oninput="updateUI()" placeholder="Cari transaksi..." class="w-full custom-input rounded-xl p-2.5 text-xs font-semibold focus:outline-none">
@@ -240,7 +248,7 @@
                     </div>
                 </div>
 
-                <!-- Quick Action Submenu -->
+                <!-- Submenu -->
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="openRecurringModal()" class="card-app p-3 rounded-2xl text-left hover:border-purple-500/40 transition flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-repeat"></i></div>
@@ -258,7 +266,7 @@
                     </button>
                 </div>
 
-                <!-- Transaction History List -->
+                <!-- Transaction List -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
                         <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> Riwayat Transaksi
@@ -266,7 +274,7 @@
                     <div id="transactionList" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
                 </div>
 
-                <!-- Recurring Bills Summary List -->
+                <!-- Recurring Bills -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -277,7 +285,7 @@
                     <div id="recurringListContainer" class="space-y-3 max-h-48 overflow-y-auto"></div>
                 </div>
 
-                <!-- Debt & Receivable List -->
+                <!-- Debts -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -301,7 +309,6 @@
                     </button>
                 </div>
 
-                <!-- Investment Summary Card -->
                 <div class="card-app p-5 rounded-3xl flex justify-between items-center">
                     <div>
                         <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Total Nilai Investasi</span>
@@ -313,7 +320,6 @@
                     </div>
                 </div>
 
-                <!-- Asset List -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-purple-400"></i> Daftar Aset & Portofolio
@@ -322,7 +328,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4: TARGET, FIRE & LOAN CALCULATOR -->
+            <!-- TAB 4: TARGET, FIRE & CALCULATOR -->
             <div id="tab-target" class="space-y-6 tab-content hidden">
                 <div class="flex justify-between items-center">
                     <div>
@@ -334,7 +340,6 @@
                     </button>
                 </div>
 
-                <!-- Budget Card Setup -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
                         <i class="fa-solid fa-bullseye text-purple-400"></i> Atur Budget Bulanan
@@ -348,7 +353,6 @@
                     </form>
                 </div>
 
-                <!-- Loan / KPR Calculator Widget -->
                 <div class="card-app p-5 rounded-3xl space-y-3">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
                         <i class="fa-solid fa-calculator text-indigo-400"></i> Kalkulator Cicilan / KPR
@@ -373,7 +377,6 @@
                     </div>
                 </div>
 
-                <!-- FIRE Simulator Widget -->
                 <div class="card-app p-5 rounded-3xl space-y-3">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
                         <i class="fa-solid fa-fire text-amber-400"></i> Simulasi FIRE (Financial Independence)
@@ -391,23 +394,48 @@
                     </div>
                 </div>
 
-                <!-- Wishlist Items -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <i class="fa-solid fa-gift text-purple-400"></i> Daftar Target Wishlist & Challenge
+                        <i class="fa-solid fa-gift text-purple-400"></i> Daftar Target Wishlist
                     </h3>
                     <div id="wishlistContainer" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- TAB 5: ANALYTICS & SETTINGS -->
+            <!-- TAB 5: AI FINANCIAL ADVISOR (Asisten AI) -->
+            <div id="tab-ai" class="space-y-6 tab-content hidden">
+                <div>
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-robot text-blue-400"></i> AI Financial Advisor
+                    </h2>
+                    <p class="text-xs text-slate-400">Tanya jawab pintar seputar kondisi keuangan Anda</p>
+                </div>
+
+                <div class="card-app p-5 rounded-3xl space-y-4">
+                    <div id="aiChatContainer" class="space-y-3 max-h-80 overflow-y-auto pr-1 text-xs">
+                        <div class="bg-blue-600/10 border border-blue-500/20 p-3 rounded-2xl text-slate-200">
+                            <strong>AI Assistant:</strong> Halo ymori! Saya asisten AI keuangan pribadi Anda. Ada yang ingin ditanyakan tentang pengeluaran atau tips menabung bulan ini?
+                        </div>
+                    </div>
+                    <div class="flex gap-2 pt-2">
+                        <input type="text" id="aiUserQuery" placeholder="Tulis pertanyaan (misal: 'Bagaimana pengeluaranku?')..." class="w-full custom-input rounded-xl p-3 text-xs font-semibold focus:outline-none">
+                        <button type="button" onclick="sendAiQuery()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-3 rounded-xl text-xs font-bold active:scale-95 shadow-md">Kirim</button>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <button onclick="askAiPreset('Bagaimana kondisi keuanganku saat ini?')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg">📊 Analisis Kondisi</button>
+                        <button onclick="askAiPreset('Bagaimana cara cepat mencapai target wishlist?')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg">🎯 Tips Wishlist</button>
+                        <button onclick="askAiPreset('Di mana kategori pengeluaran terbesar saya?')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg">🔍 Boros di mana?</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: SETTINGS & ANALYTICS -->
             <div id="tab-settings" class="space-y-6 tab-content hidden">
                 <div>
                     <h2 class="text-lg font-bold">Analisis & Pengaturan</h2>
                     <p class="text-xs text-slate-400">Grafik, cetak laporan, keamanan, & backup data</p>
                 </div>
 
-                <!-- PDF Report Print Button -->
                 <div class="card-app p-5 rounded-3xl flex justify-between items-center">
                     <div>
                         <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Cetak Laporan Keuangan</h3>
@@ -418,7 +446,6 @@
                     </button>
                 </div>
 
-                <!-- Analytics Graphs -->
                 <div class="card-app p-5 rounded-3xl space-y-3">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Pengeluaran per Kategori</h3>
                     <div class="relative h-52 flex justify-center items-center">
@@ -432,7 +459,6 @@
                     </div>
                 </div>
 
-                <!-- Category Management -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Kelola Kategori</h3>
                     <div class="flex gap-2">
@@ -442,7 +468,6 @@
                     <div id="categoryListContainer" class="max-h-40 overflow-y-auto space-y-2 border border-slate-800 p-2 rounded-xl"></div>
                 </div>
 
-                <!-- Security PIN Setting -->
                 <div class="card-app p-5 rounded-3xl space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Keamanan PIN</h3>
                     <div class="flex gap-2">
@@ -452,7 +477,6 @@
                     <button type="button" onclick="removeAppPin()" class="text-xs text-rose-400 font-bold hover:underline">Hapus PIN Pengaman</button>
                 </div>
 
-                <!-- Backup & Reset -->
                 <div class="card-app p-5 rounded-3xl space-y-3">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Backup & Ekspor Data</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -476,21 +500,24 @@
         </main>
 
         <!-- Bottom Navigation Bar -->
-        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#0b0f19]/90 bottom-nav-blur border-t border-slate-800/80 px-6 py-3 flex justify-between items-center z-40 rounded-t-3xl shadow-2xl no-print">
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#0b0f19]/90 bottom-nav-blur border-t border-slate-800/80 px-4 py-3 flex justify-between items-center z-40 rounded-t-3xl shadow-2xl no-print">
             <button onclick="switchTab('home')" id="nav-home" class="nav-btn text-purple-400 flex flex-col items-center gap-1 transition">
-                <i class="fa-solid fa-border-all text-base"></i>
+                <i class="fa-solid fa-border-all text-sm"></i>
             </button>
             <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn text-slate-500 hover:text-slate-300 flex flex-col items-center gap-1 transition">
-                <i class="fa-solid fa-wallet text-base"></i>
+                <i class="fa-solid fa-wallet text-sm"></i>
             </button>
-            <button onclick="openTransactionModal()" class="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 hover:scale-105 transition active:scale-95 -mt-4 border-4 border-[#0b0f19]">
-                <i class="fa-solid fa-plus text-sm"></i>
+            <button onclick="openTransactionModal()" class="w-11 h-11 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 hover:scale-105 transition active:scale-95 -mt-4 border-4 border-[#0b0f19]">
+                <i class="fa-solid fa-plus text-xs"></i>
             </button>
             <button onclick="switchTab('investments')" id="nav-investments" class="nav-btn text-slate-500 hover:text-slate-300 flex flex-col items-center gap-1 transition">
-                <i class="fa-solid fa-chart-line text-base"></i>
+                <i class="fa-solid fa-chart-line text-sm"></i>
+            </button>
+            <button onclick="switchTab('ai')" id="nav-ai" class="nav-btn text-slate-500 hover:text-slate-300 flex flex-col items-center gap-1 transition">
+                <i class="fa-solid fa-robot text-sm"></i>
             </button>
             <button onclick="switchTab('target')" id="nav-target" class="nav-btn text-slate-500 hover:text-slate-300 flex flex-col items-center gap-1 transition">
-                <i class="fa-solid fa-bullseye text-base"></i>
+                <i class="fa-solid fa-bullseye text-sm"></i>
             </button>
         </nav>
 
@@ -510,6 +537,20 @@
                 <div><label class="block text-[10px] font-extrabold text-slate-400 uppercase mb-1">Tanggal</label><input type="date" id="txDate" required class="w-full custom-input rounded-xl p-3 text-xs font-semibold focus:outline-none"></div>
                 <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl transition text-xs shadow-lg active:scale-95 mt-2">Simpan</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal AI OCR Scanner Simulator -->
+    <div id="ocrModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="card-app p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4 text-center">
+            <div class="flex justify-between items-center"><h3 class="font-bold text-sm tracking-tight flex items-center gap-2"><i class="fa-solid fa-camera text-blue-400"></i> AI Pindai Struk</h3><button onclick="closeOcrModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
+            <p class="text-xs text-slate-400">Unggah foto struk belanja untuk dipindai otomatis oleh AI.</p>
+            <div class="border-2 border-dashed border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-blue-500 transition">
+                <i class="fa-solid fa-cloud-arrow-up text-2xl text-blue-400"></i>
+                <span class="text-xs font-semibold text-slate-300">Pilih Foto Struk / Nota</span>
+                <input type="file" accept="image/*" onchange="simulateAiOcr(event)" class="hidden" id="ocrFileInput">
+            </div>
+            <button onclick="document.getElementById('ocrFileInput').click()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition text-xs shadow-lg active:scale-95">Unggah & Scan AI</button>
         </div>
     </div>
 
@@ -696,6 +737,57 @@
         function closeAssetModal() { document.getElementById('assetModal').classList.add('hidden'); }
         function openWishlistModal() { document.getElementById('wishlistModal').classList.remove('hidden'); }
         function closeWishlistModal() { document.getElementById('wishlistModal').classList.add('hidden'); }
+        function openOcrModal() { document.getElementById('ocrModal').classList.remove('hidden'); }
+        function closeOcrModal() { document.getElementById('ocrModal').classList.add('hidden'); }
+
+        // AI OCR Simulation
+        function simulateAiOcr(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            setTimeout(() => {
+                closeOcrModal();
+                // Mock AI extraction result
+                const mockAmount = Math.floor(Math.random() * 150000) + 15000;
+                document.getElementById('description').value = "Belanja Supermarket (AI Scan)";
+                document.getElementById('amount').value = mockAmount;
+                document.getElementById('type').value = "pengeluaran";
+                openTransactionModal();
+                alert(`✨ AI Berhasil Memindai Struk!\nNominal terdeteksi: ${formatRupiah(mockAmount)}`);
+            }, 1000);
+        }
+
+        // AI Chatbot Logic
+        function askAiPreset(q) {
+            document.getElementById('aiUserQuery').value = q;
+            sendAiQuery();
+        }
+
+        function sendAiQuery() {
+            const input = document.getElementById('aiUserQuery');
+            const q = input.value.trim();
+            if(!q) return;
+
+            const chatContainer = document.getElementById('aiChatContainer');
+            chatContainer.innerHTML += `<div class="bg-purple-600/20 border border-purple-500/20 p-3 rounded-2xl text-slate-200 text-right"><strong>Anda:</strong> ${q}</div>`;
+            input.value = '';
+
+            setTimeout(() => {
+                let reply = "Berdasarkan data keuangan Anda, pastikan untuk selalu memantau rasio pengeluaran agar target tabungan tercapai tepat waktu.";
+                let totalInc = transactions.filter(t=>t.type==='pemasukan').reduce((a,b)=>a+b.amount,0);
+                let totalExp = transactions.filter(t=>t.type==='pengeluaran').reduce((a,b)=>a+b.amount,0);
+
+                if(q.toLowerCase().includes('kondisi') || q.toLowerCase().includes('analisis')) {
+                    reply = `Analisis AI: Total pemasukan Anda saat ini ${formatRupiah(totalInc)} dan total pengeluaran ${formatRupiah(totalExp)}. ${totalInc >= totalExp ? 'Arus kas Anda positif, pertahankan!' : 'Perhatian: Pengeluaran Anda melebihi pemasukan!'}`;
+                } else if(q.toLowerCase().includes('wishlist') || q.toLowerCase().includes('target')) {
+                    reply = `Tips AI: Anda memiliki ${wishlists.length} target wishlist. Coba sisihkan minimal 20% dari pemasukan bulanan secara otomatis ke dompet terpisah agar target cepat terkumpul.`;
+                } else if(q.toLowerCase().includes('boros') || q.toLowerCase().includes('kategori')) {
+                    reply = `Analisis AI: Pengeluaran terbesar Anda cenderung berada pada kategori Makanan dan Belanja. Coba terapkan aturan ketat di kategori ini minggu depan.`;
+                }
+
+                chatContainer.innerHTML += `<div class="bg-blue-600/10 border border-blue-500/20 p-3 rounded-2xl text-slate-200"><strong>AI Assistant:</strong> ${reply}</div>`;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 600);
+        }
 
         function renderCategoryList() {
             const container = document.getElementById('categoryListContainer');
@@ -754,7 +846,6 @@
 
             transactions.push({ id: Date.now(), type, walletId, description, amount, category, rawDate: dateVal, date: formattedDate });
             
-            // Update Wallet balance
             wallets = wallets.map(w => {
                 if(w.id === walletId) {
                     w.balance = type === 'pemasukan' ? w.balance + amount : w.balance - amount;
@@ -900,7 +991,6 @@
             let netWorth = totalKas + totalInvVal;
             const sisaBudget = monthlyBudget - totalExpense;
 
-            // Render Hero & Grid
             document.getElementById('totalNetWorth').innerText = formatRupiah(netWorth);
             document.getElementById('totalKasHero').innerText = formatRupiah(totalKas);
             document.getElementById('totalAsetHero').innerText = formatRupiah(totalInvVal);
@@ -910,6 +1000,17 @@
             const sisaEl = document.getElementById('sisaBudgetCard');
             sisaEl.innerText = formatRupiah(sisaBudget);
             sisaEl.className = `text-base font-extrabold mt-1 ${sisaBudget < 0 ? 'text-rose-400' : 'text-purple-300'}`;
+
+            // AI Smart Insights Generator
+            let insightMsg = "Keuangan Anda stabil. Pertahankan kebiasaan menabung secara rutin setiap bulan.";
+            if(totalExpense > totalIncome && totalIncome > 0) {
+                insightMsg = "⚠️ Peringatan AI: Pengeluaran Anda bulan ini melebihi pemasukan. Kurangi pengeluaran tersier!";
+            } else if(monthlyBudget > 0 && totalExpense > (monthlyBudget * 0.8)) {
+                insightMsg = "💡 Tips AI: Pengeluaran Anda hampir mencapai batas budget bulanan. Harap lebih berhati-hati.";
+            } else if(transactions.length > 0) {
+                insightMsg = "✨ Bagus! Rasio tabungan Anda berada di jalur yang aman untuk mencapai target kebebasan finansial.";
+            }
+            document.getElementById('aiInsightText').innerText = insightMsg;
 
             // Wallet Summary & Detail
             const walletSum = document.getElementById('walletSummaryContainer');
@@ -940,20 +1041,17 @@
             else if(healthScore >= 50) { hStatus.innerText = "Cukup Sehat"; hStatus.className = "text-xs font-bold text-amber-400"; }
             else { hStatus.innerText = "Perlu Perhatian"; hStatus.className = "text-xs font-bold text-rose-400"; }
 
-            // Target Wishlist Progress
             let totalTarget = 0, totalSaved = 0;
             wishlists.forEach(w => { totalTarget += w.target; totalSaved += w.saved; });
             const avgProgress = totalTarget > 0 ? Math.min((totalSaved / totalTarget) * 100, 100) : 0;
             document.getElementById('targetProgressCard').innerText = `${avgProgress.toFixed(0)}%`;
 
-            // FIRE Calculator
             const annualExpenseEst = totalExpense * 12;
             const fireTarget = annualExpenseEst * 25;
             const firePct = fireTarget > 0 ? Math.min((netWorth / fireTarget) * 100, 100) : 0;
             document.getElementById('fireTargetVal').innerText = formatRupiah(fireTarget);
             document.getElementById('fireProgressVal').innerText = `${firePct.toFixed(1)}%`;
 
-            // Investments List & Dividend
             let totalDiv = 0;
             const assetContainer = document.getElementById('assetListContainer');
             assetContainer.innerHTML = '';
@@ -985,7 +1083,6 @@
             document.getElementById('totalInvestmentValue').innerText = formatRupiah(totalInvVal);
             document.getElementById('totalAnnualDividend').innerText = formatRupiah(totalDiv);
 
-            // Recurring Bills
             document.getElementById('recurringCount').innerText = `${recurringBills.length} Aktif`;
             const recContainer = document.getElementById('recurringListContainer');
             recContainer.innerHTML = '';
@@ -1000,7 +1097,6 @@
                 });
             }
 
-            // Debts
             document.getElementById('debtCount').innerText = `${debts.length} Catatan`;
             const debtContainer = document.getElementById('debtListContainer');
             debtContainer.innerHTML = '';
@@ -1015,7 +1111,6 @@
                 });
             }
 
-            // Transaction History List with Search & Filter
             const searchVal = (document.getElementById('searchTxInput')?.value || '').toLowerCase();
             const filterCat = document.getElementById('filterCategorySelect')?.value || 'ALL';
 
@@ -1043,7 +1138,6 @@
                 });
             }
 
-            // Wishlist List
             const wishContainer = document.getElementById('wishlistContainer');
             wishContainer.innerHTML = '';
             if(wishlists.length === 0) {
@@ -1074,7 +1168,6 @@
             const dLabels = Object.keys(expenseData);
             const dValues = Object.values(expenseData);
 
-            // Net Worth Chart
             const ctxNet = document.getElementById('netWorthChart');
             if(ctxNet) {
                 const ctxN = ctxNet.getContext('2d');
@@ -1156,7 +1249,7 @@
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ transactions, wallets, monthlyBudget, wishlists, assets, recurringBills, debts, categories }));
             const dl = document.createElement('a');
-            dl.setAttribute("href", dataStr); dl.setAttribute("download", "my_finance_pro_backup.json");
+            dl.setAttribute("href", dataStr); dl.setAttribute("download", "my_finance_pro_ai_backup.json");
             document.body.appendChild(dl); dl.click(); dl.remove();
         }
 
