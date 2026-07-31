@@ -4,6 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WealthSpace PRO — Ultimate Wealth & Investment Hub</title>
+    
+    <!-- PWA Meta Tags & Manifest -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WealthSpace">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Inline Web App Manifest via Data URI -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "WealthSpace PRO",
+        "short_name": "WealthSpace",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#0b0f19",
+        "theme_color": "#0f172a",
+        "icons": [
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/3135/3135706.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            }
+        ]
+    }'>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -83,7 +108,7 @@
                     <div>
                         <h1 class="font-bold text-base tracking-tight flex items-center gap-2">
                             WealthSpace 
-                            <span class="text-[10px] bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 py-0.5 px-2 rounded-full font-extrabold tracking-wider">PRO+</span>
+                            <span class="text-[10px] bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 py-0.5 px-2 rounded-full font-extrabold tracking-wider">PWA</span>
                         </h1>
                         <p class="text-xs text-slate-400 font-medium">Ultimate Wealth & Investment Hub</p>
                     </div>
@@ -107,7 +132,7 @@
         <!-- Main Content -->
         <main class="max-w-7xl mx-auto px-6 py-10 w-full space-y-8 flex-grow">
             
-            <!-- Filter Bar / Global Filter -->
+            <!-- Filter Bar -->
             <div class="card-light p-5 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-filter text-slate-400 ml-1"></i>
@@ -367,7 +392,7 @@
         <!-- Footer -->
         <footer class="border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 mt-12">
             <div class="max-w-7xl mx-auto px-6 text-center text-xs text-slate-400 font-semibold">
-                WealthSpace PRO+ &bull; Ultimate Financial & Investment Hub
+                WealthSpace PWA &bull; Ultimate Financial & Investment Hub
             </div>
         </footer>
 
@@ -447,7 +472,6 @@
             document.getElementById('budgetLimit').value = monthlyBudget;
             document.getElementById('txDate').valueAsDate = new Date();
             
-            // Set default filter year to current year if available
             const currentYear = new Date().getFullYear().toString();
             const yearSelect = document.getElementById('filterYear');
             for(let i=0; i<yearSelect.options.length; i++){
@@ -538,7 +562,7 @@
             const description = document.getElementById('description').value;
             const amount = parseFloat(document.getElementById('amount').value);
             const category = document.getElementById('category').value;
-            const dateVal = document.getElementById('txDate').value; // YYYY-MM-DD
+            const dateVal = document.getElementById('txDate').value;
 
             const dateObj = new Date(dateVal);
             const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -642,9 +666,8 @@
             const fMonth = document.getElementById('filterMonth').value;
             const fYear = document.getElementById('filterYear').value;
 
-            // Filter transactions based on month/year
             const filteredTransactions = transactions.filter(t => {
-                if (!t.rawDate) return true; // fallback
+                if (!t.rawDate) return true;
                 const [y, m, d] = t.rawDate.split('-');
                 if (fMonth !== 'ALL' && m !== fMonth) return false;
                 if (fYear !== 'ALL' && y !== fYear) return false;
@@ -684,7 +707,6 @@
                 listEl.appendChild(row);
             });
 
-            // Calculate overall cash balance from ALL transactions (not filtered)
             let overallIncome = 0;
             let overallExpense = 0;
             transactions.forEach(t => {
@@ -694,7 +716,6 @@
             const totalSaldo = overallIncome - overallExpense;
             const sisaBudget = monthlyBudget - totalExpense;
 
-            // Stock portfolio & Dividends
             let totalAssetValue = 0;
             let totalAnnualDividend = 0;
             const stockListEl = document.getElementById('stockList');
@@ -741,7 +762,6 @@
                 stockListEl.appendChild(row);
             });
 
-            // Wishlist render
             const wishContainer = document.getElementById('wishlistContainer');
             wishContainer.innerHTML = '';
             if (wishlists.length === 0) {
@@ -789,7 +809,6 @@
             const isDark = document.documentElement.classList.contains('dark');
             const textColor = isDark ? '#94a3b8' : '#64748b';
 
-            // 1. Doughnut Chart (Categories)
             const expenseData = {};
             filteredTransactions.filter(t => t.type === 'pengeluaran').forEach(t => {
                 expenseData[t.category] = (expenseData[t.category] || 0) + t.amount;
@@ -821,11 +840,10 @@
                 }
             });
 
-            // 2. Line Trend Chart (Monthly Income vs Expense)
             const monthlyMap = {};
             transactions.forEach(t => {
                 if(!t.rawDate) return;
-                const monthKey = t.rawDate.substring(0, 7); // YYYY-MM
+                const monthKey = t.rawDate.substring(0, 7);
                 if(!monthlyMap[monthKey]) monthlyMap[monthKey] = { income: 0, expense: 0 };
                 if(t.type === 'pemasukan') monthlyMap[monthKey].income += t.amount;
                 else monthlyMap[monthKey].expense += t.amount;
@@ -900,7 +918,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ transactions, monthlyBudget, wishlists, stocks, categories }));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "wealthspace_pro_backup.json");
+            downloadAnchor.setAttribute("download", "wealthspace_pwa_backup.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
