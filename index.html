@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aktivitas Harian Pro</title>
 
-<!-- Font Inter / System -->
+<!-- Font Plus Jakarta Sans -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,14 +23,13 @@
   --success-light: rgba(16, 185, 129, 0.15);
   --danger: #f43f5e;
   --danger-light: rgba(244, 63, 94, 0.15);
-  --warning: #f59e0b;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
   --border: rgba(255, 255, 255, 0.08);
   --radius: 14px;
   --radius-sm: 8px;
-  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -56,7 +55,6 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(12px);
 }
 
 .header-container {
@@ -88,7 +86,6 @@ header {
 .brand h1 {
   font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.3px;
 }
 
 .brand p {
@@ -146,16 +143,10 @@ main {
 
 .tab-content {
   display: none;
-  animation: fadeIn 0.25s ease-in-out forwards;
 }
 
 .tab-content.active {
   display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 /* CARDS & GRID */
@@ -187,12 +178,6 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.card-title span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 /* WIDGET STATS */
@@ -250,7 +235,6 @@ input, select, textarea {
   color: var(--text-primary);
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -269,7 +253,6 @@ button, .btn {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.2s;
 }
 
 .btn-primary {
@@ -279,17 +262,12 @@ button, .btn {
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .btn-secondary {
   background: var(--bg-input);
   color: var(--text-primary);
   border: 1px solid var(--border);
-}
-
-.btn-secondary:hover {
-  background: rgba(255,255,255,0.08);
 }
 
 .btn-danger {
@@ -355,8 +333,6 @@ li {
 }
 
 .badge-indigo { background: var(--accent-light); color: #818cf8; }
-.badge-green { background: var(--success-light); color: var(--success); }
-.badge-red { background: var(--danger-light); color: var(--danger); }
 
 .progress-bar-bg {
   width: 100%;
@@ -371,7 +347,6 @@ li {
   height: 100%;
   background: linear-gradient(90deg, var(--accent), #a855f7);
   border-radius: 10px;
-  transition: width 0.3s ease;
 }
 
 .text-done {
@@ -379,7 +354,6 @@ li {
   opacity: 0.5;
 }
 
-/* FOOTER */
 footer {
   text-align: center;
   padding: 24px;
@@ -407,18 +381,18 @@ footer {
 
 <!-- NAVIGASI TAB -->
 <nav class="nav-tabs">
-  <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
-  <button class="tab-btn" onclick="switchTab('keuangan')">💰 Keuangan</button>
-  <button class="tab-btn" onclick="switchTab('belanja')">🛒 Belanja</button>
-  <button class="tab-btn" onclick="switchTab('tugas')">✅ Tugas & Kebiasaan</button>
-  <button class="tab-btn" onclick="switchTab('target')">🎯 Target Tabungan</button>
-  <button class="tab-btn" onclick="switchTab('kalkulator')">📝 Catatan & Alat</button>
-  <button class="tab-btn" onclick="switchTab('pengaturan')">⚙️ Pengaturan</button>
+  <button class="tab-btn active" onclick="switchTab(this, 'dashboard')">📊 Dashboard</button>
+  <button class="tab-btn" onclick="switchTab(this, 'keuangan')">💰 Keuangan</button>
+  <button class="tab-btn" onclick="switchTab(this, 'belanja')">🛒 Belanja</button>
+  <button class="tab-btn" onclick="switchTab(this, 'tugas')">✅ Tugas & Kebiasaan</button>
+  <button class="tab-btn" onclick="switchTab(this, 'target')">🎯 Target Tabungan</button>
+  <button class="tab-btn" onclick="switchTab(this, 'kalkulator')">📝 Catatan & Alat</button>
+  <button class="tab-btn" onclick="switchTab(this, 'pengaturan')">⚙️ Pengaturan</button>
 </nav>
 
 <main>
 
-  <!-- TAB 1: DASHBOARD OVERVIEW -->
+  <!-- TAB 1: DASHBOARD -->
   <div id="tab-dashboard" class="tab-content active">
     <div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(18, 24, 38, 0.9)); border-color: rgba(99, 102, 241, 0.3);">
       <small style="color: var(--text-secondary);">Sisa Saldo Kas Utama</small>
@@ -427,11 +401,11 @@ footer {
 
     <div class="grid-3">
       <div class="stat-box">
-        <small>Pemasukan Bulan Ini</small>
+        <small>Pemasukan</small>
         <strong id="dashIncome" style="color: var(--success);">Rp0</strong>
       </div>
       <div class="stat-box">
-        <small>Pengeluaran Bulan Ini</small>
+        <small>Pengeluaran</small>
         <strong id="dashExpense" style="color: var(--danger);">Rp0</strong>
       </div>
       <div class="stat-box">
@@ -443,7 +417,7 @@ footer {
     <div class="grid-2" style="margin-top: 20px;">
       <div class="card">
         <div class="card-title">
-          <span>🛒 Rencana Belanja Pendek</span>
+          <span>🛒 Rencana Belanja</span>
         </div>
         <p class="item-sub">Total belum dibeli: <strong id="dashShoppingPending">Rp0</strong></p>
         <ul id="dashShoppingList" style="margin-top: 10px;"></ul>
@@ -451,7 +425,7 @@ footer {
 
       <div class="card">
         <div class="card-title">
-          <span>🔥 Habits Streak Hari Ini</span>
+          <span>🔥 Kebiasaan Aktif</span>
         </div>
         <ul id="dashHabitList"></ul>
       </div>
@@ -465,13 +439,13 @@ footer {
         <span>💰 Tambah Transaksi Keuangan</span>
       </div>
       <form id="moneyForm">
-        <input id="moneyName" placeholder="Keterangan (Contoh: Gaji, Makan Siang, Bensin)" required>
+        <input id="moneyName" placeholder="Keterangan (Makan, Gaji, Listrik)" required>
         <div class="form-row">
           <input id="moneyAmount" type="number" min="1" placeholder="Jumlah (Rp)" required>
           <select id="moneyCategory">
             <option value="Makanan">🍕 Makanan</option>
             <option value="Transport">🚗 Transportasi</option>
-            <option value="Tagihan">📄 Tagihan / Bulanan</option>
+            <option value="Tagihan">📄 Tagihan</option>
             <option value="Belanja">🛒 Belanja</option>
             <option value="Gaji">💼 Gaji / Pendapatan</option>
             <option value="Lainnya">📦 Lainnya</option>
@@ -512,7 +486,7 @@ footer {
     <div class="card">
       <div class="card-title">
         <span>📋 Daftar Belanjaan</span>
-        <button onclick="clearDoneShopping()" class="btn-secondary btn-sm">Bersihkan yang Selesai</button>
+        <button onclick="clearDoneShopping()" class="btn-secondary btn-sm">Bersihkan Selesai</button>
       </div>
       <ul id="shoppingList"></ul>
     </div>
@@ -521,28 +495,26 @@ footer {
   <!-- TAB 4: TUGAS & KEBIASAAN -->
   <div id="tab-tugas" class="tab-content">
     <div class="grid-2">
-      <!-- Tugas Harian -->
       <div class="card">
         <div class="card-title">
           <span>✅ Tugas Harian</span>
         </div>
         <form id="taskForm">
-          <input id="taskName" placeholder="Contoh: Belajar JavaScript 30 menit" required>
+          <input id="taskName" placeholder="Contoh: Belajar 30 menit" required>
           <button type="submit" class="btn-primary">+ Tambah Tugas</button>
         </form>
-        <ul id="taskList" style="margin-top: 14px;"></ul>
+        <ul id="taskList"></ul>
       </div>
 
-      <!-- Habit Tracker -->
       <div class="card">
         <div class="card-title">
-          <span>🌱 Pelacak Kebiasaan (Habits)</span>
+          <span>🌱 Pelacak Kebiasaan</span>
         </div>
         <form id="habitForm">
-          <input id="habitName" placeholder="Contoh: Minum air 2 liter / Minum Vitamin" required>
+          <input id="habitName" placeholder="Contoh: Minum air 2L" required>
           <button type="submit" class="btn-primary">+ Tambah Kebiasaan</button>
         </form>
-        <ul id="habitList" style="margin-top: 14px;"></ul>
+        <ul id="habitList"></ul>
       </div>
     </div>
   </div>
@@ -551,10 +523,10 @@ footer {
   <div id="tab-target" class="tab-content">
     <div class="card">
       <div class="card-title">
-        <span>🎯 Buat Target Tabungan / Wishlist</span>
+        <span>🎯 Target Tabungan</span>
       </div>
       <form id="goalForm">
-        <input id="goalName" placeholder="Contoh: Beli Laptop Baru, Dana Darurat" required>
+        <input id="goalName" placeholder="Contoh: Beli Laptop Baru" required>
         <input id="goalTarget" type="number" min="1" placeholder="Target Nominal (Rp)" required>
         <button type="submit" class="btn-primary">+ Buat Target</button>
       </form>
@@ -571,10 +543,9 @@ footer {
   <!-- TAB 6: KALKULATOR & CATATAN -->
   <div id="tab-kalkulator" class="tab-content">
     <div class="grid-2">
-      <!-- Kalkulator Ketahanan Uang -->
       <div class="card">
         <div class="card-title">
-          <span>🧮 Kalkulator Ketahanan Uang</span>
+          <span>🧮 Ketahanan Uang</span>
         </div>
         <div class="form-group">
           <label>Jumlah Uang Kamu (Rp)</label>
@@ -582,19 +553,18 @@ footer {
           <button type="button" onclick="useCurrentBalance()" class="btn-secondary btn-sm" style="margin-top: 4px;">🎯 Gunakan Saldo Saat Ini</button>
         </div>
         <div class="form-group" style="margin-top: 10px;">
-          <label>Perkiraan Pengeluaran/Hari (Rp)</label>
+          <label>Pengeluaran/Hari (Rp)</label>
           <input id="daily" type="number" min="0" placeholder="0">
         </div>
         <button onclick="calculateDays()" class="btn-primary" style="margin-top: 12px; width: 100%;">Hitung Ketahanan</button>
         <div id="calculationResult" style="margin-top: 14px; font-weight: 700; color: #818cf8;"></div>
       </div>
 
-      <!-- Quick Notes -->
       <div class="card">
         <div class="card-title">
-          <span>📝 Catatan Cepat (Scratchpad)</span>
+          <span>📝 Catatan Cepat</span>
         </div>
-        <textarea id="quickNotes" rows="7" placeholder="Tulis catatan penting atau ide harian di sini... (Otomatis tersimpan)"></textarea>
+        <textarea id="quickNotes" rows="7" placeholder="Tulis catatan penting di sini..."></textarea>
       </div>
     </div>
   </div>
@@ -603,14 +573,11 @@ footer {
   <div id="tab-pengaturan" class="tab-content">
     <div class="card">
       <div class="card-title">
-        <span>💾 Cadangan & Pemulihan Data</span>
+        <span>💾 Backup & Restore Data</span>
       </div>
-      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">
-        Semua data tersimpan aman secara lokal di browser kamu. Ekspor JSON untuk mengamankan data atau memindahkannya ke perangkat lain.
-      </p>
       <div class="form-row">
-        <button onclick="exportJSON()" class="btn-secondary">📥 Download Backup JSON</button>
-        <button onclick="$('importFile').click()" class="btn-secondary">📤 Restore Data JSON</button>
+        <button onclick="exportJSON()" class="btn-secondary">📥 Download Backup</button>
+        <button onclick="$('importFile').click()" class="btn-secondary">📤 Restore Data</button>
       </div>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
 
@@ -619,20 +586,20 @@ footer {
       <div class="card-title" style="color: var(--danger);">
         <span>🗑️ Zona Bahaya</span>
       </div>
-      <button onclick="clearAllData()" class="btn-danger" style="width: 100%;">Hapus Seluruh Data Permanen</button>
+      <button onclick="clearAllData()" class="btn-danger" style="width: 100%;">Hapus Seluruh Data</button>
     </div>
   </div>
 
 </main>
 
 <footer>
-  Aktivitas Harian Pro • Desain Modern, Cepat & Bebas Iklan
+  Aktivitas Harian Pro • Bebas Iklan & Praktis
 </footer>
 
 <script>
-// HELPER UTAMA
 const $ = id => document.getElementById(id);
 
+// PENYIMPANAN DATA SAFE
 function loadData(key) {
   try {
     const val = localStorage.getItem(key);
@@ -643,33 +610,43 @@ function loadData(key) {
 }
 
 function saveData(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch(e) {
+    console.error("Gagal menyimpan ke LocalStorage:", e);
+  }
 }
 
-// STATE GLOBAL
 let money = loadData("pro_money");
 let shopping = loadData("pro_shopping");
 let tasks = loadData("pro_tasks");
 let habits = loadData("pro_habits");
 let goals = loadData("pro_goals");
 
-// INITIALIZE DATE
+// FORMAT WAKTU & CURRENCY
 $("currentDateDisplay").textContent = new Date().toLocaleDateString("id-ID", {
   weekday: "long", day: "numeric", month: "long", year: "numeric"
 });
 
-// FORMAT CURRENCY
 function rupiah(num) {
   return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(num || 0);
 }
 
-// SWITCH TABS
-function switchTab(tabId) {
+function escapeHtml(text) {
+  if (!text) return "";
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// SWITCH TAB AMAN
+function switchTab(btnElement, tabId) {
   document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
 
-  $(`tab-${tabId}`).classList.add("active");
-  event.currentTarget.classList.add("active");
+  const targetTab = $(`tab-${tabId}`);
+  if (targetTab) targetTab.classList.add("active");
+  if (btnElement) btnElement.classList.add("active");
 
   renderAll();
 }
@@ -699,21 +676,21 @@ $("moneyForm").addEventListener("submit", function(e) {
 });
 
 function getMoneySummary() {
-  const income = money.filter(x => x.type === "in").reduce((s, x) => s + x.amount, 0);
-  const expense = money.filter(x => x.type === "out").reduce((s, x) => s + x.amount, 0);
+  const income = money.filter(x => x.type === "in").reduce((s, x) => s + (x.amount || 0), 0);
+  const expense = money.filter(x => x.type === "out").reduce((s, x) => s + (x.amount || 0), 0);
   return { income, expense, balance: income - expense };
 }
 
 function renderMoney() {
   const list = $("moneyList");
-  list.replaceChildren();
+  list.innerHTML = "";
 
   money.forEach(item => {
     const li = document.createElement("li");
     li.innerHTML = `
       <div class="item-info">
-        <div class="item-title">${escapeHtml(item.name)} <span class="badge badge-indigo">${escapeHtml(item.category)}</span></div>
-        <div class="item-sub">${item.date}</div>
+        <div class="item-title">${escapeHtml(item.name)} <span class="badge badge-indigo">${escapeHtml(item.category || 'Umum')}</span></div>
+        <div class="item-sub">${item.date || 'Baru saja'}</div>
       </div>
       <div style="text-align:right;">
         <div style="font-weight:700; color:${item.type === 'in' ? 'var(--success)' : 'var(--danger)'}">
@@ -748,7 +725,7 @@ $("shoppingForm").addEventListener("submit", function(e) {
 
 function renderShopping() {
   const list = $("shoppingList");
-  list.replaceChildren();
+  list.innerHTML = "";
 
   shopping.forEach(item => {
     const li = document.createElement("li");
@@ -785,7 +762,7 @@ function clearDoneShopping() {
   renderAll();
 }
 
-// === TUGAS & HABITS ===
+// === TUGAS & KEBIASAAN ===
 $("taskForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const name = $("taskName").value.trim();
@@ -799,10 +776,298 @@ $("taskForm").addEventListener("submit", function(e) {
 
 function renderTasks() {
   const list = $("taskList");
-  list.replaceChildren();
+  list.innerHTML = "";
 
   tasks.forEach(item => {
     const li = document.createElement("li");
     li.innerHTML = `
       <div class="item-info ${item.done ? 'text-done' : ''}">
-        <div class
+        <div class="item-title">${escapeHtml(item.name)}</div>
+      </div>
+      <button onclick="toggleTask(${item.id})" class="${item.done ? 'btn-secondary' : 'btn-primary'} btn-sm">
+        ${item.done ? 'Selesai' : 'Kerjakan'}
+      </button>
+      <button onclick="deleteTask(${item.id})" class="btn-danger btn-sm">×</button>
+    `;
+    list.append(li);
+  });
+}
+
+function toggleTask(id) {
+  const item = tasks.find(x => x.id === id);
+  if (item) item.done = !item.done;
+  saveData("pro_tasks", tasks);
+  renderAll();
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter(x => x.id !== id);
+  saveData("pro_tasks", tasks);
+  renderAll();
+}
+
+// HABITS
+$("habitForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = $("habitName").value.trim();
+  if (!name) return;
+
+  habits.push({ id: Date.now(), name, streak: 0, lastDone: "" });
+  saveData("pro_habits", habits);
+  renderAll();
+  this.reset();
+});
+
+function renderHabits() {
+  const list = $("habitList");
+  list.innerHTML = "";
+  const today = new Date().toISOString().slice(0, 10);
+
+  habits.forEach(item => {
+    const doneToday = item.lastDone === today;
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="item-info">
+        <div class="item-title">${escapeHtml(item.name)}</div>
+        <div class="item-sub">🔥 Streak: <strong>${item.streak || 0} hari</strong></div>
+      </div>
+      <button onclick="checkHabit(${item.id})" class="${doneToday ? 'btn-secondary' : 'btn-primary'} btn-sm" ${doneToday ? 'disabled' : ''}>
+        ${doneToday ? '✓ Checked' : 'Check-in'}
+      </button>
+      <button onclick="deleteHabit(${item.id})" class="btn-danger btn-sm">×</button>
+    `;
+    list.append(li);
+  });
+}
+
+function checkHabit(id) {
+  const today = new Date().toISOString().slice(0, 10);
+  const habit = habits.find(x => x.id === id);
+  if (habit && habit.lastDone !== today) {
+    habit.streak = (habit.streak || 0) + 1;
+    habit.lastDone = today;
+    saveData("pro_habits", habits);
+    renderAll();
+  }
+}
+
+function deleteHabit(id) {
+  habits = habits.filter(x => x.id !== id);
+  saveData("pro_habits", habits);
+  renderAll();
+}
+
+// === TARGET TABUNGAN ===
+$("goalForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = $("goalName").value.trim();
+  const target = Number($("goalTarget").value);
+
+  if (!name || target <= 0) return;
+
+  goals.push({ id: Date.now(), name, target, current: 0 });
+  saveData("pro_goals", goals);
+  renderAll();
+  this.reset();
+});
+
+function renderGoals() {
+  const container = $("goalList");
+  container.innerHTML = "";
+
+  if (goals.length === 0) {
+    container.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">Belum ada target tabungan.</p>`;
+    return;
+  }
+
+  goals.forEach(item => {
+    const percent = Math.min(100, Math.round(((item.current || 0) / item.target) * 100));
+    const div = document.createElement("div");
+    div.className = "stat-box";
+    div.style.marginBottom = "10px";
+    div.innerHTML = `
+      <div class="item-title" style="display:flex; justify-content:space-between;">
+        <span>${escapeHtml(item.name)}</span>
+        <span>${percent}%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:12px;">
+        <span style="color:var(--text-secondary);">${rupiah(item.current)} / ${rupiah(item.target)}</span>
+        <div>
+          <button onclick="addGoalMoney(${item.id})" class="btn-primary btn-sm">+ Tabung</button>
+          <button onclick="deleteGoal(${item.id})" class="btn-danger btn-sm">×</button>
+        </div>
+      </div>
+    `;
+    container.append(div);
+  });
+}
+
+function addGoalMoney(id) {
+  const amount = prompt("Masukkan jumlah uang yang ingin ditabung (Rp):");
+  const num = Number(amount);
+  if (num && num > 0) {
+    const goal = goals.find(x => x.id === id);
+    if (goal) {
+      goal.current = (goal.current || 0) + num;
+      saveData("pro_goals", goals);
+      renderAll();
+    }
+  }
+}
+
+function deleteGoal(id) {
+  goals = goals.filter(x => x.id !== id);
+  saveData("pro_goals", goals);
+  renderAll();
+}
+
+// === DASHBOARD ===
+function renderDashboard() {
+  const { income, expense, balance } = getMoneySummary();
+  $("dashBalance").textContent = rupiah(balance);
+  $("dashIncome").textContent = rupiah(income);
+  $("dashExpense").textContent = rupiah(expense);
+
+  const pendingTasks = tasks.filter(x => !x.done).length;
+  $("dashTasks").textContent = `${pendingTasks} Tugas`;
+
+  const pendingShoppingTotal = shopping.filter(x => !x.done).reduce((s, x) => s + (x.price || 0), 0);
+  $("dashShoppingPending").textContent = rupiah(pendingShoppingTotal);
+
+  const dashShopList = $("dashShoppingList");
+  dashShopList.innerHTML = "";
+  shopping.filter(x => !x.done).slice(0, 3).forEach(x => {
+    const li = document.createElement("li");
+    li.style.padding = "8px 12px";
+    li.innerHTML = `<span style="font-size:13px;">${escapeHtml(x.name)}</span>`;
+    dashShopList.append(li);
+  });
+
+  const dashHabList = $("dashHabitList");
+  dashHabList.innerHTML = "";
+  habits.slice(0, 3).forEach(x => {
+    const li = document.createElement("li");
+    li.style.padding = "8px 12px";
+    li.innerHTML = `<span style="font-size:13px;">${escapeHtml(x.name)}</span> <span class="badge badge-indigo">🔥 ${x.streak || 0} hari</span>`;
+    dashHabList.append(li);
+  });
+}
+
+// === KALKULATOR & NOTES ===
+function useCurrentBalance() {
+  const { balance } = getMoneySummary();
+  $("budget").value = balance > 0 ? balance : 0;
+}
+
+function calculateDays() {
+  const budget = Number($("budget").value);
+  const daily = Number($("daily").value);
+
+  if (budget <= 0 || daily <= 0) {
+    $("calculationResult").textContent = "Masukkan budget dan pengeluaran harian yang valid.";
+    return;
+  }
+
+  const days = Math.floor(budget / daily);
+  $("calculationResult").textContent = `Uangmu cukup bertahan selama ± ${days} hari.`;
+}
+
+const quickNotesEl = $("quickNotes");
+try {
+  quickNotesEl.value = localStorage.getItem("pro_notes") || "";
+} catch {
+  quickNotesEl.value = "";
+}
+quickNotesEl.addEventListener("input", function() {
+  try {
+    localStorage.setItem("pro_notes", this.value);
+  } catch {}
+});
+
+// === EXPORT & IMPORT ===
+function exportCSV() {
+  if (money.length === 0) return alert("Belum ada data keuangan untuk diekspor.");
+
+  let csv = "Tanggal,Keterangan,Kategori,Tipe,Jumlah (Rp)\n";
+  money.forEach(m => {
+    csv += `"${m.date || ''}","${m.name || ''}","${m.category || 'Umum'}","${m.type === 'in' ? 'Pemasukan' : 'Pengeluaran'}",${m.amount || 0}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `rekap_keuangan_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+function exportJSON() {
+  const data = { money, shopping, tasks, habits, goals, notes: quickNotesEl.value };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `backup_aktivitas_pro_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (data) {
+        money = data.money || [];
+        shopping = data.shopping || [];
+        tasks = data.tasks || [];
+        habits = data.habits || [];
+        goals = data.goals || [];
+        if (data.notes) {
+          quickNotesEl.value = data.notes;
+          try { localStorage.setItem("pro_notes", data.notes); } catch {}
+        }
+
+        saveData("pro_money", money);
+        saveData("pro_shopping", shopping);
+        saveData("pro_tasks", tasks);
+        saveData("pro_habits", habits);
+        saveData("pro_goals", goals);
+
+        renderAll();
+        alert("Data berhasil diimpor!");
+      }
+    } catch {
+      alert("Gagal membaca file JSON backup.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData() {
+  if (confirm("Apakah kamu yakin ingin menghapus SELURUH data aplikasi ini?")) {
+    try { localStorage.clear(); } catch {}
+    money = []; shopping = []; tasks = []; habits = []; goals = [];
+    quickNotesEl.value = "";
+    renderAll();
+  }
+}
+
+function renderAll() {
+  renderDashboard();
+  renderMoney();
+  renderShopping();
+  renderTasks();
+  renderHabits();
+  renderGoals();
+}
+
+// INISIALISASI
+renderAll();
+</script>
+
+</body>
+</html>
