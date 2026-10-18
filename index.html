@@ -1,563 +1,808 @@
 <!DOCTYPE html>
-<html lang="id" class="light">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Life Dashboard - Pusat Kendali Hidup</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
-    </script>
-    <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .dark ::-webkit-scrollbar-thumb { background: #475569; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aktivitas Harian Pro</title>
+
+<!-- Font Inter / System -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg-body: #090d16;
+  --bg-surface: #121826;
+  --bg-card: #1a2235;
+  --bg-input: #232d42;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-light: rgba(99, 102, 241, 0.15);
+  --success: #10b981;
+  --success-light: rgba(16, 185, 129, 0.15);
+  --danger: #f43f5e;
+  --danger-light: rgba(244, 63, 94, 0.15);
+  --warning: #f59e0b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: rgba(255, 255, 255, 0.08);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER & NAVBAR */
+header {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.header-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent), #a855f7);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.brand h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.brand p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* NAV TABS */
+.nav-tabs {
+  max-width: 900px;
+  margin: 16px auto 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 24px 8px;
+  scrollbar-width: none;
+}
+
+.nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.03);
+}
+
+.tab-btn.active {
+  background: var(--accent-light);
+  color: #818cf8;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* MAIN CONTAINER */
+main {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  flex: 1;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.25s ease-in-out forwards;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* CARDS & GRID */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* WIDGET STATS */
+.stat-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+}
+
+.stat-box small {
+  color: var(--text-secondary);
+  font-size: 12px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.stat-box strong {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* FORMS & INPUTS */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+}
+
+/* BUTTONS */
+button, .btn {
+  padding: 11px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.btn-danger {
+  background: var(--danger-light);
+  color: var(--danger);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* LISTS & ITEMS */
+ul {
+  list-style: none;
+  margin-top: 14px;
+}
+
+li {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.item-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.item-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* BADGES & PROGRESS */
+.badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.badge-indigo { background: var(--accent-light); color: #818cf8; }
+.badge-green { background: var(--success-light); color: var(--success); }
+.badge-red { background: var(--danger-light); color: var(--danger); }
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #a855f7);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.text-done {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  background: var(--bg-surface);
+}
+</style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen pb-16 transition-colors duration-200">
 
-    <!-- HEADER & TOP CONTROLS -->
-    <header class="bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-900 dark:to-indigo-950 text-white shadow-lg py-6 px-4 md:px-8 mb-6 transition-colors duration-200">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 id="greeting" class="text-2xl md:text-3xl font-bold">Halo! Selamat Datang</h1>
-                <p id="current-date" class="text-violet-200 text-sm mt-1"></p>
-                <p id="daily-quote" class="text-xs text-violet-100 italic mt-2 bg-violet-700/50 dark:bg-violet-950/60 px-3 py-1.5 rounded-lg border border-violet-500/30 inline-block">"Memuat motivasi..."</p>
-            </div>
-            
-            <div class="flex items-center gap-3 flex-wrap justify-center">
-                <!-- Dark Mode Toggle -->
-                <button onclick="toggleDarkMode()" class="bg-violet-700/60 hover:bg-violet-700 p-2.5 rounded-2xl border border-violet-500/40 text-sm transition" title="Ubah Tema">
-                    <span id="theme-icon">🌙</span>
-                </button>
-                <!-- Export Data -->
-                <button onclick="exportData()" class="bg-violet-700/60 hover:bg-violet-700 px-3 py-2 rounded-2xl border border-violet-500/40 text-xs font-medium transition flex items-center gap-1">
-                    💾 Export Backup
-                </button>
-                <!-- Import Data -->
-                <label class="bg-violet-700/60 hover:bg-violet-700 px-3 py-2 rounded-2xl border border-violet-500/40 text-xs font-medium transition cursor-pointer flex items-center gap-1">
-                    📂 Import
-                    <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
-                </label>
-                <!-- Jam Digital -->
-                <div class="bg-violet-800/70 px-4 py-2.5 rounded-2xl border border-violet-500/40 text-center shadow-inner">
-                    <span id="live-clock" class="text-xl md:text-2xl font-mono font-bold tracking-wider">00:00:00</span>
-                </div>
-            </div>
+<body>
+
+<header>
+  <div class="header-container">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h1>Aktivitas Harian Pro</h1>
+        <p id="currentDateDisplay">Memuat tanggal...</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAVIGASI TAB -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('keuangan')">💰 Keuangan</button>
+  <button class="tab-btn" onclick="switchTab('belanja')">🛒 Belanja</button>
+  <button class="tab-btn" onclick="switchTab('tugas')">✅ Tugas & Kebiasaan</button>
+  <button class="tab-btn" onclick="switchTab('target')">🎯 Target Tabungan</button>
+  <button class="tab-btn" onclick="switchTab('kalkulator')">📝 Catatan & Alat</button>
+  <button class="tab-btn" onclick="switchTab('pengaturan')">⚙️ Pengaturan</button>
+</nav>
+
+<main>
+
+  <!-- TAB 1: DASHBOARD OVERVIEW -->
+  <div id="tab-dashboard" class="tab-content active">
+    <div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(18, 24, 38, 0.9)); border-color: rgba(99, 102, 241, 0.3);">
+      <small style="color: var(--text-secondary);">Sisa Saldo Kas Utama</small>
+      <h2 id="dashBalance" style="font-size: 32px; font-weight: 800; color: #818cf8; margin-top: 4px;">Rp0</h2>
+    </div>
+
+    <div class="grid-3">
+      <div class="stat-box">
+        <small>Pemasukan Bulan Ini</small>
+        <strong id="dashIncome" style="color: var(--success);">Rp0</strong>
+      </div>
+      <div class="stat-box">
+        <small>Pengeluaran Bulan Ini</small>
+        <strong id="dashExpense" style="color: var(--danger);">Rp0</strong>
+      </div>
+      <div class="stat-box">
+        <small>Tugas Belum Selesai</small>
+        <strong id="dashTasks">0 Tugas</strong>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 20px;">
+      <div class="card">
+        <div class="card-title">
+          <span>🛒 Rencana Belanja Pendek</span>
         </div>
-    </header>
+        <p class="item-sub">Total belum dibeli: <strong id="dashShoppingPending">Rp0</strong></p>
+        <ul id="dashShoppingList" style="margin-top: 10px;"></ul>
+      </div>
 
-    <!-- MAIN DASHBOARD GRID -->
-    <main class="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card">
+        <div class="card-title">
+          <span>🔥 Habits Streak Hari Ini</span>
+        </div>
+        <ul id="dashHabitList"></ul>
+      </div>
+    </div>
+  </div>
 
-        <!-- 1. HABIT TRACKER -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    🔥 Habit Tracker Harian
-                </h2>
-                <div class="flex gap-2 mb-3">
-                    <input type="text" id="habit-input" placeholder="Kebiasaan baru..." class="flex-1 px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:ring-2 focus:ring-violet-500 text-sm outline-none">
-                    <button onclick="addHabit()" class="bg-violet-600 hover:bg-violet-700 text-white px-3 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
-                </div>
-                <ul id="habit-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></ul>
-            </div>
-            <p id="habit-stats" class="text-xs text-slate-400 mt-4 text-right">0 dari 0 selesai</p>
-        </section>
+  <!-- TAB 2: KEUANGAN -->
+  <div id="tab-keuangan" class="tab-content">
+    <div class="card">
+      <div class="card-title">
+        <span>💰 Tambah Transaksi Keuangan</span>
+      </div>
+      <form id="moneyForm">
+        <input id="moneyName" placeholder="Keterangan (Contoh: Gaji, Makan Siang, Bensin)" required>
+        <div class="form-row">
+          <input id="moneyAmount" type="number" min="1" placeholder="Jumlah (Rp)" required>
+          <select id="moneyCategory">
+            <option value="Makanan">🍕 Makanan</option>
+            <option value="Transport">🚗 Transportasi</option>
+            <option value="Tagihan">📄 Tagihan / Bulanan</option>
+            <option value="Belanja">🛒 Belanja</option>
+            <option value="Gaji">💼 Gaji / Pendapatan</option>
+            <option value="Lainnya">📦 Lainnya</option>
+          </select>
+        </div>
+        <select id="moneyType">
+          <option value="in">Pemasukan (+)</option>
+          <option value="out">Pengeluaran (-)</option>
+        </select>
+        <button type="submit" class="btn-primary">+ Catat Transaksi</button>
+      </form>
+    </div>
 
-        <!-- 2. WATER INTAKE -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    💧 Pelacak Air Minum
-                </h2>
-                <div class="text-center my-4">
-                    <span id="water-count" class="text-4xl font-extrabold text-sky-500">0</span>
-                    <span class="text-slate-400 text-lg">/ 8 Gelas</span>
-                    <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-3 mt-3 overflow-hidden">
-                        <div id="water-progress" class="bg-sky-400 h-full transition-all duration-300" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="updateWater(-1)" class="flex-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 py-2 rounded-xl font-bold transition">-</button>
-                <button onclick="updateWater(1)" class="flex-1 bg-sky-500 hover:bg-sky-600 text-white py-2 rounded-xl font-bold transition">+ Tambah Gelas</button>
-            </div>
-        </section>
+    <div class="card">
+      <div class="card-title">
+        <span>📜 Riwayat Transaksi</span>
+        <button onclick="exportCSV()" class="btn-secondary btn-sm">📥 Ekspor CSV</button>
+      </div>
+      <ul id="moneyList"></ul>
+    </div>
+  </div>
 
-        <!-- 3. POMODORO TIMER + AMBIENT SOUND -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
-            <div>
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                        ⏱️ Pomodoro & Suara Fokus
-                    </h2>
-                    <button onclick="toggleAmbientSound()" id="sound-btn" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-lg transition" title="Putar Suara White Noise">🎧 Suara: Off</button>
-                </div>
-                <div class="text-center my-3">
-                    <span id="timer-display" class="text-4xl font-mono font-bold text-violet-600 dark:text-violet-400 tracking-tight">25:00</span>
-                    <p id="timer-status" class="text-xs text-slate-400 mt-1">Waktu untuk fokus bekerja!</p>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="toggleTimer()" id="timer-btn" class="flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl font-medium text-sm transition">Mulai</button>
-                <button onclick="resetTimer()" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl font-medium text-sm transition">Reset</button>
-            </div>
-        </section>
+  <!-- TAB 3: BELANJA -->
+  <div id="tab-belanja" class="tab-content">
+    <div class="card">
+      <div class="card-title">
+        <span>🛒 Catat Barang Belanjaan</span>
+      </div>
+      <form id="shoppingForm">
+        <div class="form-row">
+          <input id="shoppingName" placeholder="Nama Barang" required>
+          <input id="shoppingPrice" type="number" min="0" placeholder="Estimasi Harga (Rp)">
+        </div>
+        <button type="submit" class="btn-primary">+ Tambah ke Daftar</button>
+      </form>
+    </div>
 
-        <!-- 4. TO-DO LIST PRIORITAS -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    📋 To-Do List Berprioritas
-                </h2>
-                <div class="space-y-2 mb-3">
-                    <input type="text" id="task-input" placeholder="Tulis tugas..." class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:ring-2 focus:ring-violet-500 text-sm outline-none">
-                    <div class="flex gap-2">
-                        <select id="task-priority" class="flex-1 px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
-                            <option value="Penting">🔴 Penting</option>
-                            <option value="Biasa" selected>🟡 Biasa</option>
-                            <option value="Santai">🟢 Santai</option>
-                        </select>
-                        <button onclick="addTask()" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
-                    </div>
-                </div>
-                <ul id="task-list" class="space-y-2 max-h-44 overflow-y-auto pr-1"></ul>
-            </div>
-            <p id="task-counter" class="text-xs text-slate-400 mt-3 text-right">0 selesai</p>
-        </section>
+    <div class="card">
+      <div class="card-title">
+        <span>📋 Daftar Belanjaan</span>
+        <button onclick="clearDoneShopping()" class="btn-secondary btn-sm">Bersihkan yang Selesai</button>
+      </div>
+      <ul id="shoppingList"></ul>
+    </div>
+  </div>
 
-        <!-- 5. EXPENSE TRACKER -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    💰 Pengeluaran Hari Ini
-                </h2>
-                <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl border dark:border-slate-600 mb-3 text-center">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 block">Total Pengeluaran</span>
-                    <span id="total-expense" class="text-lg font-bold text-rose-600 dark:text-rose-400">Rp 0</span>
-                </div>
-                <div class="space-y-2 mb-3">
-                    <input type="text" id="expense-name" placeholder="Keterangan (cth: Kopi)" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
-                    <input type="number" id="expense-amount" placeholder="Nominal angka" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
-                    <button onclick="addExpense()" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-xl text-sm font-medium transition">Catat Pengeluaran</button>
-                </div>
-                <ul id="expense-list" class="space-y-1 max-h-24 overflow-y-auto pr-1 text-sm"></ul>
-            </div>
-        </section>
+  <!-- TAB 4: TUGAS & KEBIASAAN -->
+  <div id="tab-tugas" class="tab-content">
+    <div class="grid-2">
+      <!-- Tugas Harian -->
+      <div class="card">
+        <div class="card-title">
+          <span>✅ Tugas Harian</span>
+        </div>
+        <form id="taskForm">
+          <input id="taskName" placeholder="Contoh: Belajar JavaScript 30 menit" required>
+          <button type="submit" class="btn-primary">+ Tambah Tugas</button>
+        </form>
+        <ul id="taskList" style="margin-top: 14px;"></ul>
+      </div>
 
-        <!-- 6. QUICK LINKS (PINTASAN WEB) -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    🔗 Pintasan Web Cepat
-                </h2>
-                <div class="space-y-2 mb-3">
-                    <input type="text" id="link-name" placeholder="Nama Web (cth: WhatsApp)" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
-                    <input type="url" id="link-url" placeholder="URL (https://...)" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
-                    <button onclick="addLink()" class="w-full bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl text-sm font-medium transition">Simpan Link</button>
-                </div>
-                <div id="links-container" class="grid grid-cols-2 gap-2 max-h-28 overflow-y-auto pr-1"></div>
-            </div>
-        </section>
+      <!-- Habit Tracker -->
+      <div class="card">
+        <div class="card-title">
+          <span>🌱 Pelacak Kebiasaan (Habits)</span>
+        </div>
+        <form id="habitForm">
+          <input id="habitName" placeholder="Contoh: Minum air 2 liter / Minum Vitamin" required>
+          <button type="submit" class="btn-primary">+ Tambah Kebiasaan</button>
+        </form>
+        <ul id="habitList" style="margin-top: 14px;"></ul>
+      </div>
+    </div>
+  </div>
 
-        <!-- 7. TIME BLOCKING (JADWAL HARIAN) -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col transition-colors md:col-span-2 lg:col-span-1">
-            <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                ⏰ Time Blocking (Jadwal Jam)
-            </h2>
-            <div id="time-blocks" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-sm">
-                <!-- Di-generate otomatis via JS -->
-            </div>
-        </section>
+  <!-- TAB 5: TARGET TABUNGAN -->
+  <div id="tab-target" class="tab-content">
+    <div class="card">
+      <div class="card-title">
+        <span>🎯 Buat Target Tabungan / Wishlist</span>
+      </div>
+      <form id="goalForm">
+        <input id="goalName" placeholder="Contoh: Beli Laptop Baru, Dana Darurat" required>
+        <input id="goalTarget" type="number" min="1" placeholder="Target Nominal (Rp)" required>
+        <button type="submit" class="btn-primary">+ Buat Target</button>
+      </form>
+    </div>
 
-        <!-- 8. TARGET & MILESTONE JANGKA PANJANG -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors md:col-span-2 lg:col-span-1">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    🎯 Target & Milestone
-                </h2>
-                <div class="flex gap-2 mb-3">
-                    <input type="text" id="goal-input" placeholder="Target bulan ini..." class="flex-1 px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
-                    <button onclick="addGoal()" class="bg-violet-600 hover:bg-violet-700 text-white px-3 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
-                </div>
-                <ul id="goal-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></ul>
-            </div>
-            <p id="goal-stats" class="text-xs text-slate-400 mt-4 text-right">0 dari 0 tercapai</p>
-        </section>
+    <div class="card">
+      <div class="card-title">
+        <span>📊 Progres Tabungan Saya</span>
+      </div>
+      <div id="goalList"></div>
+    </div>
+  </div>
 
-        <!-- 9. MOOD & GRATITUDE -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors md:col-span-2 lg:col-span-1">
-            <div>
-                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                    ✨ Mood & Rasa Syukur
-                </h2>
-                <div class="grid grid-cols-5 gap-1.5 mb-3 text-center">
-                    <button onclick="setMood('🤩 Luar Biasa')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">🤩</button>
-                    <button onclick="setMood('😊 Senang')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">😊</button>
-                    <button onclick="setMood('😐 Biasa')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">😐</button>
-                    <button onclick="setMood('🥱 Lelah')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">🥱</button>
-                    <button onclick="setMood('😤 Stres')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">😤</button>
-                </div>
-                <div class="text-center bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl border dark:border-slate-600 mb-2">
-                    <span class="text-xs text-slate-400 block">Mood:</span>
-                    <span id="selected-mood" class="text-sm font-semibold text-slate-700 dark:text-slate-200">Belum dipilih</span>
-                </div>
-            </div>
-            <div>
-                <input type="text" id="daily-gratitude" placeholder="Hal yang kamu syukuri hari ini..." class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none" oninput="saveGratitude()">
-            </div>
-        </section>
+  <!-- TAB 6: KALKULATOR & CATATAN -->
+  <div id="tab-kalkulator" class="tab-content">
+    <div class="grid-2">
+      <!-- Kalkulator Ketahanan Uang -->
+      <div class="card">
+        <div class="card-title">
+          <span>🧮 Kalkulator Ketahanan Uang</span>
+        </div>
+        <div class="form-group">
+          <label>Jumlah Uang Kamu (Rp)</label>
+          <input id="budget" type="number" min="0" placeholder="0">
+          <button type="button" onclick="useCurrentBalance()" class="btn-secondary btn-sm" style="margin-top: 4px;">🎯 Gunakan Saldo Saat Ini</button>
+        </div>
+        <div class="form-group" style="margin-top: 10px;">
+          <label>Perkiraan Pengeluaran/Hari (Rp)</label>
+          <input id="daily" type="number" min="0" placeholder="0">
+        </div>
+        <button onclick="calculateDays()" class="btn-primary" style="margin-top: 12px; width: 100%;">Hitung Ketahanan</button>
+        <div id="calculationResult" style="margin-top: 14px; font-weight: 700; color: #818cf8;"></div>
+      </div>
 
-        <!-- 10. CATATAN KILAT (FULL WIDTH) -->
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 md:col-span-2 lg:col-span-3 flex flex-col transition-colors">
-            <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
-                📝 Catatan Bebas & Ide Kreatif
-            </h2>
-            <textarea id="daily-notes" placeholder="Tulis ide atau catatan penting di sini... (Tersimpan otomatis)" class="w-full h-28 p-3 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm resize-none" oninput="saveNotes()"></textarea>
-        </section>
+      <!-- Quick Notes -->
+      <div class="card">
+        <div class="card-title">
+          <span>📝 Catatan Cepat (Scratchpad)</span>
+        </div>
+        <textarea id="quickNotes" rows="7" placeholder="Tulis catatan penting atau ide harian di sini... (Otomatis tersimpan)"></textarea>
+      </div>
+    </div>
+  </div>
 
-    </main>
+  <!-- TAB 7: PENGATURAN -->
+  <div id="tab-pengaturan" class="tab-content">
+    <div class="card">
+      <div class="card-title">
+        <span>💾 Cadangan & Pemulihan Data</span>
+      </div>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">
+        Semua data tersimpan aman secara lokal di browser kamu. Ekspor JSON untuk mengamankan data atau memindahkannya ke perangkat lain.
+      </p>
+      <div class="form-row">
+        <button onclick="exportJSON()" class="btn-secondary">📥 Download Backup JSON</button>
+        <button onclick="$('importFile').click()" class="btn-secondary">📤 Restore Data JSON</button>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // --- DARK MODE LOGIC ---
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('ul_theme', 'light');
-                document.getElementById('theme-icon').innerText = '🌙';
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('ul_theme', 'dark');
-                document.getElementById('theme-icon').innerText = '☀️';
-            }
-        }
-        if (localStorage.getItem('ul_theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-            document.getElementById('theme-icon').innerText = '☀️';
-        }
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
 
-        // --- EXPORT & IMPORT BACKUP ---
-        function exportData() {
-            const dataObj = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                dataObj[key] = localStorage.getItem(key);
-            }
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `dashboard_backup_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        }
+      <div class="card-title" style="color: var(--danger);">
+        <span>🗑️ Zona Bahaya</span>
+      </div>
+      <button onclick="clearAllData()" class="btn-danger" style="width: 100%;">Hapus Seluruh Data Permanen</button>
+    </div>
+  </div>
 
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    for (const key in importedData) {
-                        localStorage.setItem(key, importedData[key]);
-                    }
-                    alert("Data berhasil dipulihkan! Halaman akan dimuat ulang.");
-                    location.reload();
-                } catch (err) {
-                    alert("Gagal membaca file backup!");
-                }
-            };
-            reader.readAsText(file);
-        }
+</main>
 
-        // --- QUOTES HARIAN ---
-        const quotes = [
-            "“Hari ini adalah kesempatan luar biasa untuk menjadi lebih baik.”",
-            "“Langkah kecil konsisten membawa perubahan besar jangka panjang.”",
-            "“Fokuslah pada kendali diri Anda, ikhlaskan yang di luar kendali.”",
-            "“Disiplin adalah jembatan menuju impian terbesar Anda.”"
-        ];
-        document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+<footer>
+  Aktivitas Harian Pro • Desain Modern, Cepat & Bebas Iklan
+</footer>
 
-        // --- JAM & TANGGAL ---
-        function updateHeader() {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('id-ID');
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('current-date').innerText = now.toLocaleDateString('id-ID', options);
+<script>
+// HELPER UTAMA
+const $ = id => document.getElementById(id);
 
-            const hours = now.getHours();
-            let greetingText = "Halo";
-            if (hours >= 3 && hours < 11) greetingText = "Selamat Pagi 🌅";
-            else if (hours >= 11 && hours < 15) greetingText = "Selamat Siang ☀️";
-            else if (hours >= 15 && hours < 18) greetingText = "Selamat Sore 🌤️";
-            else greetingText = "Selamat Malam 🌙";
-            document.getElementById('greeting').innerText = greetingText;
-        }
-        setInterval(updateHeader, 1000);
-        updateHeader();
+function loadData(key) {
+  try {
+    const val = localStorage.getItem(key);
+    return val ? JSON.parse(val) : [];
+  } catch {
+    return [];
+  }
+}
 
-        // --- 1. HABIT TRACKER ---
-        let habits = JSON.parse(localStorage.getItem('ul_habits')) || [
-            { text: "Minum vitamin", completed: false },
-            { text: "Olahraga 15 menit", completed: false }
-        ];
-        function renderHabits() {
-            const listEl = document.getElementById('habit-list');
-            listEl.innerHTML = '';
-            let completed = 0;
-            habits.forEach((h, idx) => {
-                if (h.completed) completed++;
-                const li = document.createElement('li');
-                li.className = `flex justify-between items-center p-2.5 rounded-xl border dark:border-slate-700 text-sm transition ${h.completed ? 'bg-slate-50 dark:bg-slate-700/30 line-through text-slate-400' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'}`;
-                li.innerHTML = `
-                    <span onclick="toggleHabit(${idx})" class="cursor-pointer flex-1 truncate pr-2 select-none">${h.text}</span>
-                    <button onclick="deleteHabit(${idx})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>
-                `;
-                listEl.appendChild(li);
-            });
-            document.getElementById('habit-stats').innerText = `${completed} dari ${habits.length} selesai`;
-            localStorage.setItem('ul_habits', JSON.stringify(habits));
-        }
-        function addHabit() {
-            const val = document.getElementById('habit-input').value.trim();
-            if (val) { habits.push({ text: val, completed: false }); document.getElementById('habit-input').value = ''; renderHabits(); }
-        }
-        function toggleHabit(i) { habits[i].completed = !habits[i].completed; renderHabits(); }
-        function deleteHabit(i) { habits.splice(i, 1); renderHabits(); }
-        renderHabits();
+function saveData(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
 
-        // --- 2. WATER TRACKER ---
-        let waterCount = Number(localStorage.getItem('ul_water')) || 0;
-        function updateWater(amt) {
-            waterCount = Math.max(0, Math.min(15, waterCount + amt));
-            document.getElementById('water-count').innerText = waterCount;
-            document.getElementById('water-progress').style.width = Math.min((waterCount / 8) * 100, 100) + '%';
-            localStorage.setItem('ul_water', waterCount);
-        }
-        updateWater(0);
+// STATE GLOBAL
+let money = loadData("pro_money");
+let shopping = loadData("pro_shopping");
+let tasks = loadData("pro_tasks");
+let habits = loadData("pro_habits");
+let goals = loadData("pro_goals");
 
-        // --- 3. POMODORO TIMER & AMBIENT SOUND (WEB AUDIO API) ---
-        let timerSecs = 25 * 60, timerInt = null, isRunning = false;
-        let audioCtx = null, noiseNode = null, isSoundOn = false;
+// INITIALIZE DATE
+$("currentDateDisplay").textContent = new Date().toLocaleDateString("id-ID", {
+  weekday: "long", day: "numeric", month: "long", year: "numeric"
+});
 
-        function updateTimerDisplay() {
-            const m = Math.floor(timerSecs / 60), s = timerSecs % 60;
-            document.getElementById('timer-display').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        }
-        function toggleTimer() {
-            const btn = document.getElementById('timer-btn');
-            if (!isRunning) {
-                isRunning = true; btn.innerText = "Jeda";
-                btn.className = "flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-xl font-medium text-sm transition";
-                timerInt = setInterval(() => {
-                    if (timerSecs > 0) { timerSecs--; updateTimerDisplay(); }
-                    else { clearInterval(timerInt); alert("Pomodoro selesai!"); resetTimer(); }
-                }, 1000);
-            } else {
-                clearInterval(timerInt); isRunning = false; btn.innerText = "Lanjutkan";
-                btn.className = "flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl font-medium text-sm transition";
-            }
-        }
-        function resetTimer() {
-            clearInterval(timerInt); isRunning = false; timerSecs = 25 * 60; updateTimerDisplay();
-            const btn = document.getElementById('timer-btn'); btn.innerText = "Mulai";
-            btn.className = "flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl font-medium text-sm transition";
-        }
+// FORMAT CURRENCY
+function rupiah(num) {
+  return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(num || 0);
+}
 
-        // Ambient Sound White Noise Generator
-        function toggleAmbientSound() {
-            const btn = document.getElementById('sound-btn');
-            if (!isSoundOn) {
-                try {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const bufferSize = 2 * audioCtx.sampleRate;
-                    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                    const output = noiseBuffer.getChannelData(0);
-                    for (let i = 0; i < bufferSize; i++) {
-                        output[i] = Math.random() * 2 - 1; // White noise
-                    }
-                    noiseNode = audioCtx.createBufferSource();
-                    noiseNode.buffer = noiseBuffer;
-                    noiseNode.loop = true;
-                    
-                    const gainNode = audioCtx.createGain();
-                    gainNode.gain.value = 0.05; // soft volume
-                    noiseNode.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-                    noiseNode.start(0);
+// SWITCH TABS
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
 
-                    isSoundOn = true;
-                    btn.innerText = "🎧 Suara: On";
-                    btn.className = "text-xs bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300 px-2.5 py-1 rounded-lg transition";
-                } catch(e) { alert("Audio tidak didukung browser."); }
-            } else {
-                if (noiseNode) { noiseNode.stop(); noiseNode.disconnect(); }
-                if (audioCtx) audioCtx.close();
-                isSoundOn = false;
-                btn.innerText = "🎧 Suara: Off";
-                btn.className = "text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-lg transition";
-            }
-        }
+  $(`tab-${tabId}`).classList.add("active");
+  event.currentTarget.classList.add("active");
 
-        // --- 4. TO-DO LIST ---
-        let tasks = JSON.parse(localStorage.getItem('ul_tasks')) || [];
-        function renderTasks() {
-            const listEl = document.getElementById('task-list'); listEl.innerHTML = '';
-            if (!tasks.length) { listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Belum ada tugas.</p>'; document.getElementById('task-counter').innerText = '0 selesai'; return; }
-            let completed = 0;
-            tasks.forEach((t, i) => {
-                if (t.completed) completed++;
-                const pColor = t.priority === 'Penting' ? 'bg-rose-100 text-rose-600 dark:bg-rose-950 dark:text-rose-300' : t.priority === 'Santai' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-300';
-                const li = document.createElement('li');
-                li.className = `flex justify-between items-center p-2.5 rounded-xl border dark:border-slate-700 text-sm transition ${t.completed ? 'bg-slate-50 dark:bg-slate-700/30 line-through text-slate-400' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'}`;
-                li.innerHTML = `
-                    <div class="flex items-center gap-2 flex-1 truncate pr-2">
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md ${pColor}">${t.priority}</span>
-                        <span onclick="toggleTask(${i})" class="cursor-pointer truncate flex-1 select-none">${t.text}</span>
-                    </div>
-                    <button onclick="deleteTask(${i})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>
-                `;
-                listEl.appendChild(li);
-            });
-            document.getElementById('task-counter').innerText = `${completed} dari ${tasks.length} selesai`;
-            localStorage.setItem('ul_tasks', JSON.stringify(tasks));
-        }
-        function addTask() {
-            const val = document.getElementById('task-input').value.trim();
-            const pr = document.getElementById('task-priority').value;
-            if (val) { tasks.push({ text: val, priority: pr, completed: false }); document.getElementById('task-input').value = ''; renderTasks(); }
-        }
-        function toggleTask(i) { tasks[i].completed = !tasks[i].completed; renderTasks(); }
-        function deleteTask(i) { tasks.splice(i, 1); renderTasks(); }
-        renderTasks();
+  renderAll();
+}
 
-        // --- 5. EXPENSE TRACKER ---
-        let expenses = JSON.parse(localStorage.getItem('ul_expenses')) || [];
-        function renderExpenses() {
-            const listEl = document.getElementById('expense-list'); listEl.innerHTML = '';
-            let total = 0;
-            if (!expenses.length) listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-2">Belum ada pengeluaran.</p>';
-            expenses.forEach((ex, i) => {
-                total += Number(ex.amount);
-                const li = document.createElement('li');
-                li.className = "flex justify-between items-center bg-slate-50 dark:bg-slate-700/50 p-2 rounded-lg border dark:border-slate-600 text-xs";
-                li.innerHTML = `<span class="truncate pr-2 font-medium text-slate-700 dark:text-slate-300">${ex.name}</span>
-                    <div class="flex items-center gap-2"><span class="text-rose-600 dark:text-rose-400 font-semibold">Rp ${Number(ex.amount).toLocaleString('id-ID')}</span>
-                    <button onclick="deleteExpense(${i})" class="text-slate-400 hover:text-rose-500 font-bold">×</button></div>`;
-                listEl.appendChild(li);
-            });
-            document.getElementById('total-expense').innerText = `Rp ${total.toLocaleString('id-ID')}`;
-            localStorage.setItem('ul_expenses', JSON.stringify(expenses));
-        }
-        function addExpense() {
-            const name = document.getElementById('expense-name').value.trim();
-            const amount = document.getElementById('expense-amount').value.trim();
-            if (name && amount && !isNaN(amount)) {
-                expenses.push({ name, amount });
-                document.getElementById('expense-name').value = '';
-                document.getElementById('expense-amount').value = '';
-                renderExpenses();
-            } else alert("Masukkan data valid!");
-        }
-        function deleteExpense(i) { expenses.splice(i, 1); renderExpenses(); }
-        renderExpenses();
+// === KEUANGAN ===
+$("moneyForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = $("moneyName").value.trim();
+  const amount = Number($("moneyAmount").value);
+  const category = $("moneyCategory").value;
+  const type = $("moneyType").value;
 
-        // --- 6. QUICK LINKS ---
-        let links = JSON.parse(localStorage.getItem('ul_links')) || [
-            { name: "WhatsApp", url: "https://web.whatsapp.com" },
-            { name: "YouTube", url: "https://youtube.com" }
-        ];
-        function renderLinks() {
-            const container = document.getElementById('links-container'); container.innerHTML = '';
-            links.forEach((l, i) => {
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-slate-50 dark:bg-slate-700/50 px-3 py-2 rounded-xl border dark:border-slate-600 text-xs";
-                div.innerHTML = `<a href="${l.url}" target="_blank" class="truncate font-medium text-violet-600 dark:text-violet-400 hover:underline flex-1 pr-1">${l.name}</a>
-                    <button onclick="deleteLink(${i})" class="text-slate-400 hover:text-rose-500 font-bold">×</button>`;
-                container.appendChild(div);
-            });
-            localStorage.setItem('ul_links', JSON.stringify(links));
-        }
-        function addLink() {
-            const name = document.getElementById('link-name').value.trim();
-            let url = document.getElementById('link-url').value.trim();
-            if (name && url) {
-                if (!url.startsWith('http')) url = 'https://' + url;
-                links.push({ name, url });
-                document.getElementById('link-name').value = '';
-                document.getElementById('link-url').value = '';
-                renderLinks();
-            }
-        }
-        function deleteLink(i) { links.splice(i, 1); renderLinks(); }
-        renderLinks();
+  if (!name || amount <= 0) return;
 
-        // --- 7. TIME BLOCKING ---
-        let timeBlocks = JSON.parse(localStorage.getItem('ul_timeblocks')) || {};
-        const hoursList = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"];
-        function renderTimeBlocks() {
-            const container = document.getElementById('time-blocks'); container.innerHTML = '';
-            hoursList.forEach(hour => {
-                const val = timeBlocks[hour] || '';
-                const row = document.createElement('div');
-                row.className = "flex items-center gap-2";
-                row.innerHTML = `<span class="w-12 font-mono text-xs text-slate-400">${hour}</span>
-                    <input type="text" value="${val}" oninput="saveTimeBlock('${hour}', this.value)" placeholder="Kosong..." class="flex-1 px-3 py-1.5 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-xs outline-none">`;
-                container.appendChild(row);
-            });
-        }
-        function saveTimeBlock(hour, val) {
-            timeBlocks[hour] = val;
-            localStorage.setItem('ul_timeblocks', JSON.stringify(timeBlocks));
-        }
-        renderTimeBlocks();
+  money.unshift({
+    id: Date.now(),
+    name,
+    amount,
+    category,
+    type,
+    date: new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
+  });
 
-        // --- 8. TARGET & MILESTONE ---
-        let goals = JSON.parse(localStorage.getItem('ul_goals')) || [];
-        function renderGoals() {
-            const listEl = document.getElementById('goal-list'); listEl.innerHTML = '';
-            if (!goals.length) { listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Belum ada target.</p>'; document.getElementById('goal-stats').innerText = '0 tercapai'; return; }
-            let completed = 0;
-            goals.forEach((g, i) => {
-                if (g.completed) completed++;
-                const li = document.createElement('li');
-                li.className = `flex justify-between items-center p-2.5 rounded-xl border dark:border-slate-700 text-sm transition ${g.completed ? 'bg-slate-50 dark:bg-slate-700/30 line-through text-slate-400' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'}`;
-                li.innerHTML = `<span onclick="toggleGoal(${i})" class="cursor-pointer flex-1 truncate pr-2 select-none">${g.text}</span>
-                    <button onclick="deleteGoal(${i})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>`;
-                listEl.appendChild(li);
-            });
-            document.getElementById('goal-stats').innerText = `${completed} dari ${goals.length} tercapai`;
-            localStorage.setItem('ul_goals', JSON.stringify(goals));
-        }
-        function addGoal() {
-            const val = document.getElementById('goal-input').value.trim();
-            if (val) { goals.push({ text: val, completed: false }); document.getElementById('goal-input').value = ''; renderGoals(); }
-        }
-        function toggleGoal(i) { goals[i].completed = !goals[i].completed; renderGoals(); }
-        function deleteGoal(i) { goals.splice(i, 1); renderGoals(); }
-        renderGoals();
+  saveData("pro_money", money);
+  renderAll();
+  this.reset();
+});
 
-        // --- 9. MOOD & GRATITUDE ---
-        function setMood(m) { document.getElementById('selected-mood').innerText = m; localStorage.setItem('ul_mood', m); }
-        const savedMood = localStorage.getItem('ul_mood');
-        if (savedMood) document.getElementById('selected-mood').innerText = savedMood;
-        const gInput = document.getElementById('daily-gratitude');
-        gInput.value = localStorage.getItem('ul_gratitude') || '';
-        function saveGratitude() { localStorage.setItem('ul_gratitude', gInput.value); }
+function getMoneySummary() {
+  const income = money.filter(x => x.type === "in").reduce((s, x) => s + x.amount, 0);
+  const expense = money.filter(x => x.type === "out").reduce((s, x) => s + x.amount, 0);
+  return { income, expense, balance: income - expense };
+}
 
-        // --- 10. NOTES ---
-        const notesArea = document.getElementById('daily-notes');
-        notesArea.value = localStorage.getItem('ul_notes') || '';
-        function saveNotes() { localStorage.setItem('ul_notes', notesArea.value); }
-    </script>
-</body>
-</html>
+function renderMoney() {
+  const list = $("moneyList");
+  list.replaceChildren();
+
+  money.forEach(item => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="item-info">
+        <div class="item-title">${escapeHtml(item.name)} <span class="badge badge-indigo">${escapeHtml(item.category)}</span></div>
+        <div class="item-sub">${item.date}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-weight:700; color:${item.type === 'in' ? 'var(--success)' : 'var(--danger)'}">
+          ${item.type === 'in' ? '+' : '-'}${rupiah(item.amount)}
+        </div>
+      </div>
+      <button onclick="deleteMoney(${item.id})" class="btn-danger btn-sm">×</button>
+    `;
+    list.append(li);
+  });
+}
+
+function deleteMoney(id) {
+  money = money.filter(x => x.id !== id);
+  saveData("pro_money", money);
+  renderAll();
+}
+
+// === BELANJA ===
+$("shoppingForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = $("shoppingName").value.trim();
+  const price = Number($("shoppingPrice").value) || 0;
+
+  if (!name) return;
+
+  shopping.push({ id: Date.now(), name, price, done: false });
+  saveData("pro_shopping", shopping);
+  renderAll();
+  this.reset();
+});
+
+function renderShopping() {
+  const list = $("shoppingList");
+  list.replaceChildren();
+
+  shopping.forEach(item => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="item-info ${item.done ? 'text-done' : ''}">
+        <div class="item-title">${escapeHtml(item.name)}</div>
+        <div class="item-sub">${item.price ? rupiah(item.price) : 'Tanpa estimasi harga'}</div>
+      </div>
+      <button onclick="toggleShopping(${item.id})" class="${item.done ? 'btn-secondary' : 'btn-primary'} btn-sm">
+        ${item.done ? 'Batal' : '✓ Dibeli'}
+      </button>
+      <button onclick="deleteShopping(${item.id})" class="btn-danger btn-sm">×</button>
+    `;
+    list.append(li);
+  });
+}
+
+function toggleShopping(id) {
+  const item = shopping.find(x => x.id === id);
+  if (item) item.done = !item.done;
+  saveData("pro_shopping", shopping);
+  renderAll();
+}
+
+function deleteShopping(id) {
+  shopping = shopping.filter(x => x.id !== id);
+  saveData("pro_shopping", shopping);
+  renderAll();
+}
+
+function clearDoneShopping() {
+  shopping = shopping.filter(x => !x.done);
+  saveData("pro_shopping", shopping);
+  renderAll();
+}
+
+// === TUGAS & HABITS ===
+$("taskForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = $("taskName").value.trim();
+  if (!name) return;
+
+  tasks.push({ id: Date.now(), name, done: false });
+  saveData("pro_tasks", tasks);
+  renderAll();
+  this.reset();
+});
+
+function renderTasks() {
+  const list = $("taskList");
+  list.replaceChildren();
+
+  tasks.forEach(item => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="item-info ${item.done ? 'text-done' : ''}">
+        <div class
