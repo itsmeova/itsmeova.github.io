@@ -1,30 +1,52 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Life Dashboard - Produktivitas & Kehidupan Sehari-hari</title>
+    <title>Ultimate Life Dashboard - Pusat Kendali Hidup</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <style>
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-12">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen pb-16 transition-colors duration-200">
 
-    <!-- HEADER & QUOTE -->
-    <header class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg py-6 px-4 md:px-8 mb-6">
+    <!-- HEADER & TOP CONTROLS -->
+    <header class="bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-900 dark:to-indigo-950 text-white shadow-lg py-6 px-4 md:px-8 mb-6 transition-colors duration-200">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 <h1 id="greeting" class="text-2xl md:text-3xl font-bold">Halo! Selamat Datang</h1>
                 <p id="current-date" class="text-violet-200 text-sm mt-1"></p>
-                <p id="daily-quote" class="text-xs text-violet-100 italic mt-2 bg-violet-700/50 px-3 py-1.5 rounded-lg border border-violet-500/30 inline-block">"Memuat motivasi..."</p>
+                <p id="daily-quote" class="text-xs text-violet-100 italic mt-2 bg-violet-700/50 dark:bg-violet-950/60 px-3 py-1.5 rounded-lg border border-violet-500/30 inline-block">"Memuat motivasi..."</p>
             </div>
-            <div class="bg-violet-800/60 px-5 py-3 rounded-2xl border border-violet-500/40 text-center shadow-inner">
-                <span id="live-clock" class="text-2xl md:text-3xl font-mono font-bold tracking-wider">00:00:00</span>
+            
+            <div class="flex items-center gap-3 flex-wrap justify-center">
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="bg-violet-700/60 hover:bg-violet-700 p-2.5 rounded-2xl border border-violet-500/40 text-sm transition" title="Ubah Tema">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <!-- Export Data -->
+                <button onclick="exportData()" class="bg-violet-700/60 hover:bg-violet-700 px-3 py-2 rounded-2xl border border-violet-500/40 text-xs font-medium transition flex items-center gap-1">
+                    💾 Export Backup
+                </button>
+                <!-- Import Data -->
+                <label class="bg-violet-700/60 hover:bg-violet-700 px-3 py-2 rounded-2xl border border-violet-500/40 text-xs font-medium transition cursor-pointer flex items-center gap-1">
+                    📂 Import
+                    <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
+                </label>
+                <!-- Jam Digital -->
+                <div class="bg-violet-800/70 px-4 py-2.5 rounded-2xl border border-violet-500/40 text-center shadow-inner">
+                    <span id="live-clock" class="text-xl md:text-2xl font-mono font-bold tracking-wider">00:00:00</span>
+                </div>
             </div>
         </div>
     </header>
@@ -32,72 +54,71 @@
     <!-- MAIN DASHBOARD GRID -->
     <main class="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- 1. HABIT TRACKER (KEBIASAAN HARIAN) -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+        <!-- 1. HABIT TRACKER -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
             <div>
-                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-3">
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
                     🔥 Habit Tracker Harian
                 </h2>
-                <div class="space-y-2 mb-3">
-                    <div class="flex gap-2">
-                        <input type="text" id="habit-input" placeholder="Kebiasaan baru (cth: Olahraga 15 mnt)" class="flex-1 px-3 py-2 border rounded-xl focus:ring-2 focus:ring-violet-500 text-sm outline-none">
-                        <button onclick="addHabit()" class="bg-violet-600 hover:bg-violet-700 text-white px-3 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
-                    </div>
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="habit-input" placeholder="Kebiasaan baru..." class="flex-1 px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:ring-2 focus:ring-violet-500 text-sm outline-none">
+                    <button onclick="addHabit()" class="bg-violet-600 hover:bg-violet-700 text-white px-3 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
                 </div>
-                <ul id="habit-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
-                    <!-- Dinamis -->
-                </ul>
+                <ul id="habit-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></ul>
             </div>
-            <p id="habit-stats" class="text-xs text-slate-400 mt-4 text-right">0 dari 0 kebiasaan selesai</p>
+            <p id="habit-stats" class="text-xs text-slate-400 mt-4 text-right">0 dari 0 selesai</p>
         </section>
 
-        <!-- 2. WATER INTAKE (PELACAK AIR MINUM) -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+        <!-- 2. WATER INTAKE -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
             <div>
-                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-3">
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
                     💧 Pelacak Air Minum
                 </h2>
                 <div class="text-center my-4">
                     <span id="water-count" class="text-4xl font-extrabold text-sky-500">0</span>
                     <span class="text-slate-400 text-lg">/ 8 Gelas</span>
-                    <div class="w-full bg-slate-100 rounded-full h-3 mt-3 overflow-hidden">
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-3 mt-3 overflow-hidden">
                         <div id="water-progress" class="bg-sky-400 h-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
             <div class="flex gap-2">
-                <button onclick="updateWater(-1)" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl font-bold transition">-</button>
+                <button onclick="updateWater(-1)" class="flex-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 py-2 rounded-xl font-bold transition">-</button>
                 <button onclick="updateWater(1)" class="flex-1 bg-sky-500 hover:bg-sky-600 text-white py-2 rounded-xl font-bold transition">+ Tambah Gelas</button>
             </div>
         </section>
 
-        <!-- 3. POMODORO TIMER -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+        <!-- 3. POMODORO TIMER + AMBIENT SOUND -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
             <div>
-                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-3">
-                    ⏱️ Pomodoro Fokus
-                </h2>
-                <div class="text-center my-4">
-                    <span id="timer-display" class="text-4xl font-mono font-bold text-violet-600 tracking-tight">25:00</span>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        ⏱️ Pomodoro & Suara Fokus
+                    </h2>
+                    <button onclick="toggleAmbientSound()" id="sound-btn" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-lg transition" title="Putar Suara White Noise">🎧 Suara: Off</button>
+                </div>
+                <div class="text-center my-3">
+                    <span id="timer-display" class="text-4xl font-mono font-bold text-violet-600 dark:text-violet-400 tracking-tight">25:00</span>
                     <p id="timer-status" class="text-xs text-slate-400 mt-1">Waktu untuk fokus bekerja!</p>
                 </div>
             </div>
             <div class="flex gap-2">
                 <button onclick="toggleTimer()" id="timer-btn" class="flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl font-medium text-sm transition">Mulai</button>
-                <button onclick="resetTimer()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl font-medium text-sm transition">Reset</button>
+                <button onclick="resetTimer()" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl font-medium text-sm transition">Reset</button>
             </div>
         </section>
 
-        <!-- 4. TO-DO LIST DENGAN PRIORITAS -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between md:col-span-2 lg:col-span-1">
+        <!-- 4. TO-DO LIST PRIORITAS -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
             <div>
-                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-3">
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
                     📋 To-Do List Berprioritas
                 </h2>
                 <div class="space-y-2 mb-3">
-                    <input type="text" id="task-input" placeholder="Tulis tugas..." class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-violet-500 text-sm outline-none">
+                    <input type="text" id="task-input" placeholder="Tulis tugas..." class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:ring-2 focus:ring-violet-500 text-sm outline-none">
                     <div class="flex gap-2">
-                        <select id="task-priority" class="flex-1 px-3 py-2 border rounded-xl text-sm bg-white focus:ring-2 focus:ring-violet-500 outline-none">
+                        <select id="task-priority" class="flex-1 px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
                             <option value="Penting">🔴 Penting</option>
                             <option value="Biasa" selected>🟡 Biasa</option>
                             <option value="Santai">🟢 Santai</option>
@@ -105,78 +126,164 @@
                         <button onclick="addTask()" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
                     </div>
                 </div>
-                <ul id="task-list" class="space-y-2 max-h-44 overflow-y-auto pr-1">
-                    <!-- Dinamis -->
-                </ul>
+                <ul id="task-list" class="space-y-2 max-h-44 overflow-y-auto pr-1"></ul>
             </div>
             <p id="task-counter" class="text-xs text-slate-400 mt-3 text-right">0 selesai</p>
         </section>
 
-        <!-- 5. PENCATAT KEUANGAN MINI -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between md:col-span-1 lg:col-span-1">
+        <!-- 5. EXPENSE TRACKER -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
             <div>
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                        💰 Pengeluaran Hari Ini
-                    </h2>
-                </div>
-                <div class="bg-slate-50 p-3 rounded-xl border mb-3 text-center">
-                    <span class="text-xs text-slate-500 block">Total Pengeluaran</span>
-                    <span id="total-expense" class="text-lg font-bold text-rose-600">Rp 0</span>
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+                    💰 Pengeluaran Hari Ini
+                </h2>
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl border dark:border-slate-600 mb-3 text-center">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 block">Total Pengeluaran</span>
+                    <span id="total-expense" class="text-lg font-bold text-rose-600 dark:text-rose-400">Rp 0</span>
                 </div>
                 <div class="space-y-2 mb-3">
-                    <input type="text" id="expense-name" placeholder="Keterangan (cth: Makan Siang)" class="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-violet-500">
-                    <input type="number" id="expense-amount" placeholder="Nominal (angka saja)" class="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-violet-500">
+                    <input type="text" id="expense-name" placeholder="Keterangan (cth: Kopi)" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
+                    <input type="number" id="expense-amount" placeholder="Nominal angka" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
                     <button onclick="addExpense()" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-xl text-sm font-medium transition">Catat Pengeluaran</button>
                 </div>
-                <ul id="expense-list" class="space-y-1 max-h-24 overflow-y-auto pr-1 text-sm">
-                    <!-- Dinamis -->
-                </ul>
+                <ul id="expense-list" class="space-y-1 max-h-24 overflow-y-auto pr-1 text-sm"></ul>
             </div>
         </section>
 
-        <!-- 6. MOOD & REFLEKSI HARIAN -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between md:col-span-1 lg:col-span-1">
+        <!-- 6. QUICK LINKS (PINTASAN WEB) -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors">
             <div>
-                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-3">
-                    ✨ Suasana Hati (Mood) Hari Ini
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+                    🔗 Pintasan Web Cepat
                 </h2>
-                <div class="grid grid-cols-5 gap-2 mb-4 text-center">
-                    <button onclick="setMood('🤩 Luar Biasa')" class="mood-btn p-2 rounded-xl border hover:bg-slate-50 text-xl transition">🤩</button>
-                    <button onclick="setMood('😊 Senang')" class="mood-btn p-2 rounded-xl border hover:bg-slate-50 text-xl transition">😊</button>
-                    <button onclick="setMood('😐 Biasa Saja')" class="mood-btn p-2 rounded-xl border hover:bg-slate-50 text-xl transition">😐</button>
-                    <button onclick="setMood('🥱 Lelah')" class="mood-btn p-2 rounded-xl border hover:bg-slate-50 text-xl transition">🥱</button>
-                    <button onclick="setMood('😤 Stres')" class="mood-btn p-2 rounded-xl border hover:bg-slate-50 text-xl transition">😤</button>
+                <div class="space-y-2 mb-3">
+                    <input type="text" id="link-name" placeholder="Nama Web (cth: WhatsApp)" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
+                    <input type="url" id="link-url" placeholder="URL (https://...)" class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
+                    <button onclick="addLink()" class="w-full bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl text-sm font-medium transition">Simpan Link</button>
                 </div>
-                <div class="text-center bg-slate-50 p-3 rounded-xl border mb-3">
-                    <span class="text-xs text-slate-400 block">Mood Terpilih:</span>
-                    <span id="selected-mood" class="text-sm font-semibold text-slate-700">Belum dipilih</span>
-                </div>
-            </div>
-            <div>
-                <input type="text" id="daily-gratitude" placeholder="Hal kecil apa yang kamu syukuri hari ini?" class="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-violet-500" oninput="saveGratitude()">
+                <div id="links-container" class="grid grid-cols-2 gap-2 max-h-28 overflow-y-auto pr-1"></div>
             </div>
         </section>
 
-        <!-- 7. CATATAN KILAT (FULL WIDTH) -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:col-span-2 lg:col-span-3 flex flex-col">
-            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-3">
+        <!-- 7. TIME BLOCKING (JADWAL HARIAN) -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col transition-colors md:col-span-2 lg:col-span-1">
+            <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+                ⏰ Time Blocking (Jadwal Jam)
+            </h2>
+            <div id="time-blocks" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-sm">
+                <!-- Di-generate otomatis via JS -->
+            </div>
+        </section>
+
+        <!-- 8. TARGET & MILESTONE JANGKA PANJANG -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors md:col-span-2 lg:col-span-1">
+            <div>
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+                    🎯 Target & Milestone
+                </h2>
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="goal-input" placeholder="Target bulan ini..." class="flex-1 px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none">
+                    <button onclick="addGoal()" class="bg-violet-600 hover:bg-violet-700 text-white px-3 py-2 rounded-xl text-sm font-medium transition">Tambah</button>
+                </div>
+                <ul id="goal-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></ul>
+            </div>
+            <p id="goal-stats" class="text-xs text-slate-400 mt-4 text-right">0 dari 0 tercapai</p>
+        </section>
+
+        <!-- 9. MOOD & GRATITUDE -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between transition-colors md:col-span-2 lg:col-span-1">
+            <div>
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+                    ✨ Mood & Rasa Syukur
+                </h2>
+                <div class="grid grid-cols-5 gap-1.5 mb-3 text-center">
+                    <button onclick="setMood('🤩 Luar Biasa')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">🤩</button>
+                    <button onclick="setMood('😊 Senang')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">😊</button>
+                    <button onclick="setMood('😐 Biasa')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">😐</button>
+                    <button onclick="setMood('🥱 Lelah')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">🥱</button>
+                    <button onclick="setMood('😤 Stres')" class="p-2 rounded-xl border dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-lg">😤</button>
+                </div>
+                <div class="text-center bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl border dark:border-slate-600 mb-2">
+                    <span class="text-xs text-slate-400 block">Mood:</span>
+                    <span id="selected-mood" class="text-sm font-semibold text-slate-700 dark:text-slate-200">Belum dipilih</span>
+                </div>
+            </div>
+            <div>
+                <input type="text" id="daily-gratitude" placeholder="Hal yang kamu syukuri hari ini..." class="w-full px-3 py-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm outline-none" oninput="saveGratitude()">
+            </div>
+        </section>
+
+        <!-- 10. CATATAN KILAT (FULL WIDTH) -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 md:col-span-2 lg:col-span-3 flex flex-col transition-colors">
+            <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
                 📝 Catatan Bebas & Ide Kreatif
             </h2>
-            <textarea id="daily-notes" placeholder="Tulis ide, catatan meeting, atau link penting di sini... (Tersimpan otomatis)" class="w-full h-28 p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm resize-none" oninput="saveNotes()"></textarea>
+            <textarea id="daily-notes" placeholder="Tulis ide atau catatan penting di sini... (Tersimpan otomatis)" class="w-full h-28 p-3 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm resize-none" oninput="saveNotes()"></textarea>
         </section>
 
     </main>
 
-    <!-- JAVASCRIPT LOGIC LENGKAP -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- QUOTES HARIAN ACAK ---
+        // --- DARK MODE LOGIC ---
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('ul_theme', 'light');
+                document.getElementById('theme-icon').innerText = '🌙';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('ul_theme', 'dark');
+                document.getElementById('theme-icon').innerText = '☀️';
+            }
+        }
+        if (localStorage.getItem('ul_theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').innerText = '☀️';
+        }
+
+        // --- EXPORT & IMPORT BACKUP ---
+        function exportData() {
+            const dataObj = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                dataObj[key] = localStorage.getItem(key);
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `dashboard_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    for (const key in importedData) {
+                        localStorage.setItem(key, importedData[key]);
+                    }
+                    alert("Data berhasil dipulihkan! Halaman akan dimuat ulang.");
+                    location.reload();
+                } catch (err) {
+                    alert("Gagal membaca file backup!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- QUOTES HARIAN ---
         const quotes = [
-            "“Hari ini adalah kesempatan luar biasa untuk menjadi lebih baik dari kemarin.”",
-            "“Langkah kecil setiap hari membawa perubahan besar dalam jangka panjang.”",
-            "“Fokuslah pada hal yang bisa kamu kontrol, ikhlaskan yang tidak bisa.”",
-            "“Disiplin adalah jembatan antara tujuan dan pencapaian.”",
-            "“Jangan menunggu waktu yang tepat, buatlah waktu itu menjadi tepat.”"
+            "“Hari ini adalah kesempatan luar biasa untuk menjadi lebih baik.”",
+            "“Langkah kecil konsisten membawa perubahan besar jangka panjang.”",
+            "“Fokuslah pada kendali diri Anda, ikhlaskan yang di luar kendali.”",
+            "“Disiplin adalah jembatan menuju impian terbesar Anda.”"
         ];
         document.getElementById('daily-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
 
@@ -200,132 +307,257 @@
 
         // --- 1. HABIT TRACKER ---
         let habits = JSON.parse(localStorage.getItem('ul_habits')) || [
-            { text: "Minum vitamin / suplemen", completed: false },
-            { text: "Olahraga / Peregangan 15 menit", completed: false },
-            { text: "Membaca buku 10 halaman", completed: false }
+            { text: "Minum vitamin", completed: false },
+            { text: "Olahraga 15 menit", completed: false }
         ];
-
         function renderHabits() {
             const listEl = document.getElementById('habit-list');
             listEl.innerHTML = '';
-            let completedCount = 0;
-
-            habits.forEach((habit, index) => {
-                if (habit.completed) completedCount++;
+            let completed = 0;
+            habits.forEach((h, idx) => {
+                if (h.completed) completed++;
                 const li = document.createElement('li');
-                li.className = `flex justify-between items-center p-2.5 rounded-xl border text-sm transition ${habit.completed ? 'bg-slate-50 line-through text-slate-400 border-slate-200' : 'bg-white text-slate-700 border-slate-200'}`;
+                li.className = `flex justify-between items-center p-2.5 rounded-xl border dark:border-slate-700 text-sm transition ${h.completed ? 'bg-slate-50 dark:bg-slate-700/30 line-through text-slate-400' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'}`;
                 li.innerHTML = `
-                    <span onclick="toggleHabit(${index})" class="cursor-pointer flex-1 select-none pr-2 truncate">${habit.text}</span>
-                    <button onclick="deleteHabit(${index})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>
+                    <span onclick="toggleHabit(${idx})" class="cursor-pointer flex-1 truncate pr-2 select-none">${h.text}</span>
+                    <button onclick="deleteHabit(${idx})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>
                 `;
                 listEl.appendChild(li);
             });
-            document.getElementById('habit-stats').innerText = `${completedCount} dari${habits.length} kebiasaan selesai`;
+            document.getElementById('habit-stats').innerText = `${completed} dari ${habits.length} selesai`;
             localStorage.setItem('ul_habits', JSON.stringify(habits));
         }
-
         function addHabit() {
-            const input = document.getElementById('habit-input');
-            const text = input.value.trim();
-            if (text) {
-                habits.push({ text: text, completed: false });
-                input.value = '';
-                renderHabits();
-            }
+            const val = document.getElementById('habit-input').value.trim();
+            if (val) { habits.push({ text: val, completed: false }); document.getElementById('habit-input').value = ''; renderHabits(); }
         }
-
-        function toggleHabit(index) {
-            habits[index].completed = !habits[index].completed;
-            renderHabits();
-        }
-
-        function deleteHabit(index) {
-            habits.splice(index, 1);
-            renderHabits();
-        }
+        function toggleHabit(i) { habits[i].completed = !habits[i].completed; renderHabits(); }
+        function deleteHabit(i) { habits.splice(i, 1); renderHabits(); }
         renderHabits();
 
         // --- 2. WATER TRACKER ---
         let waterCount = Number(localStorage.getItem('ul_water')) || 0;
-        function updateWater(amount) {
-            waterCount += amount;
-            if (waterCount < 0) waterCount = 0;
-            if (waterCount > 15) waterCount = 15; // Max limit view
+        function updateWater(amt) {
+            waterCount = Math.max(0, Math.min(15, waterCount + amt));
             document.getElementById('water-count').innerText = waterCount;
-            const percentage = Math.min((waterCount / 8) * 100, 100);
-            document.getElementById('water-progress').style.width = percentage + '%';
+            document.getElementById('water-progress').style.width = Math.min((waterCount / 8) * 100, 100) + '%';
             localStorage.setItem('ul_water', waterCount);
         }
-        updateWater(0); // init render
+        updateWater(0);
 
-        // --- 3. POMODORO TIMER ---
-        let timerSeconds = 25 * 60;
-        let timerInterval = null;
-        let isTimerRunning = false;
+        // --- 3. POMODORO TIMER & AMBIENT SOUND (WEB AUDIO API) ---
+        let timerSecs = 25 * 60, timerInt = null, isRunning = false;
+        let audioCtx = null, noiseNode = null, isSoundOn = false;
 
         function updateTimerDisplay() {
-            const m = Math.floor(timerSeconds / 60);
-            const s = timerSeconds % 60;
-            document.getElementById('timer-display').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            const m = Math.floor(timerSecs / 60), s = timerSecs % 60;
+            document.getElementById('timer-display').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
         }
-
         function toggleTimer() {
             const btn = document.getElementById('timer-btn');
-            if (!isTimerRunning) {
-                isTimerRunning = true;
-                btn.innerText = "Jeda";
+            if (!isRunning) {
+                isRunning = true; btn.innerText = "Jeda";
                 btn.className = "flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-xl font-medium text-sm transition";
-                document.getElementById('timer-status').innerText = "Tetap fokus! Jauhi ponsel.";
-                timerInterval = setInterval(() => {
-                    if (timerSeconds > 0) {
-                        timerSeconds--;
-                        updateTimerDisplay();
-                    } else {
-                        clearInterval(timerInterval);
-                        alert("Waktu fokus selesai! Istirahatlah sejenak.");
-                        resetTimer();
-                    }
+                timerInt = setInterval(() => {
+                    if (timerSecs > 0) { timerSecs--; updateTimerDisplay(); }
+                    else { clearInterval(timerInt); alert("Pomodoro selesai!"); resetTimer(); }
                 }, 1000);
             } else {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                btn.innerText = "Lanjutkan";
+                clearInterval(timerInt); isRunning = false; btn.innerText = "Lanjutkan";
                 btn.className = "flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl font-medium text-sm transition";
-                document.getElementById('timer-status').innerText = "Timer dijeda.";
             }
         }
-
         function resetTimer() {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            timerSeconds = 25 * 60;
-            updateTimerDisplay();
-            const btn = document.getElementById('timer-btn');
-            btn.innerText = "Mulai";
+            clearInterval(timerInt); isRunning = false; timerSecs = 25 * 60; updateTimerDisplay();
+            const btn = document.getElementById('timer-btn'); btn.innerText = "Mulai";
             btn.className = "flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-xl font-medium text-sm transition";
-            document.getElementById('timer-status').innerText = "Waktu untuk fokus bekerja!";
+        }
+
+        // Ambient Sound White Noise Generator
+        function toggleAmbientSound() {
+            const btn = document.getElementById('sound-btn');
+            if (!isSoundOn) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const bufferSize = 2 * audioCtx.sampleRate;
+                    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const output = noiseBuffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = Math.random() * 2 - 1; // White noise
+                    }
+                    noiseNode = audioCtx.createBufferSource();
+                    noiseNode.buffer = noiseBuffer;
+                    noiseNode.loop = true;
+                    
+                    const gainNode = audioCtx.createGain();
+                    gainNode.gain.value = 0.05; // soft volume
+                    noiseNode.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    noiseNode.start(0);
+
+                    isSoundOn = true;
+                    btn.innerText = "🎧 Suara: On";
+                    btn.className = "text-xs bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300 px-2.5 py-1 rounded-lg transition";
+                } catch(e) { alert("Audio tidak didukung browser."); }
+            } else {
+                if (noiseNode) { noiseNode.stop(); noiseNode.disconnect(); }
+                if (audioCtx) audioCtx.close();
+                isSoundOn = false;
+                btn.innerText = "🎧 Suara: Off";
+                btn.className = "text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-lg transition";
+            }
         }
 
         // --- 4. TO-DO LIST ---
         let tasks = JSON.parse(localStorage.getItem('ul_tasks')) || [];
-
         function renderTasks() {
-            const listEl = document.getElementById('task-list');
-            listEl.innerHTML = '';
-            if (tasks.length === 0) {
-                listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Belum ada tugas.</p>';
-                document.getElementById('task-counter').innerText = '0 selesai';
-                return;
-            }
-
+            const listEl = document.getElementById('task-list'); listEl.innerHTML = '';
+            if (!tasks.length) { listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Belum ada tugas.</p>'; document.getElementById('task-counter').innerText = '0 selesai'; return; }
             let completed = 0;
-            tasks.forEach((task, index) => {
-                if (task.completed) completed++;
-                const priorityColor = task.priority === 'Penting' ? 'bg-rose-100 text-rose-600' : task.priority === 'Santai' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600';
-                
+            tasks.forEach((t, i) => {
+                if (t.completed) completed++;
+                const pColor = t.priority === 'Penting' ? 'bg-rose-100 text-rose-600 dark:bg-rose-950 dark:text-rose-300' : t.priority === 'Santai' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-300';
                 const li = document.createElement('li');
-                li.className = `flex justify-between items-center p-2.5 rounded-xl border text-sm transition ${task.completed ? 'bg-slate-50 line-through text-slate-400 border-slate-200' : 'bg-white text-slate-700 border-slate-200'}`;
+                li.className = `flex justify-between items-center p-2.5 rounded-xl border dark:border-slate-700 text-sm transition ${t.completed ? 'bg-slate-50 dark:bg-slate-700/30 line-through text-slate-400' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'}`;
                 li.innerHTML = `
                     <div class="flex items-center gap-2 flex-1 truncate pr-2">
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md ${priorityColor}">${task.priority}</span>
-                        <span onclick="toggleTask(${index})" class="cursor-pointer select
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md ${pColor}">${t.priority}</span>
+                        <span onclick="toggleTask(${i})" class="cursor-pointer truncate flex-1 select-none">${t.text}</span>
+                    </div>
+                    <button onclick="deleteTask(${i})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>
+                `;
+                listEl.appendChild(li);
+            });
+            document.getElementById('task-counter').innerText = `${completed} dari ${tasks.length} selesai`;
+            localStorage.setItem('ul_tasks', JSON.stringify(tasks));
+        }
+        function addTask() {
+            const val = document.getElementById('task-input').value.trim();
+            const pr = document.getElementById('task-priority').value;
+            if (val) { tasks.push({ text: val, priority: pr, completed: false }); document.getElementById('task-input').value = ''; renderTasks(); }
+        }
+        function toggleTask(i) { tasks[i].completed = !tasks[i].completed; renderTasks(); }
+        function deleteTask(i) { tasks.splice(i, 1); renderTasks(); }
+        renderTasks();
+
+        // --- 5. EXPENSE TRACKER ---
+        let expenses = JSON.parse(localStorage.getItem('ul_expenses')) || [];
+        function renderExpenses() {
+            const listEl = document.getElementById('expense-list'); listEl.innerHTML = '';
+            let total = 0;
+            if (!expenses.length) listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-2">Belum ada pengeluaran.</p>';
+            expenses.forEach((ex, i) => {
+                total += Number(ex.amount);
+                const li = document.createElement('li');
+                li.className = "flex justify-between items-center bg-slate-50 dark:bg-slate-700/50 p-2 rounded-lg border dark:border-slate-600 text-xs";
+                li.innerHTML = `<span class="truncate pr-2 font-medium text-slate-700 dark:text-slate-300">${ex.name}</span>
+                    <div class="flex items-center gap-2"><span class="text-rose-600 dark:text-rose-400 font-semibold">Rp ${Number(ex.amount).toLocaleString('id-ID')}</span>
+                    <button onclick="deleteExpense(${i})" class="text-slate-400 hover:text-rose-500 font-bold">×</button></div>`;
+                listEl.appendChild(li);
+            });
+            document.getElementById('total-expense').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+            localStorage.setItem('ul_expenses', JSON.stringify(expenses));
+        }
+        function addExpense() {
+            const name = document.getElementById('expense-name').value.trim();
+            const amount = document.getElementById('expense-amount').value.trim();
+            if (name && amount && !isNaN(amount)) {
+                expenses.push({ name, amount });
+                document.getElementById('expense-name').value = '';
+                document.getElementById('expense-amount').value = '';
+                renderExpenses();
+            } else alert("Masukkan data valid!");
+        }
+        function deleteExpense(i) { expenses.splice(i, 1); renderExpenses(); }
+        renderExpenses();
+
+        // --- 6. QUICK LINKS ---
+        let links = JSON.parse(localStorage.getItem('ul_links')) || [
+            { name: "WhatsApp", url: "https://web.whatsapp.com" },
+            { name: "YouTube", url: "https://youtube.com" }
+        ];
+        function renderLinks() {
+            const container = document.getElementById('links-container'); container.innerHTML = '';
+            links.forEach((l, i) => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-slate-50 dark:bg-slate-700/50 px-3 py-2 rounded-xl border dark:border-slate-600 text-xs";
+                div.innerHTML = `<a href="${l.url}" target="_blank" class="truncate font-medium text-violet-600 dark:text-violet-400 hover:underline flex-1 pr-1">${l.name}</a>
+                    <button onclick="deleteLink(${i})" class="text-slate-400 hover:text-rose-500 font-bold">×</button>`;
+                container.appendChild(div);
+            });
+            localStorage.setItem('ul_links', JSON.stringify(links));
+        }
+        function addLink() {
+            const name = document.getElementById('link-name').value.trim();
+            let url = document.getElementById('link-url').value.trim();
+            if (name && url) {
+                if (!url.startsWith('http')) url = 'https://' + url;
+                links.push({ name, url });
+                document.getElementById('link-name').value = '';
+                document.getElementById('link-url').value = '';
+                renderLinks();
+            }
+        }
+        function deleteLink(i) { links.splice(i, 1); renderLinks(); }
+        renderLinks();
+
+        // --- 7. TIME BLOCKING ---
+        let timeBlocks = JSON.parse(localStorage.getItem('ul_timeblocks')) || {};
+        const hoursList = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"];
+        function renderTimeBlocks() {
+            const container = document.getElementById('time-blocks'); container.innerHTML = '';
+            hoursList.forEach(hour => {
+                const val = timeBlocks[hour] || '';
+                const row = document.createElement('div');
+                row.className = "flex items-center gap-2";
+                row.innerHTML = `<span class="w-12 font-mono text-xs text-slate-400">${hour}</span>
+                    <input type="text" value="${val}" oninput="saveTimeBlock('${hour}', this.value)" placeholder="Kosong..." class="flex-1 px-3 py-1.5 border dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-xs outline-none">`;
+                container.appendChild(row);
+            });
+        }
+        function saveTimeBlock(hour, val) {
+            timeBlocks[hour] = val;
+            localStorage.setItem('ul_timeblocks', JSON.stringify(timeBlocks));
+        }
+        renderTimeBlocks();
+
+        // --- 8. TARGET & MILESTONE ---
+        let goals = JSON.parse(localStorage.getItem('ul_goals')) || [];
+        function renderGoals() {
+            const listEl = document.getElementById('goal-list'); listEl.innerHTML = '';
+            if (!goals.length) { listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Belum ada target.</p>'; document.getElementById('goal-stats').innerText = '0 tercapai'; return; }
+            let completed = 0;
+            goals.forEach((g, i) => {
+                if (g.completed) completed++;
+                const li = document.createElement('li');
+                li.className = `flex justify-between items-center p-2.5 rounded-xl border dark:border-slate-700 text-sm transition ${g.completed ? 'bg-slate-50 dark:bg-slate-700/30 line-through text-slate-400' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200'}`;
+                li.innerHTML = `<span onclick="toggleGoal(${i})" class="cursor-pointer flex-1 truncate pr-2 select-none">${g.text}</span>
+                    <button onclick="deleteGoal(${i})" class="text-slate-300 hover:text-rose-500 font-bold px-2">×</button>`;
+                listEl.appendChild(li);
+            });
+            document.getElementById('goal-stats').innerText = `${completed} dari ${goals.length} tercapai`;
+            localStorage.setItem('ul_goals', JSON.stringify(goals));
+        }
+        function addGoal() {
+            const val = document.getElementById('goal-input').value.trim();
+            if (val) { goals.push({ text: val, completed: false }); document.getElementById('goal-input').value = ''; renderGoals(); }
+        }
+        function toggleGoal(i) { goals[i].completed = !goals[i].completed; renderGoals(); }
+        function deleteGoal(i) { goals.splice(i, 1); renderGoals(); }
+        renderGoals();
+
+        // --- 9. MOOD & GRATITUDE ---
+        function setMood(m) { document.getElementById('selected-mood').innerText = m; localStorage.setItem('ul_mood', m); }
+        const savedMood = localStorage.getItem('ul_mood');
+        if (savedMood) document.getElementById('selected-mood').innerText = savedMood;
+        const gInput = document.getElementById('daily-gratitude');
+        gInput.value = localStorage.getItem('ul_gratitude') || '';
+        function saveGratitude() { localStorage.setItem('ul_gratitude', gInput.value); }
+
+        // --- 10. NOTES ---
+        const notesArea = document.getElementById('daily-notes');
+        notesArea.value = localStorage.getItem('ul_notes') || '';
+        function saveNotes() { localStorage.setItem('ul_notes', notesArea.value); }
+    </script>
+</body>
+</html>
