@@ -3,1071 +3,422 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aktivitas Harian Pro</title>
-
-<!-- Font Plus Jakarta Sans -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<meta name="theme-color" content="#171b2e">
+<title>Daylight — Personal Life Dashboard</title>
 <style>
-:root {
-  --bg-body: #090d16;
-  --bg-surface: #121826;
-  --bg-card: #1a2235;
-  --bg-input: #232d42;
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --accent-light: rgba(99, 102, 241, 0.15);
-  --success: #10b981;
-  --success-light: rgba(16, 185, 129, 0.15);
-  --danger: #f43f5e;
-  --danger-light: rgba(244, 63, 94, 0.15);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border: rgba(255, 255, 255, 0.08);
-  --radius: 14px;
-  --radius-sm: 8px;
-  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+:root{
+ --bg:#f5f6fb;--panel:#fff;--ink:#20243a;--muted:#7d8299;--line:#e9ebf3;
+ --purple:#7667f5;--purple2:#eeeaff;--mint:#dff7ee;--green:#1e9b77;
+ --peach:#fff0e5;--orange:#ed8a48;--blue:#e5f2ff;--red:#df5b71;
+ --shadow:0 12px 35px rgba(34,39,76,.07);--radius:20px;
 }
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#171b2e;color:#fff;padding:28px 18px;display:flex;flex-direction:column;gap:30px}
+.brand{display:flex;align-items:center;gap:11px;padding:0 10px}.brand-icon{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,#a69cff,#6d5cf6);display:grid;place-items:center;font-size:20px;box-shadow:0 7px 18px #7767f544}.brand strong{font-size:19px;letter-spacing:-.5px}.brand small{display:block;color:#a4a8c2;font-size:11px;letter-spacing:1.6px;text-transform:uppercase}
+.nav-label{color:#777e9f;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:0 13px;margin-bottom:8px}.nav{display:grid;gap:6px}.nav button{color:#b9bdd2;background:transparent;text-align:left;padding:12px 13px;border-radius:12px;display:flex;align-items:center;gap:12px;transition:.2s}.nav button:hover{background:#252a43;color:#fff}.nav button.active{background:#7667f5;color:#fff;box-shadow:0 7px 18px #7667f544}.nav .ico{width:21px;text-align:center;font-size:17px}.sidebar-bottom{margin-top:auto;background:#222741;border:1px solid #343955;border-radius:17px;padding:16px}.sidebar-bottom .sun{font-size:25px}.sidebar-bottom p{color:#b9bdd2;font-size:12px;margin:6px 0 0}
+main{padding:28px clamp(18px,3vw,42px) 45px;min-width:0;max-width:1600px;width:100%;margin:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);font-weight:800}.topbar h1{font-size:clamp(24px,3vw,33px);letter-spacing:-1.2px;margin:4px 0 0;line-height:1.2}.top-actions{display:flex;align-items:center;gap:10px}.date-pill,.avatar{background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:13px;color:var(--muted);font-size:12px}.avatar{width:42px;height:42px;padding:0;display:grid;place-items:center;background:#e9e5ff;color:#5e50cf;font-weight:800;font-size:14px}
+.page{display:none}.page.active{display:block}.welcome{background:linear-gradient(115deg,#7565f5 0%,#9386ff 60%,#b8afff 100%);color:#fff;border-radius:24px;padding:27px 30px;display:flex;justify-content:space-between;align-items:center;gap:18px;position:relative;overflow:hidden;box-shadow:0 15px 32px #7667f52c;margin-bottom:23px}.welcome:after{content:"";position:absolute;width:210px;height:210px;border:35px solid #ffffff17;border-radius:50%;right:8%;top:-90px}.welcome h2{font-size:25px;letter-spacing:-.7px;margin:4px 0 8px}.welcome p{color:#eeeaff;margin:0;max-width:510px}.welcome .date-tag{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#e5e1ff;font-weight:800}.welcome-art{font-size:63px;position:relative;z-index:1;padding:0 18px}
+.grid{display:grid;gap:18px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:22px}.card{background:var(--panel);border:1px solid #eef0f6;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);min-width:0}.stat-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:600}.stat-icon{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;font-size:18px}.stat-value{font-size:27px;letter-spacing:-1px;font-weight:800;margin:14px 0 2px}.stat-note{font-size:11px;color:var(--muted)}.stat-note strong{color:var(--green)}
+.two-col{grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr)}.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.section-head h3{margin:0;font-size:16px;letter-spacing:-.3px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.text-btn{background:transparent;color:var(--purple);font-weight:750;font-size:12px;padding:6px}.task-list{display:grid;gap:11px}.task{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:13px}.task input{accent-color:var(--purple);width:17px;height:17px}.task-text{flex:1;min-width:0}.task-text strong{font-size:13px;display:block;font-weight:700}.task-text small{font-size:11px;color:var(--muted)}.task.done .task-text strong{text-decoration:line-through;color:#a3a6b6}.tag{font-size:10px;font-weight:800;border-radius:7px;padding:5px 8px;white-space:nowrap}.tag.purple{background:var(--purple2);color:#6c5ce7}.tag.green{background:var(--mint);color:#168465}.tag.orange{background:var(--peach);color:#ce793d}
+.progress-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin:17px 0 8px}.progress-row span:last-child{color:var(--muted)}.progress{height:8px;background:#f0f1f7;border-radius:20px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,#7667f5,#aaa0ff);border-radius:20px;transition:width .3s}
+.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.quick{border:1px solid var(--line);background:#fff;border-radius:15px;padding:15px;text-align:left;transition:.2s}.quick:hover{transform:translateY(-2px);border-color:#c9c1ff}.quick .qicon{font-size:22px;margin-bottom:8px}.quick strong{display:block;font-size:12px}.quick small{color:var(--muted);font-size:10px}
+.page-intro{margin:4px 0 22px;color:var(--muted);max-width:700px}.page-intro strong{color:var(--ink)}.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:11px;color:var(--muted);font-weight:750}.input,select,textarea{width:100%;border:1px solid #e4e6f0;border-radius:11px;background:#fff;padding:11px 12px;color:var(--ink);outline:none}.input:focus,select:focus,textarea:focus{border-color:#a69cff;box-shadow:0 0 0 3px #7667f518}textarea{resize:vertical;min-height:105px}.btn{padding:11px 15px;border-radius:11px;background:var(--purple);color:#fff;font-size:12px;font-weight:800;box-shadow:0 6px 14px #7667f52c}.btn:hover{filter:brightness(1.04)}.btn.secondary{background:#f1efff;color:#6655e6;box-shadow:none}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--muted);box-shadow:none}.btn.danger{background:#fff0f2;color:var(--red);box-shadow:none}.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-actions{display:flex;gap:8px;align-items:end}.list{display:grid;gap:10px}.item-row{display:flex;align-items:center;gap:13px;border:1px solid var(--line);padding:13px;border-radius:14px}.item-main{flex:1;min-width:0}.item-main strong{display:block;font-size:13px;overflow-wrap:anywhere}.item-main small{color:var(--muted);font-size:11px}.amount{font-weight:800;font-size:13px;white-space:nowrap}.amount.income{color:var(--green)}.amount.expense{color:var(--red)}.empty{padding:30px 15px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed #dfe2ee;border-radius:14px}.empty span{font-size:25px;display:block;margin-bottom:7px}
+.balance-card{background:linear-gradient(130deg,#242944,#343a5d);color:white;border-radius:20px;padding:23px;margin-bottom:17px}.balance-card small{color:#c4c8df}.balance-card h2{font-size:32px;margin:6px 0 16px;letter-spacing:-1px}.balance-split{display:flex;gap:30px;flex-wrap:wrap}.balance-split div{font-size:12px;color:#c4c8df}.balance-split strong{display:block;color:#fff;font-size:15px;margin-top:3px}.mood-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.mood-option{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px 5px;text-align:center;color:var(--muted)}.mood-option span{display:block;font-size:27px;margin-bottom:5px}.mood-option strong{font-size:11px}.mood-option.selected{border-color:var(--purple);background:var(--purple2);color:#5c4bd2;box-shadow:0 0 0 2px #7667f51c}.journal-entry{padding:16px;border:1px solid var(--line);border-radius:14px}.journal-entry .entry-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.journal-entry p{margin:0;color:#666b82;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.journal-entry small{color:var(--muted);font-size:11px}
+.helper-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.helper-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}.helper-card .big-icon{font-size:30px;margin-bottom:10px}.helper-card h3{font-size:15px;margin:0 0 5px}.helper-card p{font-size:12px;color:var(--muted);margin:0 0 15px}.recipe-result{background:#fff8f0;border-radius:13px;padding:13px;font-size:12px;color:#8c623e;margin-top:12px}.calc{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.calc button{padding:12px 3px;border-radius:10px;background:#f3f2fb;color:var(--ink);font-weight:700}.calc button.op{background:var(--purple2);color:#6554e4}.calc-display{background:#f7f7fc;padding:16px;border-radius:12px;text-align:right;font-size:24px;font-weight:800;overflow:hidden}
+.profile-banner{background:linear-gradient(120deg,#e8e4ff,#f3f0ff);border-radius:20px;padding:23px;display:flex;align-items:center;gap:17px;margin-bottom:18px}.profile-avatar{width:65px;height:65px;border-radius:22px;background:#fff;display:grid;place-items:center;font-size:28px;box-shadow:var(--shadow)}.profile-banner h2{margin:0;font-size:20px}.profile-banner p{margin:4px 0 0;color:#77719e;font-size:12px}.wish{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:12px;border-radius:12px}.wish input{accent-color:var(--purple)}.wish span{flex:1;font-size:13px}.wish.done span{text-decoration:line-through;color:#9ca0b1}.note-card{padding:15px;border-radius:14px;background:#fff8d9;border:1px solid #f4eab8}.note-card p{margin:7px 0 0;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.note-card small{color:#9b8b4e}
+.toast{position:fixed;right:20px;bottom:20px;background:#20243a;color:#fff;padding:13px 17px;border-radius:12px;box-shadow:var(--shadow);font-size:12px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none;z-index:10}.toast.show{opacity:1;transform:translateY(0)}.mobile-menu{display:none}
+footer{text-align:center;color:#a0a4b6;font-size:10px;padding:25px 0 0}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.helper-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}}
+@media(max-width:720px){.app{display:block}.sidebar{position:fixed;z-index:20;left:0;top:0;bottom:0;width:260px;transform:translateX(-105%);transition:transform .25s;box-shadow:20px 0 50px #11142a22}.sidebar.open{transform:translateX(0)}main{padding:20px 15px 35px}.topbar{margin-bottom:20px}.topbar h1{font-size:25px}.date-pill{display:none}.mobile-menu{display:grid;place-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;width:40px;height:40px;margin-right:9px}.top-left{display:flex;align-items:center}.welcome{padding:22px;border-radius:19px}.welcome h2{font-size:21px}.welcome-art{font-size:43px;padding:0}.welcome p{font-size:12px}.stats{gap:10px}.card{padding:15px;border-radius:16px}.stat-value{font-size:23px}.stat-icon{width:32px;height:32px}.three-col,.helper-grid{grid-template-columns:1fr}.mood-options{gap:5px}.mood-option{padding:11px 2px}.mood-option span{font-size:23px}.mood-option strong{font-size:9px}.form-row{grid-template-columns:1fr}.profile-banner{padding:16px}.balance-card h2{font-size:27px}.quick-grid{gap:8px}}
+@media(max-width:390px){.stats{grid-template-columns:1fr 1fr}.stat-top{font-size:10px}.stat-value{font-size:21px}.welcome-art{display:none}.mood-option span{font-size:20px}}
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-}
+.field{display:grid;gap:6px;margin-bottom:11px;min-width:0}.field>span{font-size:11px;font-weight:750;color:var(--muted)}
+.field input,.field select,.field textarea,.form-row input,#globalSearch{width:100%;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus,.form-row input:focus,#globalSearch:focus{border-color:#a9a0ff;box-shadow:0 0 0 3px #7667f51a}
+.form-row{display:flex;gap:8px;align-items:center}.form-row>*{min-width:0;flex:1}.form-row button{flex:0 0 auto}
+.btn{padding:10px 14px;border-radius:11px;font-weight:750;font-size:12px}.btn.primary{background:var(--purple);color:#fff}.btn.secondary{background:var(--purple2);color:#6555dd}
+.affirmation{background:linear-gradient(135deg,#f0edff,#fff5f8);border:1px solid #e7e0ff;padding:22px;border-radius:16px;font-size:19px;font-weight:800;line-height:1.45;color:#6254c9;min-height:110px;display:flex;align-items:center}
+.achievement-list{display:flex;flex-wrap:wrap;gap:8px}.badge{border:1px solid var(--line);border-radius:11px;padding:9px 10px;background:#fafaff;font-size:11px;color:var(--muted)}.badge.unlocked{background:#fff7d9;border-color:#f4dfa0;color:#906c1b}.badge strong{display:block;font-size:12px;color:var(--ink)}
+.stack-list{display:grid;gap:9px}.extra-item{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;gap:9px;align-items:center;justify-content:space-between}.extra-item strong{font-size:12px;display:block}.extra-item small{font-size:10px;color:var(--muted)}.extra-item .item-actions{display:flex;gap:5px;align-items:center}.tiny-btn{padding:6px 8px;border-radius:8px;background:var(--purple2);color:#6658d8;font-size:11px;font-weight:800}.tiny-btn.danger{background:#fff0f2;color:#c84b61}
+.stat-mini{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:5px}.stat-mini span{font-size:11px;color:var(--muted)}.stat-mini strong{font-size:19px;letter-spacing:-.5px}
+.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.theme-choice{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 7px;display:grid;justify-items:center;gap:7px;font-size:11px;color:var(--ink)}.theme-choice span{width:100%;height:28px;border-radius:8px}.theme-choice.selected{border-color:var(--purple);box-shadow:0 0 0 2px #7667f51a}
+body[data-theme="pink"]{--purple:#d85f91;--purple2:#ffebf3;--mint:#e3f7ed;--green:#278765}.body[data-theme="sage"]{--purple:#43876f;--purple2:#e3f4eb;--mint:#dff4e8;--green:#247657}
+body[data-theme="ocean"]{--purple:#397db8;--purple2:#e5f2ff;--mint:#def6f0;--green:#228b79}body[data-theme="sunset"]{--purple:#d78042;--purple2:#fff0e3;--mint:#e4f5e8;--green:#3c956e}
+body[data-theme="dark"]{--bg:#171a2a;--panel:#22263a;--ink:#f1f2ff;--muted:#a8adc5;--line:#393e57;--purple:#a69bff;--purple2:#34304f;--mint:#243e3a;--peach:#49392f;--blue:#263b50;--shadow:0 12px 35px rgba(0,0,0,.15)}
+body[data-theme="dark"] .card,body[data-theme="dark"] .task,body[data-theme="dark"] .quick,body[data-theme="dark"] .field input,body[data-theme="dark"] .field select,body[data-theme="dark"] .field textarea,body[data-theme="dark"] .form-row input,body[data-theme="dark"] #globalSearch,body[data-theme="dark"] .theme-choice{background:var(--panel);color:var(--ink);border-color:var(--line)}
+body[data-theme="dark"] .affirmation{background:#302b4c;color:#d7d0ff;border-color:#494165}body[data-theme="dark"] .badge{background:#2a2e44;color:var(--muted)}body[data-theme="dark"] .badge strong{color:var(--ink)}
+@media(max-width:900px){#page-more .two-col{grid-template-columns:1fr!important}#page-more .three-col{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:540px){.form-row{flex-wrap:wrap}.form-row>*{flex:1 1 100%}.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.affirmation{font-size:17px}.stat-mini strong{font-size:17px}}
 
-body {
-  background-color: var(--bg-body);
-  color: var(--text-primary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 
-/* HEADER & NAVBAR */
-header {
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 24px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+.pro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px}.pro-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:19px;box-shadow:var(--shadow);min-width:0}.pro-card h3{margin:0 0 5px;font-size:16px}.pro-card p{margin:0 0 14px;color:var(--muted);font-size:12px}.pro-row{display:flex;gap:8px;align-items:center;margin:8px 0}.pro-row>*{min-width:0}.pro-list{display:grid;gap:8px;margin-top:12px}.pro-item{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px}.pro-item small{display:block;color:var(--muted)}.pro-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.pro-kpi{background:var(--bg);border-radius:12px;padding:12px}.pro-kpi small{display:block;color:var(--muted);font-size:10px}.pro-kpi strong{display:block;font-size:18px;margin-top:4px}.bar-list{display:grid;gap:10px}.bar-line{display:grid;grid-template-columns:90px 1fr auto;gap:8px;align-items:center;font-size:11px}.bar-track{height:9px;background:var(--bg);border-radius:20px;overflow:hidden}.bar-track span{display:block;height:100%;background:linear-gradient(90deg,var(--purple),#b2aaff);border-radius:20px}.kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.kan-col{background:var(--bg);padding:10px;border-radius:13px;min-width:0}.kan-col h4{margin:0 0 9px;font-size:12px}.kan-task{background:var(--panel);border:1px solid var(--line);padding:9px;border-radius:9px;font-size:11px;margin-bottom:7px;overflow-wrap:anywhere}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.calendar-cell{min-height:52px;padding:6px 3px;border:1px solid var(--line);border-radius:9px;text-align:center;font-size:11px;background:var(--panel)}.calendar-cell.today{background:var(--purple2);border-color:var(--purple);font-weight:800}.calendar-cell.has-event:after{content:'•';display:block;color:var(--purple);font-size:16px;line-height:10px}.calendar-head{font-size:10px;color:var(--muted);text-align:center;padding:4px}.focus-overlay{position:fixed;inset:0;background:#171b2ef2;color:#fff;z-index:99;display:none;align-items:center;justify-content:center;text-align:center;padding:24px}.focus-overlay.open{display:flex}.focus-overlay h2{font-size:clamp(30px,8vw,64px);margin:10px}.focus-overlay .focus-clock{font-size:clamp(54px,15vw,100px);font-weight:800;letter-spacing:-3px}.focus-overlay p{color:#c4c8df}.pro-chat{min-height:100px;max-height:250px;overflow:auto;background:var(--bg);border-radius:12px;padding:12px;margin-bottom:10px;font-size:12px;white-space:pre-wrap}.tag-soft{display:inline-block;border-radius:8px;padding:4px 7px;background:var(--purple2);color:var(--purple);font-size:10px;font-weight:800}
+@media(max-width:800px){.pro-grid{grid-template-columns:1fr}.kanban{grid-template-columns:1fr}.pro-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.calendar-cell{min-height:38px;font-size:10px}}
 
-.header-container {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--accent), #a855f7);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-.brand h1 {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.brand p {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-/* NAV TABS */
-.nav-tabs {
-  max-width: 900px;
-  margin: 16px auto 0;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 0 24px 8px;
-  scrollbar-width: none;
-}
-
-.nav-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-.tab-btn {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid transparent;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.tab-btn:hover {
-  color: var(--text-primary);
-  background: rgba(255,255,255,0.03);
-}
-
-.tab-btn.active {
-  background: var(--accent-light);
-  color: #818cf8;
-  border-color: rgba(99, 102, 241, 0.3);
-}
-
-/* MAIN CONTAINER */
-main {
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 24px;
-  flex: 1;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-/* CARDS & GRID */
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow);
-}
-
-.card-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* WIDGET STATS */
-.stat-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  padding: 16px;
-  border-radius: var(--radius-sm);
-}
-
-.stat-box small {
-  color: var(--text-secondary);
-  font-size: 12px;
-  display: block;
-  margin-bottom: 6px;
-}
-
-.stat-box strong {
-  font-size: 20px;
-  font-weight: 700;
-}
-
-/* FORMS & INPUTS */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-group label {
-  font-size: 12px;
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--accent);
-}
-
-/* BUTTONS */
-button, .btn {
-  padding: 11px 18px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--accent-hover);
-}
-
-.btn-secondary {
-  background: var(--bg-input);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-}
-
-.btn-danger {
-  background: var(--danger-light);
-  color: var(--danger);
-  border: 1px solid rgba(244, 63, 94, 0.2);
-}
-
-.btn-danger:hover {
-  background: var(--danger);
-  color: white;
-}
-
-.btn-sm {
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 6px;
-}
-
-/* LISTS & ITEMS */
-ul {
-  list-style: none;
-  margin-top: 14px;
-}
-
-li {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.item-info {
-  flex: 1;
-  overflow: hidden;
-}
-
-.item-title {
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.item-sub {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-/* BADGES & PROGRESS */
-.badge {
-  font-size: 11px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-weight: 600;
-}
-
-.badge-indigo { background: var(--accent-light); color: #818cf8; }
-
-.progress-bar-bg {
-  width: 100%;
-  height: 8px;
-  background: var(--bg-input);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 8px;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), #a855f7);
-  border-radius: 10px;
-}
-
-.text-done {
-  text-decoration: line-through;
-  opacity: 0.5;
-}
-
-footer {
-  text-align: center;
-  padding: 24px;
-  border-top: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 13px;
-  background: var(--bg-surface);
-}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="header-container">
-    <div class="brand">
-      <div class="brand-icon">⚡</div>
-      <div>
-        <h1>Aktivitas Harian Pro</h1>
-        <p id="currentDateDisplay">Memuat tanggal...</p>
-      </div>
-    </div>
-  </div>
-</header>
-
-<!-- NAVIGASI TAB -->
-<nav class="nav-tabs">
-  <button class="tab-btn active" onclick="switchTab(this, 'dashboard')">📊 Dashboard</button>
-  <button class="tab-btn" onclick="switchTab(this, 'keuangan')">💰 Keuangan</button>
-  <button class="tab-btn" onclick="switchTab(this, 'belanja')">🛒 Belanja</button>
-  <button class="tab-btn" onclick="switchTab(this, 'tugas')">✅ Tugas & Kebiasaan</button>
-  <button class="tab-btn" onclick="switchTab(this, 'target')">🎯 Target Tabungan</button>
-  <button class="tab-btn" onclick="switchTab(this, 'kalkulator')">📝 Catatan & Alat</button>
-  <button class="tab-btn" onclick="switchTab(this, 'pengaturan')">⚙️ Pengaturan</button>
-</nav>
-
+<div class="app">
+<aside class="sidebar" id="sidebar">
+ <div class="brand"><div class="brand-icon">☀</div><div><strong>daylight</strong><small>your life, in balance</small></div></div>
+ <div><div class="nav-label">WORKSPACE</div><nav class="nav" id="nav">
+ <button class="active" data-page="home"><span class="ico">⌂</span>Ringkasan</button>
+ <button data-page="organizer"><span class="ico">✓</span>Life Organizer</button>
+ <button data-page="money"><span class="ico">◈</span>Money Tracker</button>
+ <button data-page="mood"><span class="ico">☻</span>MoodSpace</button>
+ <button data-page="helper"><span class="ico">✳</span>Daily Helper</button>
+ <button data-page="personal"><span class="ico">♡</span>My Personal Space</button>
+ <button data-page="more"><span class="ico">✦</span>Growth & Settings</button>
+ <button data-page="pro"><span class="ico">🚀</span>Pro Dashboard</button>
+ </nav></div>
+ <div class="sidebar-bottom"><div class="sun">🌤️</div><strong>Pelan-pelan, tetap maju.</strong><p>Kemajuan kecil yang konsisten juga berarti.</p></div>
+</aside>
 <main>
-
-  <!-- TAB 1: DASHBOARD -->
-  <div id="tab-dashboard" class="tab-content active">
-    <div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(18, 24, 38, 0.9)); border-color: rgba(99, 102, 241, 0.3);">
-      <small style="color: var(--text-secondary);">Sisa Saldo Kas Utama</small>
-      <h2 id="dashBalance" style="font-size: 32px; font-weight: 800; color: #818cf8; margin-top: 4px;">Rp0</h2>
-    </div>
-
-    <div class="grid-3">
-      <div class="stat-box">
-        <small>Pemasukan</small>
-        <strong id="dashIncome" style="color: var(--success);">Rp0</strong>
-      </div>
-      <div class="stat-box">
-        <small>Pengeluaran</small>
-        <strong id="dashExpense" style="color: var(--danger);">Rp0</strong>
-      </div>
-      <div class="stat-box">
-        <small>Tugas Belum Selesai</small>
-        <strong id="dashTasks">0 Tugas</strong>
-      </div>
-    </div>
-
-    <div class="grid-2" style="margin-top: 20px;">
-      <div class="card">
-        <div class="card-title">
-          <span>🛒 Rencana Belanja</span>
-        </div>
-        <p class="item-sub">Total belum dibeli: <strong id="dashShoppingPending">Rp0</strong></p>
-        <ul id="dashShoppingList" style="margin-top: 10px;"></ul>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>🔥 Kebiasaan Aktif</span>
-        </div>
-        <ul id="dashHabitList"></ul>
-      </div>
-    </div>
+<header class="topbar">
+ <div class="top-left"><button class="mobile-menu" id="menuBtn" aria-label="Buka menu">☰</button><div><div class="eyebrow" id="eyebrow">YOUR PERSONAL DASHBOARD</div><h1 id="pageTitle">Selamat datang kembali ✨</h1></div></div>
+ <div class="top-actions"><div class="date-pill" id="todayPill"></div><div class="avatar" id="avatarInitial">K</div></div>
+</header>
+<section class="page active" id="page-home">
+ <div class="welcome"><div><div class="date-tag">RUANG KECIL UNTUK HIDUP YANG LEBIH BAIK</div><h2>Hari ini, mulai dari satu hal. 🌱</h2><p>Atur aktivitas, pahami keuangan, rawat perasaan, dan simpan hal-hal yang berarti—semuanya dalam satu tempat.</p></div><div class="welcome-art">☀️</div></div>
+ <div class="grid stats">
+  <div class="card"><div class="stat-top">Tugas selesai <span class="stat-icon" style="background:var(--purple2)">✓</span></div><div class="stat-value" id="homeTasks">0/0</div><div class="stat-note">Tugas yang sudah kamu tuntaskan</div></div>
+  <div class="card"><div class="stat-top">Saldo tercatat <span class="stat-icon" style="background:var(--mint)">◈</span></div><div class="stat-value" id="homeBalance">Rp0</div><div class="stat-note">Berdasarkan catatan transaksi</div></div>
+  <div class="card"><div class="stat-top">Catatan mood <span class="stat-icon" style="background:var(--peach)">☻</span></div><div class="stat-value" id="homeMood">0</div><div class="stat-note">Entri jurnal tersimpan</div></div>
+  <div class="card"><div class="stat-top">Wishlist <span class="stat-icon" style="background:var(--blue)">♡</span></div><div class="stat-value" id="homeWishes">0</div><div class="stat-note">Impian kecil yang kamu simpan</div></div>
+ </div>
+ <div class="grid two-col">
+  <div class="card"><div class="section-head"><div><h3>Fokus hari ini</h3><p>Langkah kecil untuk hari yang lebih terarah.</p></div><button class="text-btn" data-goto="organizer">Lihat semua →</button></div><div id="homeTaskList" class="task-list"></div><div class="progress-row"><span>Progres tugas</span><span id="homeProgressLabel">0%</span></div><div class="progress"><span id="homeProgress" style="width:0%"></span></div></div>
+  <div class="card"><div class="section-head"><div><h3>Akses cepat</h3><p>Langsung menuju hal yang kamu butuhkan.</p></div></div><div class="quick-grid">
+   <button class="quick" data-goto="organizer"><div class="qicon">🗓️</div><strong>Tambah tugas</strong><small>Rencanakan harimu</small></button>
+   <button class="quick" data-goto="money"><div class="qicon">💳</div><strong>Catat transaksi</strong><small>Jaga uang tetap terarah</small></button>
+   <button class="quick" data-goto="mood"><div class="qicon">🌈</div><strong>Catat perasaan</strong><small>Luangkan waktu untuk diri</small></button>
+   <button class="quick" data-goto="personal"><div class="qicon">💌</div><strong>Simpan ide</strong><small>Jangan kehilangan inspirasi</small></button>
+  </div></div>
+ </div>
+</section>
+<section class="page" id="page-organizer">
+ <p class="page-intro">Buat hari terasa lebih ringan dengan memecah hal besar menjadi <strong>langkah kecil yang bisa dilakukan.</strong></p>
+ <div class="grid two-col">
+  <div class="card"><div class="section-head"><div><h3>Tambah tugas baru</h3><p>Tentukan satu hal yang ingin kamu selesaikan.</p></div><span>✍️</span></div>
+   <form id="taskForm"><div class="field"><label for="taskTitle">Nama tugas</label><input class="input" id="taskTitle" placeholder="Contoh: belajar 30 menit" required maxlength="100"></div><div class="form-row" style="margin-top:12px"><div class="field"><label for="taskTime">Waktu / tenggat</label><input class="input" id="taskTime" placeholder="Contoh: 19.00 atau hari ini"></div><div class="field"><label for="taskPriority">Prioritas</label><select id="taskPriority"><option value="Normal">Normal</option><option value="Penting">Penting</option><option value="Santai">Santai</option></select></div></div><button class="btn" style="margin-top:14px;width:100%">＋ Tambahkan tugas</button></form>
+   <div style="margin-top:25px"><div class="section-head"><h3>Target kebiasaan</h3><span class="tag purple">HARIAN</span></div><div id="habitList" class="list"></div><form id="habitForm" style="display:flex;gap:8px;margin-top:12px"><input class="input" id="habitTitle" placeholder="Kebiasaan baru..." maxlength="70" required><button class="btn">Tambah</button></form></div>
   </div>
-
-  <!-- TAB 2: KEUANGAN -->
-  <div id="tab-keuangan" class="tab-content">
-    <div class="card">
-      <div class="card-title">
-        <span>💰 Tambah Transaksi Keuangan</span>
-      </div>
-      <form id="moneyForm">
-        <input id="moneyName" placeholder="Keterangan (Makan, Gaji, Listrik)" required>
-        <div class="form-row">
-          <input id="moneyAmount" type="number" min="1" placeholder="Jumlah (Rp)" required>
-          <select id="moneyCategory">
-            <option value="Makanan">🍕 Makanan</option>
-            <option value="Transport">🚗 Transportasi</option>
-            <option value="Tagihan">📄 Tagihan</option>
-            <option value="Belanja">🛒 Belanja</option>
-            <option value="Gaji">💼 Gaji / Pendapatan</option>
-            <option value="Lainnya">📦 Lainnya</option>
-          </select>
-        </div>
-        <select id="moneyType">
-          <option value="in">Pemasukan (+)</option>
-          <option value="out">Pengeluaran (-)</option>
-        </select>
-        <button type="submit" class="btn-primary">+ Catat Transaksi</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span>📜 Riwayat Transaksi</span>
-        <button onclick="exportCSV()" class="btn-secondary btn-sm">📥 Ekspor CSV</button>
-      </div>
-      <ul id="moneyList"></ul>
-    </div>
+  <div class="card"><div class="section-head"><div><h3>Daftar tugas</h3><p id="taskCount">Semua yang perlu kamu lakukan.</p></div><button class="text-btn" id="clearDone">Hapus selesai</button></div><div id="taskList" class="task-list"></div><div class="progress-row"><span>Progres penyelesaian</span><span id="taskProgressLabel">0%</span></div><div class="progress"><span id="taskProgress" style="width:0%"></span></div></div>
+ </div>
+</section>
+<section class="page" id="page-money">
+ <p class="page-intro">Kenali pola pengeluaranmu dan rencanakan uang dengan lebih sadar. Data keuangan disimpan di perangkat ini.</p>
+ <div class="balance-card"><small>Saldo bersih tercatat</small><h2 id="moneyBalance">Rp0</h2><div class="balance-split"><div>Pemasukan<strong id="moneyIncome">Rp0</strong></div><div>Pengeluaran<strong id="moneyExpense">Rp0</strong></div></div></div>
+ <div class="grid two-col">
+  <div class="card"><div class="section-head"><div><h3>Catat transaksi</h3><p>Isi pemasukan atau pengeluaran baru.</p></div><span>💸</span></div>
+   <form id="transactionForm"><div class="form-row"><div class="field"><label for="txType">Jenis transaksi</label><select id="txType"><option value="expense">Pengeluaran</option><option value="income">Pemasukan</option></select></div><div class="field"><label for="txAmount">Nominal (Rp)</label><input class="input" id="txAmount" type="number" min="1" step="1" placeholder="25000" required></div></div><div class="field" style="margin-top:12px"><label for="txName">Keterangan</label><input class="input" id="txName" placeholder="Contoh: makan siang" maxlength="100" required></div><div class="form-row" style="margin-top:12px"><div class="field"><label for="txCategory">Kategori</label><select id="txCategory"><option>Makanan</option><option>Transportasi</option><option>Belanja</option><option>Tagihan</option><option>Hiburan</option><option>Gaji</option><option>Tabungan</option><option>Lainnya</option></select></div><div class="field"><label for="txDate">Tanggal</label><input class="input" id="txDate" type="date" required></div></div><button class="btn" style="margin-top:14px;width:100%">＋ Simpan transaksi</button></form>
+   <div class="field" style="margin-top:22px"><label for="budgetInput">Target pengeluaran bulanan (Rp)</label><div style="display:flex;gap:8px"><input class="input" id="budgetInput" type="number" min="0" placeholder="Misalnya 1500000"><button class="btn secondary" id="saveBudget" type="button">Simpan</button></div></div><div class="progress-row"><span>Pengeluaran vs target</span><span id="budgetLabel">Belum diatur</span></div><div class="progress"><span id="budgetProgress" style="width:0%"></span></div>
   </div>
-
-  <!-- TAB 3: BELANJA -->
-  <div id="tab-belanja" class="tab-content">
-    <div class="card">
-      <div class="card-title">
-        <span>🛒 Catat Barang Belanjaan</span>
-      </div>
-      <form id="shoppingForm">
-        <div class="form-row">
-          <input id="shoppingName" placeholder="Nama Barang" required>
-          <input id="shoppingPrice" type="number" min="0" placeholder="Estimasi Harga (Rp)">
-        </div>
-        <button type="submit" class="btn-primary">+ Tambah ke Daftar</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span>📋 Daftar Belanjaan</span>
-        <button onclick="clearDoneShopping()" class="btn-secondary btn-sm">Bersihkan Selesai</button>
-      </div>
-      <ul id="shoppingList"></ul>
-    </div>
+  <div class="card"><div class="section-head"><div><h3>Riwayat transaksi</h3><p>Transaksi terbaru ada di bagian atas.</p></div><button class="text-btn" id="exportTx">Ekspor CSV ↓</button></div><div id="transactionList" class="list"></div></div>
+ </div>
+</section>
+<section class="page" id="page-mood">
+ <p class="page-intro">Tidak perlu merasa baik setiap saat. Beri dirimu ruang untuk mengenali apa yang sedang dirasakan, tanpa menghakimi.</p>
+ <div class="grid two-col">
+  <div class="card"><div class="section-head"><div><h3>Bagaimana perasaanmu?</h3><p>Pilih yang paling mendekati perasaanmu sekarang.</p></div><span>🌷</span></div>
+   <form id="moodForm"><div class="mood-options" id="moodOptions">
+    <button type="button" class="mood-option" data-mood="Senang" data-emoji="😄"><span>😄</span><strong>Senang</strong></button><button type="button" class="mood-option" data-mood="Tenang" data-emoji="😌"><span>😌</span><strong>Tenang</strong></button><button type="button" class="mood-option" data-mood="Biasa" data-emoji="🙂"><span>🙂</span><strong>Biasa</strong></button><button type="button" class="mood-option" data-mood="Lelah" data-emoji="😮‍💨"><span>😮‍💨</span><strong>Lelah</strong></button><button type="button" class="mood-option" data-mood="Sedih" data-emoji="😔"><span>😔</span><strong>Sedih</strong></button>
+   </div><div class="field" style="margin-top:18px"><label for="moodNote">Apa yang sedang memenuhi pikiranmu?</label><textarea id="moodNote" placeholder="Tulis bebas. Tidak harus sempurna, cukup jujur pada diri sendiri."></textarea></div><div class="field" style="margin-top:12px"><label for="gratitude">Satu hal yang kamu syukuri hari ini</label><input class="input" id="gratitude" placeholder="Hal kecil pun berarti..." maxlength="200"></div><button class="btn" style="margin-top:14px;width:100%">Simpan catatan hari ini</button></form>
   </div>
+  <div class="card"><div class="section-head"><div><h3>Jurnal pribadimu</h3><p>Catatan yang kamu simpan sebelumnya.</p></div><span>📖</span></div><div id="moodHistory" class="list"></div></div>
+ </div>
+</section>
+<section class="page" id="page-helper">
+ <p class="page-intro">Alat praktis untuk keputusan kecil sehari-hari. Sederhana, cepat, dan langsung bisa dipakai.</p>
+ <div class="grid helper-grid">
+  <div class="helper-card"><div class="big-icon">🍜</div><h3>Inspirasi menu</h3><p>Bingung mau makan apa? Pilih ide menu acak untuk hari ini.</p><button class="btn secondary" id="recipeBtn">Pilih menu untukku</button><div id="recipeResult" class="recipe-result" hidden></div></div>
+  <div class="helper-card"><div class="big-icon">🛒</div><h3>Daftar belanja</h3><p>Catat kebutuhan agar tidak ada yang terlupa saat berbelanja.</p><form id="shoppingForm" style="display:flex;gap:7px"><input class="input" id="shoppingInput" placeholder="Tambah barang..." maxlength="80" required><button class="btn">+</button></form><div id="shoppingList" class="list" style="margin-top:12px"></div></div>
+  <div class="helper-card"><div class="big-icon">🧮</div><h3>Kalkulator cepat</h3><p>Hitung angka sederhana langsung di halaman ini.</p><div class="calc-display" id="calcDisplay" aria-live="polite">0</div><div class="calc" id="calcKeys"><button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button class="op" data-key="/">÷</button><button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button class="op" data-key="*">×</button><button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button class="op" data-key="-">−</button><button data-key="C">C</button><button data-key="0">0</button><button data-key=".">.</button><button class="op" data-key="+">+</button><button data-key="(">(</button><button data-key=")">)</button><button data-key="back">⌫</button><button class="op" data-key="=">=</button></div></div>
+  <div class="helper-card"><div class="big-icon">💡</div><h3>Jeda sejenak</h3><p>Pengingat kecil untuk merawat diri di tengah kesibukan.</p><div class="note-card" style="background:#edf8f3;border-color:#d7efe5"><strong id="tipTitle">Tarik napas.</strong><p id="tipText">Berhenti sebentar, tarik napas perlahan, dan lepaskan ketegangan di bahu.</p></div><button class="btn secondary" id="tipBtn" style="margin-top:12px">Tips lainnya ↗</button></div>
+  <div class="helper-card"><div class="big-icon">⏳</div><h3>Fokus 25 menit</h3><p>Gunakan sesi fokus singkat untuk memulai tugas yang tertunda.</p><div class="calc-display" id="timerDisplay">25:00</div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="timerStart">Mulai</button><button class="btn ghost" id="timerReset">Atur ulang</button></div></div>
+  <div class="helper-card"><div class="big-icon">🎲</div><h3>Bantu ambil keputusan</h3><p>Tulis pilihan yang sama-sama baik, lalu biarkan roda kecil ini memilih satu.</p><div class="field"><label for="choicesInput">Pilihan (pisahkan dengan koma)</label><textarea id="choicesInput" placeholder="Contoh: jalan santai, baca buku, nonton film" style="min-height:80px"></textarea></div><button class="btn secondary" id="chooseBtn" style="margin-top:10px">Pilih secara acak</button><div id="choiceResult" class="recipe-result" hidden></div></div>
+ </div>
+</section>
+<section class="page" id="page-personal">
+ <p class="page-intro">Ruang kecil milikmu untuk menyimpan ide, harapan, kenangan, dan hal-hal yang ingin kamu ingat.</p>
+ <div class="profile-banner"><div class="profile-avatar">🌼</div><div style="flex:1"><h2 id="profileHeading">Ruang pribadiku</h2><p>Tempat bertumbuh dengan caramu sendiri.</p></div><button class="btn secondary" id="editProfile">Edit profil</button></div>
+ <div class="grid two-col">
+  <div class="card"><div class="section-head"><div><h3>Catatan & ide</h3><p>Simpan pikiran yang ingin kamu temukan lagi.</p></div><span>📝</span></div><form id="noteForm"><div class="field"><label for="noteTitle">Judul catatan</label><input class="input" id="noteTitle" placeholder="Ide yang tiba-tiba muncul..." maxlength="80" required></div><div class="field" style="margin-top:12px"><label for="noteBody">Isi catatan</label><textarea id="noteBody" placeholder="Tulis idemu di sini..." required></textarea></div><button class="btn" style="margin-top:12px;width:100%">Simpan catatan</button></form><div class="section-head" style="margin-top:23px"><h3>Catatan tersimpan</h3></div><div id="notesList" class="list"></div></div>
+  <div class="card"><div class="section-head"><div><h3>Wishlist & impian</h3><p>Hal-hal yang ingin kamu wujudkan, satu per satu.</p></div><span>✨</span></div><form id="wishForm" style="display:flex;gap:8px"><input class="input" id="wishInput" placeholder="Contoh: belajar skill baru" maxlength="100" required><button class="btn">Tambah</button></form><div id="wishList" class="list" style="margin-top:14px"></div><div class="section-head" style="margin-top:25px"><div><h3>Profil singkat</h3><p>Personalisasi ruangmu.</p></div></div><form id="profileForm"><div class="field"><label for="profileName">Nama panggilan</label><input class="input" id="profileName" placeholder="Nama yang ingin ditampilkan" maxlength="40"></div><div class="field" style="margin-top:12px"><label for="profileGoal">Fokus utama saat ini</label><input class="input" id="profileGoal" placeholder="Contoh: lebih sehat dan konsisten" maxlength="120"></div><button class="btn secondary" style="margin-top:12px">Simpan profil</button></form></div>
+ </div>
+ <div class="card" style="margin-top:18px"><div class="section-head"><div><h3>Data & privasi</h3><p>Data website disimpan secara lokal di browser perangkat ini.</p></div><span>🔒</span></div><p style="font-size:12px;color:var(--muted)">Data tidak otomatis tersinkron ke perangkat lain. Ekspor atau cadangkan data penting secara berkala. Menghapus data browser dapat menghapus catatan tersimpan.</p><button class="btn ghost" id="exportBackup">Unduh cadangan data JSON ↓</button> <button class="btn danger" id="resetData">Hapus semua data</button></div>
+</section>
 
-  <!-- TAB 4: TUGAS & KEBIASAAN -->
-  <div id="tab-tugas" class="tab-content">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">
-          <span>✅ Tugas Harian</span>
-        </div>
-        <form id="taskForm">
-          <input id="taskName" placeholder="Contoh: Belajar 30 menit" required>
-          <button type="submit" class="btn-primary">+ Tambah Tugas</button>
-        </form>
-        <ul id="taskList"></ul>
-      </div>
+<section class="page" id="page-pro">
+ <div class="welcome"><div><div class="date-tag">DAYLIGHT · ALL-IN-ONE LIFE SYSTEM</div><h2>Semua progresmu, satu tempat. 🚀</h2><p>Kalender, Kanban, statistik produktivitas, analisis keuangan, rencana harian, mode fokus, dan asisten pintar berbasis aturan lokal.</p></div><div class="welcome-art">✨</div></div>
+ <div class="pro-grid">
+  <div class="pro-card"><h3>🗓️ Kalender & agenda</h3><p>Simpan agenda penting dan lihat tanggal yang punya jadwal.</p><div class="pro-row"><button class="btn ghost" id="calPrev">← Bulan lalu</button><strong id="calTitle" style="flex:1;text-align:center"></strong><button class="btn ghost" id="calNext">Bulan depan →</button></div><div class="calendar-grid" id="calendarGrid"></div><form id="eventForm" style="margin-top:14px"><div class="field"><span>Nama agenda</span><input id="eventName" placeholder="Contoh: rapat / olahraga" required maxlength="100"></div><div class="pro-row"><input id="eventDate" type="date" required><input id="eventTime" type="time"></div><button class="btn primary">＋ Simpan agenda</button></form><div class="pro-list" id="eventList"></div></div>
+  <div class="pro-card"><h3>📊 Statistik produktivitas</h3><p>Ringkasan dari data yang tercatat di Daylight.</p><div class="pro-kpis"><div class="pro-kpi"><small>Tugas selesai</small><strong id="proDone">0</strong></div><div class="pro-kpi"><small>Rasio selesai</small><strong id="proRate">0%</strong></div><div class="pro-kpi"><small>Kebiasaan hari ini</small><strong id="proHabits">0</strong></div></div><h4 style="font-size:12px;margin:18px 0 10px">Progres tugas</h4><div class="bar-list" id="productivityBars"></div><div class="section-head" style="margin-top:20px"><h3>🔥 Streak kebiasaan</h3><span class="tag-soft" id="streakValue">0 hari</span></div><p id="streakText">Tandai kebiasaan setiap hari untuk membangun konsistensi.</p></div>
+  <div class="pro-card"><h3>🧩 Kanban tugas</h3><p>Pindahkan tugas dari rencana ke proses atau selesai. Status ini tersimpan terpisah dari checklist tugas utama.</p><div class="kanban" id="kanbanBoard"></div><div class="pro-row" style="margin-top:12px"><select id="kanTask"><option value="">Pilih tugas yang sudah ada</option></select><select id="kanStatus"><option value="todo">Rencana</option><option value="doing">Dikerjakan</option><option value="done">Selesai</option></select><button class="btn primary" id="kanMove">Pindahkan</button></div></div>
+  <div class="pro-card"><h3>💸 Analitik keuangan</h3><p>Grafik kategori pengeluaran dan perbandingan bulan ini dengan bulan sebelumnya.</p><div class="pro-kpis"><div class="pro-kpi"><small>Pemasukan</small><strong id="proIncome">Rp0</strong></div><div class="pro-kpi"><small>Pengeluaran</small><strong id="proExpense">Rp0</strong></div><div class="pro-kpi"><small>Selisih bulanan</small><strong id="proCompare">—</strong></div></div><h4 style="font-size:12px;margin:18px 0 10px">Pengeluaran per kategori</h4><div class="bar-list" id="financeBars"></div><div class="section-head" style="margin-top:18px"><h3>Anggaran per kategori</h3></div><form id="categoryBudgetForm" class="pro-row"><input id="budgetCategory" placeholder="Kategori" required><input id="budgetCategoryAmount" type="number" min="1" placeholder="Batas Rp" required><button class="btn primary">Simpan</button></form><div class="pro-list" id="categoryBudgetList"></div></div>
+  <div class="pro-card"><h3>📅 Daily planner</h3><p>Susun hari dalam blok waktu sederhana. Ini membantu membagi waktu, bukan jadwal otomatis.</p><form id="plannerForm"><div class="pro-row"><input id="planTime" type="time" required><input id="planTitle" placeholder="Aktivitas" maxlength="100" required></div><button class="btn primary">Tambah blok waktu</button></form><div class="pro-list" id="plannerList"></div><button class="btn ghost" id="planClear" style="margin-top:10px">Bersihkan agenda harian</button></div>
+  <div class="pro-card"><h3>🤖 Daylight Smart Assistant</h3><p>Asisten mini tanpa koneksi AI eksternal. Jawaban dibuat dari data yang tersimpan di browser.</p><div id="assistantChat" class="pro-chat">Halo! Tanyakan “prioritas”, “keuangan”, “mood”, atau “ringkasan”.</div><form id="assistantForm" class="pro-row"><input id="assistantInput" placeholder="Apa yang perlu aku bantu?" required><button class="btn primary">Kirim</button></form><div class="pro-row"><button class="tiny-btn" data-ask="prioritas">Saran prioritas</button><button class="tiny-btn" data-ask="keuangan">Cek keuangan</button><button class="tiny-btn" data-ask="mood">Cek mood</button></div></div>
+  <div class="pro-card"><h3>🔔 Notifikasi & pengingat</h3><p>Aktifkan notifikasi browser jika didukung. Pengingat di halaman ini aktif saat website terbuka.</p><button class="btn secondary" id="enableNotifications">Izinkan notifikasi browser</button><div id="notificationStatus" class="pro-list"></div><div class="section-head" style="margin-top:18px"><h3>Ringkasan pintar</h3></div><div id="smartInsights" class="pro-list"></div></div>
+  <div class="pro-card"><h3>☁️ Backup & pindah perangkat</h3><p>Sinkronisasi cloud otomatis memerlukan server/akun eksternal, jadi belum aktif di file HTML offline ini. Gunakan backup untuk memindahkan data.</p><button class="btn primary" id="proExport">Unduh backup lengkap JSON</button> <button class="btn ghost" id="proImport">Impor backup JSON</button><input type="file" id="proImportFile" accept="application/json,.json" hidden><div class="pro-list"><div class="pro-item"><span>Privasi</span><strong>Lokal di browser</strong></div><div class="pro-item"><span>Ekspor transaksi</span><strong>CSV tersedia di Money Tracker</strong></div><div class="pro-item"><span>Tips</span><strong>Backup berkala</strong></div></div></div>
+ </div>
+</section>
+<div class="focus-overlay" id="focusOverlay"><div><div class="tag-soft">FOCUS MODE</div><h2 id="focusLabel">Satu hal dalam satu waktu.</h2><div class="focus-clock" id="focusClock">25:00</div><p>Kurangi gangguan. Fokus pada satu langkah kecil.</p><button class="btn primary" id="focusToggle">Mulai fokus</button> <button class="btn ghost" id="focusExit">Keluar</button></div></div>
 
-      <div class="card">
-        <div class="card-title">
-          <span>🌱 Pelacak Kebiasaan</span>
-        </div>
-        <form id="habitForm">
-          <input id="habitName" placeholder="Contoh: Minum air 2L" required>
-          <button type="submit" class="btn-primary">+ Tambah Kebiasaan</button>
-        </form>
-        <ul id="habitList"></ul>
-      </div>
-    </div>
+<footer>DAYLIGHT · Dirancang untuk keseharian yang lebih seimbang · Data tersimpan di perangkatmu</footer>
+
+<section class="page" id="page-more">
+ <div class="page-intro"><span class="eyebrow">YOUR NEXT CHAPTER</span><h2>Growth & Settings ✨</h2><p>Bangun rutinitas kecil, rayakan progres, dan atur Daylight sesuai gayamu.</p></div>
+ <div class="grid two-col" style="margin-bottom:18px">
+  <div class="card">
+   <div class="section-head"><div><h3>🌈 Daily check-in</h3><p>Catatan singkat untuk hari ini</p></div><span class="tag purple" id="checkinDate"></span></div>
+   <div class="grid three-col">
+    <label class="field"><span>Air minum (gelas)</span><input id="waterInput" type="number" min="0" max="30" value="0"></label>
+    <label class="field"><span>Jam tidur</span><input id="sleepInput" type="number" min="0" max="24" step=".5" value="8"></label>
+    <label class="field"><span>Energi hari ini</span><select id="energyInput"><option value="1">Rendah</option><option value="2">Sedang</option><option value="3">Tinggi</option></select></label>
+   </div>
+   <div class="progress-row"><span>Target air: 8 gelas</span><span id="waterLabel">0/8 gelas</span></div><div class="progress"><span id="waterProgress" style="width:0%"></span></div>
+   <div class="progress-row"><span>Target tidur: 8 jam</span><span id="sleepLabel">8/8 jam</span></div><div class="progress"><span id="sleepProgress" style="width:100%"></span></div>
+   <button class="btn primary" id="saveCheckin" style="margin-top:15px">Simpan check-in</button>
   </div>
-
-  <!-- TAB 5: TARGET TABUNGAN -->
-  <div id="tab-target" class="tab-content">
-    <div class="card">
-      <div class="card-title">
-        <span>🎯 Target Tabungan</span>
-      </div>
-      <form id="goalForm">
-        <input id="goalName" placeholder="Contoh: Beli Laptop Baru" required>
-        <input id="goalTarget" type="number" min="1" placeholder="Target Nominal (Rp)" required>
-        <button type="submit" class="btn-primary">+ Buat Target</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span>📊 Progres Tabungan Saya</span>
-      </div>
-      <div id="goalList"></div>
-    </div>
+  <div class="card">
+   <div class="section-head"><div><h3>💌 Afirmasi hari ini</h3><p>Pengingat lembut untuk dirimu</p></div><button class="text-btn" id="newAffirmation">Acak ↻</button></div>
+   <div class="affirmation" id="affirmationText">Aku boleh bertumbuh dengan kecepatanku sendiri.</div>
+   <div class="section-head" style="margin-top:22px"><div><h3>🏆 Pencapaian</h3><p>Lencana dari langkah kecilmu</p></div></div>
+   <div id="achievementList" class="achievement-list"></div>
   </div>
-
-  <!-- TAB 6: KALKULATOR & CATATAN -->
-  <div id="tab-kalkulator" class="tab-content">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">
-          <span>🧮 Ketahanan Uang</span>
-        </div>
-        <div class="form-group">
-          <label>Jumlah Uang Kamu (Rp)</label>
-          <input id="budget" type="number" min="0" placeholder="0">
-          <button type="button" onclick="useCurrentBalance()" class="btn-secondary btn-sm" style="margin-top: 4px;">🎯 Gunakan Saldo Saat Ini</button>
-        </div>
-        <div class="form-group" style="margin-top: 10px;">
-          <label>Pengeluaran/Hari (Rp)</label>
-          <input id="daily" type="number" min="0" placeholder="0">
-        </div>
-        <button onclick="calculateDays()" class="btn-primary" style="margin-top: 12px; width: 100%;">Hitung Ketahanan</button>
-        <div id="calculationResult" style="margin-top: 14px; font-weight: 700; color: #818cf8;"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>📝 Catatan Cepat</span>
-        </div>
-        <textarea id="quickNotes" rows="7" placeholder="Tulis catatan penting di sini..."></textarea>
-      </div>
-    </div>
+ </div>
+ <div class="grid two-col" style="margin-bottom:18px">
+  <div class="card">
+   <div class="section-head"><div><h3>🎯 Goal tracker</h3><p>Ubah impian besar menjadi langkah terukur</p></div></div>
+   <form id="goalForm" class="form-row"><input id="goalName" placeholder="Contoh: Baca 5 buku" required><input id="goalTarget" type="number" min="1" value="10" aria-label="Target"><button class="btn primary">Tambah</button></form>
+   <div id="goalList" class="stack-list" style="margin-top:14px"></div>
   </div>
-
-  <!-- TAB 7: PENGATURAN -->
-  <div id="tab-pengaturan" class="tab-content">
-    <div class="card">
-      <div class="card-title">
-        <span>💾 Backup & Restore Data</span>
-      </div>
-      <div class="form-row">
-        <button onclick="exportJSON()" class="btn-secondary">📥 Download Backup</button>
-        <button onclick="$('importFile').click()" class="btn-secondary">📤 Restore Data</button>
-      </div>
-      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
-
-      <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
-
-      <div class="card-title" style="color: var(--danger);">
-        <span>🗑️ Zona Bahaya</span>
-      </div>
-      <button onclick="clearAllData()" class="btn-danger" style="width: 100%;">Hapus Seluruh Data</button>
-    </div>
+  <div class="card">
+   <div class="section-head"><div><h3>🐷 Savings challenge</h3><p>Tetapkan target tabungan dan pantau progres</p></div></div>
+   <form id="savingForm" class="form-row"><input id="savingName" placeholder="Target, mis. Dana darurat" required><input id="savingTarget" type="number" min="1" placeholder="Target Rp" required><button class="btn primary">Buat</button></form>
+   <div id="savingList" class="stack-list" style="margin-top:14px"></div>
   </div>
+ </div>
+ <div class="grid two-col" style="margin-bottom:18px">
+  <div class="card">
+   <div class="section-head"><div><h3>📊 Weekly review</h3><p>Ringkasan sederhana dari progresmu</p></div><button class="text-btn" id="refreshReview">Perbarui</button></div>
+   <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:12px">
+    <div class="stat-mini"><span>Tugas selesai</span><strong id="reviewTasks">0</strong></div>
+    <div class="stat-mini"><span>Kebiasaan aktif</span><strong id="reviewHabits">0</strong></div>
+    <div class="stat-mini"><span>Entri jurnal</span><strong id="reviewMoods">0</strong></div>
+    <div class="stat-mini"><span>Tabungan tercatat</span><strong id="reviewSavings">Rp0</strong></div>
+   </div>
+   <label class="field"><span>Apa yang berjalan baik minggu ini?</span><textarea id="reviewWin" rows="2" placeholder="Tulis kemenangan kecilmu..."></textarea></label>
+   <label class="field"><span>Apa yang ingin diperbaiki minggu depan?</span><textarea id="reviewImprove" rows="2" placeholder="Satu langkah kecil berikutnya..."></textarea></label>
+   <button class="btn primary" id="saveReview">Simpan refleksi</button>
+  </div>
+  <div class="card">
+   <div class="section-head"><div><h3>🔔 Reminder & fokus</h3><p>Pengingat browser dan sesi fokus</p></div></div>
+   <form id="reminderForm" class="stack-list">
+    <label class="field"><span>Nama pengingat</span><input id="reminderName" placeholder="Contoh: Minum air" required></label>
+    <label class="field"><span>Waktu</span><input id="reminderTime" type="time" required></label>
+    <button class="btn primary">Tambah pengingat</button>
+   </form>
+   <p class="muted" style="font-size:11px;margin-top:9px">Pengingat di halaman ini hanya aktif selama Daylight terbuka. Notifikasi browser mungkin meminta izin.</p>
+   <div id="reminderList" class="stack-list" style="margin-top:12px"></div>
+  </div>
+ </div>
+ <div class="grid two-col">
+  <div class="card">
+   <div class="section-head"><div><h3>🎨 Personalisasi tampilan</h3><p>Pilih suasana yang paling kamu suka</p></div></div>
+   <div class="theme-grid">
+    <button class="theme-choice" data-theme="default"><span style="background:linear-gradient(135deg,#7667f5,#b8afff)"></span>Lavender</button>
+    <button class="theme-choice" data-theme="pink"><span style="background:linear-gradient(135deg,#e66f9a,#ffc5d8)"></span>Rose</button>
+    <button class="theme-choice" data-theme="sage"><span style="background:linear-gradient(135deg,#468b74,#c9e8d8)"></span>Sage</button>
+    <button class="theme-choice" data-theme="ocean"><span style="background:linear-gradient(135deg,#397db8,#b7e1ff)"></span>Ocean</button>
+    <button class="theme-choice" data-theme="sunset"><span style="background:linear-gradient(135deg,#e58b4c,#ffd8a8)"></span>Sunset</button>
+    <button class="theme-choice" data-theme="dark"><span style="background:linear-gradient(135deg,#25283f,#6e6a9b)"></span>Midnight</button>
+   </div>
+   <label class="field" style="margin-top:15px"><span>Nama tampilan</span><input id="displayName" placeholder="Mis. My Cozy Space"></label>
+   <button class="btn primary" id="saveDisplayName">Simpan nama</button>
+  </div>
+  <div class="card">
+   <div class="section-head"><div><h3>🔎 Pencarian cepat</h3><p>Cari kata di tugas, catatan, jurnal, dan wishlist</p></div></div>
+   <input id="globalSearch" placeholder="Ketik kata kunci..." style="width:100%">
+   <div id="searchResults" class="stack-list" style="margin-top:12px"><div class="empty">Mulai mengetik untuk mencari data Daylight.</div></div>
+   <div class="section-head" style="margin-top:22px"><div><h3>♻️ Backup & restore</h3><p>Simpan salinan atau pulihkan data JSON</p></div></div>
+   <div class="form-row"><button class="btn secondary" id="restoreBtn">Pilih backup JSON</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div>
+   <p class="muted" style="font-size:11px;margin-top:8px">Backup yang diimpor akan menggantikan data lokal saat ini. Ekspor backup lama terlebih dahulu agar aman.</p>
+  </div>
+ </div>
+</section>
 
 </main>
-
-<footer>
-  Aktivitas Harian Pro • Bebas Iklan & Praktis
-</footer>
-
+</div>
+<div class="toast" id="toast" role="status"></div>
 <script>
-const $ = id => document.getElementById(id);
-
-// PENYIMPANAN DATA SAFE
-function loadData(key) {
-  try {
-    const val = localStorage.getItem(key);
-    return val ? JSON.parse(val) : [];
-  } catch {
-    return [];
-  }
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const KEY='daylight-life-dashboard-v1';
+const todayISO=()=>new Date().toISOString().slice(0,10);
+const fresh=()=>({tasks:[],habits:[],transactions:[],budget:0,moods:[],shopping:[],notes:[],wishes:[],profile:{name:'',goal:''},goals:[],savings:[],checkins:{},reminders:[],reviews:{},settings:{theme:'default',displayName:'Daylight'}});
+let data;
+try{data={...fresh(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){data=fresh()}
+data.goals=data.goals||[];data.savings=data.savings||[];data.checkins=data.checkins||{};data.reminders=data.reminders||[];data.reviews=data.reviews||{};data.settings={theme:'default',displayName:'Daylight',...(data.settings||{})};
+let selectedMood=null, calcExpr='0', timerSeconds=1500, timerInterval=null;
+const money=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n||0);
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate=d=>{try{return new Date(d+'T12:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}catch(e){return d}};
+function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2500)}
+function showPage(name){$$('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));$('#sidebar').classList.remove('open');const labels={home:['YOUR PERSONAL DASHBOARD','Selamat datang kembali ✨'],organizer:['PLAN WITH PURPOSE','Life Organizer'],money:['MONEY MINDFULLY','Money Tracker'],mood:['CHECK IN WITH YOURSELF','MoodSpace'],helper:['LITTLE TOOLS, BIG HELP','Daily Helper'],personal:['YOUR OWN LITTLE CORNER','My Personal Space'],more:['YOUR NEXT CHAPTER','Growth & Settings'],pro:['DAYLIGHT PRO TOOLS','Pro Dashboard']};$('#eyebrow').textContent=labels[name][0];$('#pageTitle').textContent=labels[name][1];}
+$$('#nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.goto)));
+$('#menuBtn').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
+$('#todayPill').textContent=new Date().toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+function renderTasks(){
+ const html=data.tasks.length?data.tasks.map(t=>`<div class="task ${t.done?'done':''}"><input type="checkbox" data-task-check="${t.id}" ${t.done?'checked':''} aria-label="Tandai selesai"><div class="task-text"><strong>${safe(t.title)}</strong><small>${safe(t.time||'Tanpa tenggat')}</small></div><span class="tag ${t.priority==='Penting'?'orange':t.priority==='Santai'?'green':'purple'}">${safe(t.priority)}</span><button class="text-btn" data-task-delete="${t.id}" aria-label="Hapus tugas">×</button></div>`).join(''):'<div class="empty"><span>🌿</span>Belum ada tugas. Mulai dengan satu hal kecil.</div>';
+ $('#taskList').innerHTML=html;
+ const open=data.tasks.filter(t=>!t.done), done=data.tasks.length-open.length, pct=data.tasks.length?Math.round(done/data.tasks.length*100):0;
+ $('#taskCount').textContent=`${open.length} tugas tersisa · ${done} selesai`;$('#taskProgressLabel').textContent=pct+'%';$('#taskProgress').style.width=pct+'%';
+ $('#homeTasks').textContent=`${done}/${data.tasks.length}`;$('#homeTaskList').innerHTML=(data.tasks.filter(t=>!t.done).slice(0,4).length?data.tasks.filter(t=>!t.done).slice(0,4):data.tasks.slice(-3)).map(t=>`<div class="task ${t.done?'done':''}"><input type="checkbox" data-task-check="${t.id}" ${t.done?'checked':''} aria-label="Tandai selesai"><div class="task-text"><strong>${safe(t.title)}</strong><small>${safe(t.time||'Tanpa tenggat')}</small></div><span class="tag ${t.priority==='Penting'?'orange':'purple'}">${safe(t.priority)}</span></div>`).join('')||'<div class="empty"><span>☀️</span>Tambahkan tugas pertama untuk mulai mengatur harimu.</div>';
+ $('#homeProgressLabel').textContent=pct+'%';$('#homeProgress').style.width=pct+'%';
+ $('#habitList').innerHTML=data.habits.length?data.habits.map(h=>`<div class="item-row"><input type="checkbox" data-habit="${h.id}" ${h.doneDate===todayISO()?'checked':''} aria-label="Tandai kebiasaan selesai"><div class="item-main"><strong>${safe(h.title)}</strong><small>${h.doneDate===todayISO()?'Selesai hari ini':'Sedikit demi sedikit'}</small></div><button class="text-btn" data-habit-delete="${h.id}">×</button></div>`).join(''):'<div class="empty">Tambahkan kebiasaan yang ingin kamu bangun.</div>';
 }
+$('#taskForm').addEventListener('submit',e=>{e.preventDefault();data.tasks.push({id:Date.now(),title:$('#taskTitle').value.trim(),time:$('#taskTime').value.trim(),priority:$('#taskPriority').value,done:false});e.target.reset();save();toast('Tugas berhasil ditambahkan.')});
+$('#taskList').addEventListener('change',e=>{if(e.target.dataset.taskCheck){const t=data.tasks.find(t=>t.id==e.target.dataset.taskCheck);if(t)t.done=e.target.checked;save()}});
+$('#homeTaskList').addEventListener('change',e=>{if(e.target.dataset.taskCheck){const t=data.tasks.find(t=>t.id==e.target.dataset.taskCheck);if(t)t.done=e.target.checked;save()}});
+document.addEventListener('click',e=>{const del=e.target.closest('[data-task-delete]');if(del){data.tasks=data.tasks.filter(t=>t.id!=del.dataset.taskDelete);save();toast('Tugas dihapus.')}const hd=e.target.closest('[data-habit-delete]');if(hd){data.habits=data.habits.filter(h=>h.id!=hd.dataset.habitDelete);save()}});
+$('#clearDone').addEventListener('click',()=>{data.tasks=data.tasks.filter(t=>!t.done);save();toast('Tugas selesai dibersihkan.')});
+$('#habitForm').addEventListener('submit',e=>{e.preventDefault();data.habits.push({id:Date.now(),title:$('#habitTitle').value.trim(),doneDate:''});e.target.reset();save();toast('Kebiasaan ditambahkan.')});
+$('#habitList').addEventListener('change',e=>{if(e.target.dataset.habit){const h=data.habits.find(h=>h.id==e.target.dataset.habit);if(h)h.doneDate=e.target.checked?todayISO():'';save()}});
+function renderMoney(){const inc=data.transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0),exp=data.transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);$('#moneyBalance').textContent=money(inc-exp);$('#moneyIncome').textContent=money(inc);$('#moneyExpense').textContent=money(exp);$('#homeBalance').textContent=money(inc-exp);$('#budgetInput').value=data.budget||'';const thisMonth=todayISO().slice(0,7),monthExp=data.transactions.filter(t=>t.type==='expense'&&t.date.startsWith(thisMonth)).reduce((a,t)=>a+t.amount,0),pct=data.budget?Math.min(100,Math.round(monthExp/data.budget*100)):0;$('#budgetLabel').textContent=data.budget?`${money(monthExp)} / ${money(data.budget)} (${Math.round(monthExp/data.budget*100)}%)`:'Belum diatur';$('#budgetProgress').style.width=pct+'%';$('#budgetProgress').style.background=pct>=100?'#df5b71':'linear-gradient(90deg,#7667f5,#aaa0ff)';
+ $('#transactionList').innerHTML=data.transactions.length?[...data.transactions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||b.id-a.id).map(t=>`<div class="item-row"><div class="stat-icon" style="background:${t.type==='income'?'var(--mint)':'var(--peach)'}">${t.type==='income'?'↙':'↗'}</div><div class="item-main"><strong>${safe(t.name)}</strong><small>${safe(t.category)} · ${fmtDate(t.date)}</small></div><div class="amount ${t.type}">${t.type==='income'?'+':'−'}${money(t.amount)}</div><button class="text-btn" data-tx-delete="${t.id}" aria-label="Hapus transaksi">×</button></div>`).join(''):'<div class="empty"><span>💸</span>Belum ada transaksi. Catat transaksi pertamamu.</div>'}
+$('#txDate').value=todayISO();
+$('#transactionForm').addEventListener('submit',e=>{e.preventDefault();data.transactions.push({id:Date.now(),type:$('#txType').value,amount:Number($('#txAmount').value),name:$('#txName').value.trim(),category:$('#txCategory').value,date:$('#txDate').value});e.target.reset();$('#txDate').value=todayISO();save();toast('Transaksi tersimpan.')});
+$('#transactionList').addEventListener('click',e=>{const b=e.target.closest('[data-tx-delete]');if(b){data.transactions=data.transactions.filter(t=>t.id!=b.dataset.txDelete);save();toast('Transaksi dihapus.')}});
+$('#saveBudget').addEventListener('click',()=>{data.budget=Math.max(0,Number($('#budgetInput').value)||0);save();toast('Target anggaran disimpan.')});
+$('#exportTx').addEventListener('click',()=>{const rows=[['Tanggal','Jenis','Keterangan','Kategori','Nominal'],...data.transactions.map(t=>[t.date,t.type,t.name,t.category,t.amount])];download('transaksi-daylight.csv',rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8;');});
+function renderMoods(){$('#homeMood').textContent=data.moods.length;$('#moodHistory').innerHTML=data.moods.length?[...data.moods].reverse().map(m=>`<div class="journal-entry"><div class="entry-top"><div><span style="font-size:23px;margin-right:7px">${safe(m.emoji)}</span><strong style="font-size:13px">${safe(m.mood)}</strong></div><small>${fmtDate(m.date)}</small><button class="text-btn" data-mood-delete="${m.id}">×</button></div>${m.note?`<p>${safe(m.note)}</p>`:''}${m.gratitude?`<p style="margin-top:8px;color:#8d7b43">♡ Syukur: ${safe(m.gratitude)}</p>`:''}</div>`).join(''):'<div class="empty"><span>🌷</span>Jurnalmu masih kosong. Bagaimana perasaanmu hari ini?</div>'}
+$('#moodOptions').addEventListener('click',e=>{const b=e.target.closest('[data-mood]');if(!b)return;selectedMood=b.dataset.mood;$$('.mood-option').forEach(x=>x.classList.toggle('selected',x===b))});
+$('#moodForm').addEventListener('submit',e=>{e.preventDefault();if(!selectedMood){toast('Pilih suasana hati terlebih dahulu.');return}const opt=$(`[data-mood="${selectedMood}"]`);data.moods.push({id:Date.now(),mood:selectedMood,emoji:opt.dataset.emoji,note:$('#moodNote').value.trim(),gratitude:$('#gratitude').value.trim(),date:todayISO()});e.target.reset();selectedMood=null;$$('.mood-option').forEach(x=>x.classList.remove('selected'));save();toast('Terima kasih sudah meluangkan waktu untuk diri sendiri.')});
+$('#moodHistory').addEventListener('click',e=>{const b=e.target.closest('[data-mood-delete]');if(b){data.moods=data.moods.filter(m=>m.id!=b.dataset.moodDelete);save();toast('Catatan dihapus.')}});
+const recipes=[['Nasi goreng sayur','Nasi, telur, wortel, sawi, dan bumbu sederhana.'],['Sup ayam hangat','Ayam, wortel, kentang, bawang putih, dan daun bawang.'],['Telur dadar sayur','Telur, daun bawang, wortel parut, dan sedikit garam.'],['Tumis tahu kecap','Tahu, bawang, kecap manis, dan sayuran favorit.'],['Pasta sederhana','Pasta, bawang putih, tomat, dan sedikit keju.'],['Oatmeal buah','Oat, susu, pisang, dan buah yang tersedia.'],['Tempe sambal kecap','Tempe goreng, cabai, bawang merah, dan kecap.'],['Bubur ayam rumahan','Nasi, suwiran ayam, daun bawang, dan bawang goreng.']];
+$('#recipeBtn').addEventListener('click',()=>{const r=recipes[Math.floor(Math.random()*recipes.length)];$('#recipeResult').hidden=false;$('#recipeResult').innerHTML=`<strong>${r[0]}</strong><br>${r[1]}`});
+function renderShopping(){$('#shoppingList').innerHTML=data.shopping.length?data.shopping.map(s=>`<div class="item-row" style="padding:9px 10px"><input type="checkbox" data-shop-check="${s.id}" ${s.done?'checked':''}><div class="item-main"><strong style="${s.done?'text-decoration:line-through;color:#9ca0b1':''}">${safe(s.name)}</strong></div><button class="text-btn" data-shop-delete="${s.id}">×</button></div>`).join(''):'<div class="empty" style="padding:17px">Daftar belanjamu kosong.</div>'}
+$('#shoppingForm').addEventListener('submit',e=>{e.preventDefault();data.shopping.push({id:Date.now(),name:$('#shoppingInput').value.trim(),done:false});e.target.reset();save()});
+$('#shoppingList').addEventListener('change',e=>{if(e.target.dataset.shopCheck){const s=data.shopping.find(s=>s.id==e.target.dataset.shopCheck);if(s)s.done=e.target.checked;save()}});
+$('#shoppingList').addEventListener('click',e=>{const b=e.target.closest('[data-shop-delete]');if(b){data.shopping=data.shopping.filter(s=>s.id!=b.dataset.shopDelete);save()}});
+const tips=[['Tarik napas.','Berhenti sebentar, tarik napas perlahan, dan lepaskan ketegangan di bahu.'],['Minum air.','Ambil jeda untuk minum air dan menyegarkan tubuh.'],['Gerakkan tubuh.','Berdiri, regangkan punggung, atau berjalan sebentar jika memungkinkan.'],['Rayakan progres.','Sebutkan satu hal yang sudah kamu lakukan dengan baik hari ini.'],['Istirahat itu penting.','Kamu tidak harus menyelesaikan semuanya sekaligus. Pilih prioritasmu.'],['Hubungi seseorang.','Kirim pesan singkat kepada orang yang membuatmu merasa terhubung.']];
+$('#tipBtn').addEventListener('click',()=>{const t=tips[Math.floor(Math.random()*tips.length)];$('#tipTitle').textContent=t[0];$('#tipText').textContent=t[1]});
+$('#chooseBtn').addEventListener('click',()=>{const choices=$('#choicesInput').value.split(',').map(s=>s.trim()).filter(Boolean);$('#choiceResult').hidden=false;$('#choiceResult').textContent=choices.length?`Pilihan hari ini: ${choices[Math.floor(Math.random()*choices.length)]}`:'Tulis setidaknya dua pilihan, pisahkan dengan koma.'});
+function renderCalc(){$('#calcDisplay').textContent=calcExpr}
+$('#calcKeys').addEventListener('click',e=>{const b=e.target.closest('[data-key]');if(!b)return;const k=b.dataset.key;if(k==='C')calcExpr='0';else if(k==='back')calcExpr=calcExpr.length>1?calcExpr.slice(0,-1):'0';else if(k==='='){try{if(!/^[0-9+\-*/().\s]+$/.test(calcExpr))throw 0;const result=Function('"use strict";return ('+calcExpr+')')();if(!Number.isFinite(result))throw 0;calcExpr=String(Math.round((result+Number.EPSILON)*1e8)/1e8)}catch(e){calcExpr='Tidak valid'}}else calcExpr=calcExpr==='0'||calcExpr==='Tidak valid'?k:calcExpr+k;renderCalc()});
+function renderTimer(){$('#timerDisplay').textContent=String(Math.floor(timerSeconds/60)).padStart(2,'0')+':'+String(timerSeconds%60).padStart(2,'0')}
+$('#timerStart').addEventListener('click',()=>{if(timerInterval){clearInterval(timerInterval);timerInterval=null;$('#timerStart').textContent='Lanjut';return}$('#timerStart').textContent='Jeda';timerInterval=setInterval(()=>{timerSeconds--;renderTimer();if(timerSeconds<=0){clearInterval(timerInterval);timerInterval=null;$('#timerStart').textContent='Mulai';toast('Sesi fokus selesai. Saatnya istirahat!');timerSeconds=0;renderTimer()}},1000)});
+$('#timerReset').addEventListener('click',()=>{clearInterval(timerInterval);timerInterval=null;timerSeconds=1500;renderTimer();$('#timerStart').textContent='Mulai'});
+function renderPersonal(){$('#homeWishes').textContent=data.wishes.length;const name=data.profile.name||'';$('#profileHeading').textContent=name?`Ruang ${name}`:'Ruang pribadiku';$('#avatarInitial').textContent=name?name.trim().charAt(0).toUpperCase():'K';$('#profileName').value=data.profile.name||'';$('#profileGoal').value=data.profile.goal||'';$('#notesList').innerHTML=data.notes.length?[...data.notes].reverse().map(n=>`<div class="note-card"><div style="display:flex;justify-content:space-between;gap:8px"><strong>${safe(n.title)}</strong><button class="text-btn" data-note-delete="${n.id}">×</button></div><small>${fmtDate(n.date)}</small><p>${safe(n.body)}</p></div>`).join(''):'<div class="empty">Belum ada catatan yang disimpan.</div>';$('#wishList').innerHTML=data.wishes.length?data.wishes.map(w=>`<div class="wish ${w.done?'done':''}"><input type="checkbox" data-wish-check="${w.id}" ${w.done?'checked':''}><span>${safe(w.name)}</span><button class="text-btn" data-wish-delete="${w.id}">×</button></div>`).join(''):'<div class="empty">Wishlist-mu dimulai dari satu impian kecil.</div>'}
+$('#noteForm').addEventListener('submit',e=>{e.preventDefault();data.notes.push({id:Date.now(),title:$('#noteTitle').value.trim(),body:$('#noteBody').value.trim(),date:todayISO()});e.target.reset();save();toast('Catatan disimpan.')});
+$('#notesList').addEventListener('click',e=>{const b=e.target.closest('[data-note-delete]');if(b){data.notes=data.notes.filter(n=>n.id!=b.dataset.noteDelete);save()}});
+$('#wishForm').addEventListener('submit',e=>{e.preventDefault();data.wishes.push({id:Date.now(),name:$('#wishInput').value.trim(),done:false});e.target.reset();save();toast('Wishlist ditambahkan.')});
+$('#wishList').addEventListener('change',e=>{if(e.target.dataset.wishCheck){const w=data.wishes.find(w=>w.id==e.target.dataset.wishCheck);if(w)w.done=e.target.checked;save()}});
+$('#wishList').addEventListener('click',e=>{const b=e.target.closest('[data-wish-delete]');if(b){data.wishes=data.wishes.filter(w=>w.id!=b.dataset.wishDelete);save()}});
+$('#profileForm').addEventListener('submit',e=>{e.preventDefault();data.profile={name:$('#profileName').value.trim(),goal:$('#profileGoal').value.trim()};save();toast('Profil diperbarui.')});
+$('#editProfile').addEventListener('click',()=>{$('#profileName').focus();$('#profileName').scrollIntoView({behavior:'smooth',block:'center'})});
+function download(filename,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url)}
+$('#exportBackup').addEventListener('click',()=>download('daylight-backup-'+todayISO()+'.json',JSON.stringify(data,null,2),'application/json'));
+$('#resetData').addEventListener('click',()=>{if(confirm('Yakin ingin menghapus semua data Daylight dari browser ini? Tindakan ini tidak dapat dibatalkan.')){data=fresh();save();toast('Data lokal telah dihapus.')}});
 
-function saveData(key, data) {
-  try {
-    localStorage.setItem(key, JSON.stringify(data));
-  } catch(e) {
-    console.error("Gagal menyimpan ke LocalStorage:", e);
-  }
+// Growth & Settings: semua data disimpan lokal di browser.
+const affirmations=[
+ 'Aku boleh bertumbuh dengan kecepatanku sendiri.',
+ 'Langkah kecil yang konsisten tetap membawa perubahan.',
+ 'Istirahat juga bagian dari produktivitas.',
+ 'Aku tidak harus sempurna untuk memulai.',
+ 'Hari ini adalah kesempatan untuk mencoba lagi.',
+ 'Aku layak mendapatkan waktu, perhatian, dan kebaikan.',
+ 'Satu hal selesai lebih baik daripada seribu hal hanya dipikirkan.'
+];
+function todayCheckin(){return data.checkins[todayISO()]||{water:0,sleep:8,energy:'2'}}
+function renderCheckin(){
+ const c=todayCheckin();$('#checkinDate').textContent=fmtDate(todayISO());
+ $('#waterInput').value=c.water;$('#sleepInput').value=c.sleep;$('#energyInput').value=c.energy;
+ $('#waterLabel').textContent=`${c.water}/8 gelas`;$('#waterProgress').style.width=Math.min(100,c.water/8*100)+'%';
+ $('#sleepLabel').textContent=`${c.sleep}/8 jam`;$('#sleepProgress').style.width=Math.min(100,c.sleep/8*100)+'%';
 }
-
-let money = loadData("pro_money");
-let shopping = loadData("pro_shopping");
-let tasks = loadData("pro_tasks");
-let habits = loadData("pro_habits");
-let goals = loadData("pro_goals");
-
-// FORMAT WAKTU & CURRENCY
-$("currentDateDisplay").textContent = new Date().toLocaleDateString("id-ID", {
-  weekday: "long", day: "numeric", month: "long", year: "numeric"
-});
-
-function rupiah(num) {
-  return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(num || 0);
+$('#saveCheckin').addEventListener('click',()=>{data.checkins[todayISO()]={water:Math.max(0,Number($('#waterInput').value)||0),sleep:Math.max(0,Number($('#sleepInput').value)||0),energy:$('#energyInput').value};save();renderCheckin();toast('Daily check-in tersimpan 🌱')});
+$('#newAffirmation').addEventListener('click',()=>{$('#affirmationText').textContent=affirmations[Math.floor(Math.random()*affirmations.length)]});
+function renderGoals(){
+ $('#goalList').innerHTML=data.goals.length?data.goals.map(g=>`<div class="extra-item"><div style="flex:1"><strong>${safe(g.name)}</strong><small>${g.progress||0} dari ${g.target}</small><div class="progress" style="margin-top:7px"><span style="width:${Math.min(100,(g.progress||0)/g.target*100)}%"></span></div></div><div class="item-actions"><button class="tiny-btn" data-goal-add="${g.id}">+1</button><button class="tiny-btn danger" data-goal-delete="${g.id}">×</button></div></div>`).join(''):'<div class="empty">Tambahkan satu tujuan yang berarti untukmu.</div>';
 }
-
-function escapeHtml(text) {
-  if (!text) return "";
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+$('#goalForm').addEventListener('submit',e=>{e.preventDefault();data.goals.push({id:Date.now(),name:$('#goalName').value.trim(),target:Math.max(1,Number($('#goalTarget').value)||1),progress:0});e.target.reset();$('#goalTarget').value=10;save();toast('Goal baru ditambahkan!')});
+$('#goalList').addEventListener('click',e=>{const add=e.target.closest('[data-goal-add]'),del=e.target.closest('[data-goal-delete]');if(add){const g=data.goals.find(x=>x.id==add.dataset.goalAdd);if(g)g.progress=Math.min(g.target,(g.progress||0)+1);save()}if(del){data.goals=data.goals.filter(x=>x.id!=del.dataset.goalDelete);save()}});
+function renderSavings(){
+ $('#savingList').innerHTML=data.savings.length?data.savings.map(a=>`<div class="extra-item"><div style="flex:1"><strong>${safe(a.name)}</strong><small>${money(a.current||0)} dari ${money(a.target)}</small><div class="progress" style="margin-top:7px"><span style="width:${Math.min(100,(a.current||0)/a.target*100)}%"></span></div></div><div class="item-actions"><button class="tiny-btn" data-saving-add="${a.id}">+ Rp</button><button class="tiny-btn danger" data-saving-delete="${a.id}">×</button></div></div>`).join(''):'<div class="empty">Buat tantangan tabungan pertamamu.</div>';
 }
-
-// SWITCH TAB AMAN
-function switchTab(btnElement, tabId) {
-  document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-  document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
-
-  const targetTab = $(`tab-${tabId}`);
-  if (targetTab) targetTab.classList.add("active");
-  if (btnElement) btnElement.classList.add("active");
-
-  renderAll();
+$('#savingForm').addEventListener('submit',e=>{e.preventDefault();data.savings.push({id:Date.now(),name:$('#savingName').value.trim(),target:Math.max(1,Number($('#savingTarget').value)||1),current:0});e.target.reset();save();toast('Tantangan tabungan dibuat 🐷')});
+$('#savingList').addEventListener('click',e=>{const add=e.target.closest('[data-saving-add]'),del=e.target.closest('[data-saving-delete]');if(add){const a=data.savings.find(x=>x.id==add.dataset.savingAdd);if(!a)return;const raw=prompt('Berapa nominal yang ingin ditambahkan? (Rp)');if(raw===null)return;const amount=Number(raw);if(!Number.isFinite(amount)||amount<=0){toast('Masukkan nominal yang valid.');return}a.current=(a.current||0)+amount;save()}if(del){data.savings=data.savings.filter(x=>x.id!=del.dataset.savingDelete);save()}});
+function renderReview(){
+ const tasks=data.tasks.filter(t=>t.done).length;$('#reviewTasks').textContent=tasks;$('#reviewHabits').textContent=data.habits.filter(h=>h.done).length;
+ $('#reviewMoods').textContent=data.moods.length;$('#reviewSavings').textContent=money(data.savings.reduce((n,a)=>n+(a.current||0),0));
+ const r=data.reviews[todayISO()]||{};$('#reviewWin').value=r.win||'';$('#reviewImprove').value=r.improve||'';
+ const badges=[['🌱','Mulai bergerak','Selesaikan tugas pertama',tasks>=1],['✅','Produktif','Selesaikan 5 tugas',tasks>=5],['📔','Jujur pada diri','Tulis jurnal mood',data.moods.length>=1],['🎯','Punya arah','Buat goal pertama',data.goals.length>=1],['🐷','Penabung','Mulai tantangan tabungan',data.savings.length>=1],['💧','Rawat diri','Minum 8 gelas hari ini',(todayCheckin().water||0)>=8]];
+ $('#achievementList').innerHTML=badges.map(b=>`<div class="badge ${b[3]?'unlocked':''}"><strong>${b[0]} ${b[1]}</strong>${b[3]?'Terbuka!':b[2]}</div>`).join('');
 }
-
-// === KEUANGAN ===
-$("moneyForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const name = $("moneyName").value.trim();
-  const amount = Number($("moneyAmount").value);
-  const category = $("moneyCategory").value;
-  const type = $("moneyType").value;
-
-  if (!name || amount <= 0) return;
-
-  money.unshift({
-    id: Date.now(),
-    name,
-    amount,
-    category,
-    type,
-    date: new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
-  });
-
-  saveData("pro_money", money);
-  renderAll();
-  this.reset();
-});
-
-function getMoneySummary() {
-  const income = money.filter(x => x.type === "in").reduce((s, x) => s + (x.amount || 0), 0);
-  const expense = money.filter(x => x.type === "out").reduce((s, x) => s + (x.amount || 0), 0);
-  return { income, expense, balance: income - expense };
+$('#refreshReview').addEventListener('click',()=>{renderReview();toast('Ringkasan diperbarui.')});
+$('#saveReview').addEventListener('click',()=>{data.reviews[todayISO()]={win:$('#reviewWin').value.trim(),improve:$('#reviewImprove').value.trim()};save();toast('Refleksi mingguan disimpan.')});
+function renderReminders(){
+ $('#reminderList').innerHTML=data.reminders.length?data.reminders.map(r=>`<div class="extra-item"><div><strong>${safe(r.name)}</strong><small>Setiap hari • ${safe(r.time)}</small></div><button class="tiny-btn danger" data-reminder-delete="${r.id}">Hapus</button></div>`).join(''):'<div class="empty">Belum ada pengingat.</div>';
 }
-
-function renderMoney() {
-  const list = $("moneyList");
-  list.innerHTML = "";
-
-  money.forEach(item => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div class="item-info">
-        <div class="item-title">${escapeHtml(item.name)} <span class="badge badge-indigo">${escapeHtml(item.category || 'Umum')}</span></div>
-        <div class="item-sub">${item.date || 'Baru saja'}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-weight:700; color:${item.type === 'in' ? 'var(--success)' : 'var(--danger)'}">
-          ${item.type === 'in' ? '+' : '-'}${rupiah(item.amount)}
-        </div>
-      </div>
-      <button onclick="deleteMoney(${item.id})" class="btn-danger btn-sm">×</button>
-    `;
-    list.append(li);
-  });
+$('#reminderForm').addEventListener('submit',e=>{e.preventDefault();data.reminders.push({id:Date.now(),name:$('#reminderName').value.trim(),time:$('#reminderTime').value,last:''});e.target.reset();save();if('Notification' in window && Notification.permission==='default')Notification.requestPermission();toast('Pengingat ditambahkan. Biarkan Daylight terbuka agar aktif.')});
+$('#reminderList').addEventListener('click',e=>{const b=e.target.closest('[data-reminder-delete]');if(b){data.reminders=data.reminders.filter(r=>r.id!=b.dataset.reminderDelete);save()}});
+function checkReminders(){
+ const now=new Date(),hh=String(now.getHours()).padStart(2,'0'),mm=String(now.getMinutes()).padStart(2,'0'),key=todayISO()+' '+hh+':'+mm;
+ data.reminders.forEach(r=>{if(r.time===hh+':'+mm&&r.last!==key){r.last=key;toast('🔔 '+r.name);if('Notification'in window&&Notification.permission==='granted')new Notification('Daylight reminder',{body:r.name})}});
 }
-
-function deleteMoney(id) {
-  money = money.filter(x => x.id !== id);
-  saveData("pro_money", money);
-  renderAll();
+function applyTheme(theme){const allowed=['default','pink','sage','ocean','sunset','dark'];data.settings.theme=allowed.includes(theme)?theme:'default';document.body.dataset.theme=data.settings.theme;document.querySelectorAll('.theme-choice').forEach(b=>b.classList.toggle('selected',b.dataset.theme===data.settings.theme));}
+document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>{applyTheme(b.dataset.theme);save();toast('Tema diperbarui ✨')}));
+$('#saveDisplayName').addEventListener('click',()=>{data.settings.displayName=$('#displayName').value.trim()||'Daylight';save();toast('Nama tampilan disimpan.')});
+function renderSearch(){
+ const q=$('#globalSearch').value.trim().toLowerCase();if(!q){$('#searchResults').innerHTML='<div class="empty">Mulai mengetik untuk mencari data Daylight.</div>';return}
+ const found=[];const add=(kind,items,field)=>items.forEach(x=>{if(String(x[field]||'').toLowerCase().includes(q))found.push({kind,title:x[field],detail:x.body||x.note||x.date||'',page:kind==='Tugas'?'organizer':kind==='Catatan'||kind==='Wishlist'?'personal':kind==='Jurnal'?'mood':'money'})});
+ add('Tugas',data.tasks,'title');add('Catatan',data.notes,'title');add('Wishlist',data.wishes,'name');add('Jurnal',data.moods,'note');add('Transaksi',data.transactions,'name');
+ $('#searchResults').innerHTML=found.length?found.slice(0,30).map(x=>`<div class="extra-item"><div><strong>${safe(x.kind)} · ${safe(x.title)}</strong><small>${safe(x.detail)}</small></div><button class="tiny-btn" data-search-page="${x.page}">Buka</button></div>`).join(''):'<div class="empty">Tidak ada hasil yang cocok.</div>';
 }
+$('#globalSearch').addEventListener('input',renderSearch);
+$('#searchResults').addEventListener('click',e=>{const b=e.target.closest('[data-search-page]');if(b)showPage(b.dataset.searchPage)});
+$('#restoreBtn').addEventListener('click',()=>$('#restoreFile').click());
+$('#restoreFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());if(!confirm('Pulihkan backup ini? Data lokal saat ini akan diganti.'))return;if(!imported||typeof imported!=='object')throw new Error('Format tidak valid');data={...fresh(),...imported};data.goals=data.goals||[];data.savings=data.savings||[];data.checkins=data.checkins||{};data.reminders=data.reminders||[];data.reviews=data.reviews||{};data.settings={theme:'default',displayName:'Daylight',...(data.settings||{})};save();toast('Backup berhasil dipulihkan.')}catch(err){toast('File backup tidak valid.')}finally{e.target.value=''}});
+const oldSave=save;
+save=function(){oldSave();renderGoals();renderSavings();renderCheckin();renderReview();renderReminders();applyTheme(data.settings.theme);$('#displayName').value=data.settings.displayName||'Daylight'};
+applyTheme(data.settings.theme);
+$('#displayName').value=data.settings.displayName||'Daylight';
+renderGoals();renderSavings();renderCheckin();renderReview();renderReminders();
+setInterval(checkReminders,15000);
 
-// === BELANJA ===
-$("shoppingForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const name = $("shoppingName").value.trim();
-  const price = Number($("shoppingPrice").value) || 0;
-
-  if (!name) return;
-
-  shopping.push({ id: Date.now(), name, price, done: false });
-  saveData("pro_shopping", shopping);
-  renderAll();
-  this.reset();
-});
-
-function renderShopping() {
-  const list = $("shoppingList");
-  list.innerHTML = "";
-
-  shopping.forEach(item => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div class="item-info ${item.done ? 'text-done' : ''}">
-        <div class="item-title">${escapeHtml(item.name)}</div>
-        <div class="item-sub">${item.price ? rupiah(item.price) : 'Tanpa estimasi harga'}</div>
-      </div>
-      <button onclick="toggleShopping(${item.id})" class="${item.done ? 'btn-secondary' : 'btn-primary'} btn-sm">
-        ${item.done ? 'Batal' : '✓ Dibeli'}
-      </button>
-      <button onclick="deleteShopping(${item.id})" class="btn-danger btn-sm">×</button>
-    `;
-    list.append(li);
-  });
-}
-
-function toggleShopping(id) {
-  const item = shopping.find(x => x.id === id);
-  if (item) item.done = !item.done;
-  saveData("pro_shopping", shopping);
-  renderAll();
-}
-
-function deleteShopping(id) {
-  shopping = shopping.filter(x => x.id !== id);
-  saveData("pro_shopping", shopping);
-  renderAll();
-}
-
-function clearDoneShopping() {
-  shopping = shopping.filter(x => !x.done);
-  saveData("pro_shopping", shopping);
-  renderAll();
-}
-
-// === TUGAS & KEBIASAAN ===
-$("taskForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const name = $("taskName").value.trim();
-  if (!name) return;
-
-  tasks.push({ id: Date.now(), name, done: false });
-  saveData("pro_tasks", tasks);
-  renderAll();
-  this.reset();
-});
-
-function renderTasks() {
-  const list = $("taskList");
-  list.innerHTML = "";
-
-  tasks.forEach(item => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div class="item-info ${item.done ? 'text-done' : ''}">
-        <div class="item-title">${escapeHtml(item.name)}</div>
-      </div>
-      <button onclick="toggleTask(${item.id})" class="${item.done ? 'btn-secondary' : 'btn-primary'} btn-sm">
-        ${item.done ? 'Selesai' : 'Kerjakan'}
-      </button>
-      <button onclick="deleteTask(${item.id})" class="btn-danger btn-sm">×</button>
-    `;
-    list.append(li);
-  });
-}
-
-function toggleTask(id) {
-  const item = tasks.find(x => x.id === id);
-  if (item) item.done = !item.done;
-  saveData("pro_tasks", tasks);
-  renderAll();
-}
-
-function deleteTask(id) {
-  tasks = tasks.filter(x => x.id !== id);
-  saveData("pro_tasks", tasks);
-  renderAll();
-}
-
-// HABITS
-$("habitForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const name = $("habitName").value.trim();
-  if (!name) return;
-
-  habits.push({ id: Date.now(), name, streak: 0, lastDone: "" });
-  saveData("pro_habits", habits);
-  renderAll();
-  this.reset();
-});
-
-function renderHabits() {
-  const list = $("habitList");
-  list.innerHTML = "";
-  const today = new Date().toISOString().slice(0, 10);
-
-  habits.forEach(item => {
-    const doneToday = item.lastDone === today;
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div class="item-info">
-        <div class="item-title">${escapeHtml(item.name)}</div>
-        <div class="item-sub">🔥 Streak: <strong>${item.streak || 0} hari</strong></div>
-      </div>
-      <button onclick="checkHabit(${item.id})" class="${doneToday ? 'btn-secondary' : 'btn-primary'} btn-sm" ${doneToday ? 'disabled' : ''}>
-        ${doneToday ? '✓ Checked' : 'Check-in'}
-      </button>
-      <button onclick="deleteHabit(${item.id})" class="btn-danger btn-sm">×</button>
-    `;
-    list.append(li);
-  });
-}
-
-function checkHabit(id) {
-  const today = new Date().toISOString().slice(0, 10);
-  const habit = habits.find(x => x.id === id);
-  if (habit && habit.lastDone !== today) {
-    habit.streak = (habit.streak || 0) + 1;
-    habit.lastDone = today;
-    saveData("pro_habits", habits);
-    renderAll();
-  }
-}
-
-function deleteHabit(id) {
-  habits = habits.filter(x => x.id !== id);
-  saveData("pro_habits", habits);
-  renderAll();
-}
-
-// === TARGET TABUNGAN ===
-$("goalForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const name = $("goalName").value.trim();
-  const target = Number($("goalTarget").value);
-
-  if (!name || target <= 0) return;
-
-  goals.push({ id: Date.now(), name, target, current: 0 });
-  saveData("pro_goals", goals);
-  renderAll();
-  this.reset();
-});
-
-function renderGoals() {
-  const container = $("goalList");
-  container.innerHTML = "";
-
-  if (goals.length === 0) {
-    container.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">Belum ada target tabungan.</p>`;
-    return;
-  }
-
-  goals.forEach(item => {
-    const percent = Math.min(100, Math.round(((item.current || 0) / item.target) * 100));
-    const div = document.createElement("div");
-    div.className = "stat-box";
-    div.style.marginBottom = "10px";
-    div.innerHTML = `
-      <div class="item-title" style="display:flex; justify-content:space-between;">
-        <span>${escapeHtml(item.name)}</span>
-        <span>${percent}%</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" style="width: ${percent}%;"></div>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:12px;">
-        <span style="color:var(--text-secondary);">${rupiah(item.current)} / ${rupiah(item.target)}</span>
-        <div>
-          <button onclick="addGoalMoney(${item.id})" class="btn-primary btn-sm">+ Tabung</button>
-          <button onclick="deleteGoal(${item.id})" class="btn-danger btn-sm">×</button>
-        </div>
-      </div>
-    `;
-    container.append(div);
-  });
-}
-
-function addGoalMoney(id) {
-  const amount = prompt("Masukkan jumlah uang yang ingin ditabung (Rp):");
-  const num = Number(amount);
-  if (num && num > 0) {
-    const goal = goals.find(x => x.id === id);
-    if (goal) {
-      goal.current = (goal.current || 0) + num;
-      saveData("pro_goals", goals);
-      renderAll();
-    }
-  }
-}
-
-function deleteGoal(id) {
-  goals = goals.filter(x => x.id !== id);
-  saveData("pro_goals", goals);
-  renderAll();
-}
-
-// === DASHBOARD ===
-function renderDashboard() {
-  const { income, expense, balance } = getMoneySummary();
-  $("dashBalance").textContent = rupiah(balance);
-  $("dashIncome").textContent = rupiah(income);
-  $("dashExpense").textContent = rupiah(expense);
-
-  const pendingTasks = tasks.filter(x => !x.done).length;
-  $("dashTasks").textContent = `${pendingTasks} Tugas`;
-
-  const pendingShoppingTotal = shopping.filter(x => !x.done).reduce((s, x) => s + (x.price || 0), 0);
-  $("dashShoppingPending").textContent = rupiah(pendingShoppingTotal);
-
-  const dashShopList = $("dashShoppingList");
-  dashShopList.innerHTML = "";
-  shopping.filter(x => !x.done).slice(0, 3).forEach(x => {
-    const li = document.createElement("li");
-    li.style.padding = "8px 12px";
-    li.innerHTML = `<span style="font-size:13px;">${escapeHtml(x.name)}</span>`;
-    dashShopList.append(li);
-  });
-
-  const dashHabList = $("dashHabitList");
-  dashHabList.innerHTML = "";
-  habits.slice(0, 3).forEach(x => {
-    const li = document.createElement("li");
-    li.style.padding = "8px 12px";
-    li.innerHTML = `<span style="font-size:13px;">${escapeHtml(x.name)}</span> <span class="badge badge-indigo">🔥 ${x.streak || 0} hari</span>`;
-    dashHabList.append(li);
-  });
-}
-
-// === KALKULATOR & NOTES ===
-function useCurrentBalance() {
-  const { balance } = getMoneySummary();
-  $("budget").value = balance > 0 ? balance : 0;
-}
-
-function calculateDays() {
-  const budget = Number($("budget").value);
-  const daily = Number($("daily").value);
-
-  if (budget <= 0 || daily <= 0) {
-    $("calculationResult").textContent = "Masukkan budget dan pengeluaran harian yang valid.";
-    return;
-  }
-
-  const days = Math.floor(budget / daily);
-  $("calculationResult").textContent = `Uangmu cukup bertahan selama ± ${days} hari.`;
-}
-
-const quickNotesEl = $("quickNotes");
-try {
-  quickNotesEl.value = localStorage.getItem("pro_notes") || "";
-} catch {
-  quickNotesEl.value = "";
-}
-quickNotesEl.addEventListener("input", function() {
-  try {
-    localStorage.setItem("pro_notes", this.value);
-  } catch {}
-});
-
-// === EXPORT & IMPORT ===
-function exportCSV() {
-  if (money.length === 0) return alert("Belum ada data keuangan untuk diekspor.");
-
-  let csv = "Tanggal,Keterangan,Kategori,Tipe,Jumlah (Rp)\n";
-  money.forEach(m => {
-    csv += `"${m.date || ''}","${m.name || ''}","${m.category || 'Umum'}","${m.type === 'in' ? 'Pemasukan' : 'Pengeluaran'}",${m.amount || 0}\n`;
-  });
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `rekap_keuangan_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-
-function exportJSON() {
-  const data = { money, shopping, tasks, habits, goals, notes: quickNotesEl.value };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `backup_aktivitas_pro_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-}
-
-function importJSON(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    try {
-      const data = JSON.parse(evt.target.result);
-      if (data) {
-        money = data.money || [];
-        shopping = data.shopping || [];
-        tasks = data.tasks || [];
-        habits = data.habits || [];
-        goals = data.goals || [];
-        if (data.notes) {
-          quickNotesEl.value = data.notes;
-          try { localStorage.setItem("pro_notes", data.notes); } catch {}
-        }
-
-        saveData("pro_money", money);
-        saveData("pro_shopping", shopping);
-        saveData("pro_tasks", tasks);
-        saveData("pro_habits", habits);
-        saveData("pro_goals", goals);
-
-        renderAll();
-        alert("Data berhasil diimpor!");
-      }
-    } catch {
-      alert("Gagal membaca file JSON backup.");
-    }
-  };
-  reader.readAsText(file);
-}
-
-function clearAllData() {
-  if (confirm("Apakah kamu yakin ingin menghapus SELURUH data aplikasi ini?")) {
-    try { localStorage.clear(); } catch {}
-    money = []; shopping = []; tasks = []; habits = []; goals = [];
-    quickNotesEl.value = "";
-    renderAll();
-  }
-}
-
-function renderAll() {
-  renderDashboard();
-  renderMoney();
-  renderShopping();
-  renderTasks();
-  renderHabits();
-  renderGoals();
-}
-
-// INISIALISASI
+function renderAll(){renderTasks();renderMoney();renderMoods();renderShopping();renderPersonal();renderGoals();renderSavings();renderCheckin();renderReview();renderReminders()}
 renderAll();
-</script>
 
+// Daylight Pro modules: calendar, analytics, Kanban, daily planner, assistant and category budgets.
+const PROKEY='daylight-pro-v1';
+const proFresh=()=>({events:[],kanban:{},planner:[],categoryBudgets:{}});
+let proData;try{proData={...proFresh(),...JSON.parse(localStorage.getItem(PROKEY)||'{}')}}catch(e){proData=proFresh()}
+proData.events=proData.events||[];proData.kanban=proData.kanban||{};proData.planner=proData.planner||[];proData.categoryBudgets=proData.categoryBudgets||{};
+function proSave(){localStorage.setItem(PROKEY,JSON.stringify(proData));renderPro()}
+let calMonth=new Date().getMonth(),calYear=new Date().getFullYear();
+function renderCalendar(){const first=new Date(calYear,calMonth,1),days=new Date(calYear,calMonth+1,0).getDate(),offset=(first.getDay()+6)%7;$('#calTitle').textContent=first.toLocaleDateString('id-ID',{month:'long',year:'numeric'});let h=['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(x=>`<div class="calendar-head">${x}</div>`).join('');for(let i=0;i<offset;i++)h+='<div></div>';for(let d=1;d<=days;d++){const iso=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,ev=proData.events.some(x=>x.date===iso);h+=`<button class="calendar-cell ${iso===todayISO()?'today':''} ${ev?'has-event':''}" data-calendar-date="${iso}">${d}</button>`}$('#calendarGrid').innerHTML=h;$('#eventDate').value=$('#eventDate').value||todayISO();const list=proData.events.filter(x=>x.date>=todayISO()).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).slice(0,8);$('#eventList').innerHTML=list.length?list.map(x=>`<div class="pro-item"><div><strong>${safe(x.name)}</strong><small>${fmtDate(x.date)} ${safe(x.time||'')}</small></div><button class="tiny-btn danger" data-event-delete="${x.id}">Hapus</button></div>`).join(''):'<div class="empty">Belum ada agenda mendatang.</div>'}
+$('#calPrev').addEventListener('click',()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()});$('#calNext').addEventListener('click',()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()});$('#calendarGrid').addEventListener('click',e=>{const b=e.target.closest('[data-calendar-date]');if(b)$('#eventDate').value=b.dataset.calendarDate});$('#eventForm').addEventListener('submit',e=>{e.preventDefault();proData.events.push({id:Date.now(),name:$('#eventName').value.trim(),date:$('#eventDate').value,time:$('#eventTime').value});e.target.reset();$('#eventDate').value=todayISO();proSave();toast('Agenda tersimpan.')});$('#eventList').addEventListener('click',e=>{const b=e.target.closest('[data-event-delete]');if(b){proData.events=proData.events.filter(x=>x.id!=b.dataset.eventDelete);proSave()}});
+function renderKanban(){const tasks=data.tasks;const cols=[['todo','📌 Rencana'],['doing','⚡ Dikerjakan'],['done','✅ Selesai']];$('#kanbanBoard').innerHTML=cols.map(([key,label])=>`<div class="kan-col"><h4>${label} (${tasks.filter(t=>(proData.kanban[t.id]|| (t.done?'done':'todo'))===key).length})</h4>${tasks.filter(t=>(proData.kanban[t.id]||(t.done?'done':'todo'))===key).map(t=>`<div class="kan-task"><strong>${safe(t.title)}</strong><small style="display:block;color:var(--muted);margin-top:4px">${safe(t.priority||'Normal')}</small></div>`).join('')||'<small style="color:var(--muted)">Kosong</small>'}</div>`).join('');$('#kanTask').innerHTML='<option value="">Pilih tugas yang sudah ada</option>'+tasks.map(t=>`<option value="${t.id}">${safe(t.title)}</option>`).join('')}
+$('#kanMove').addEventListener('click',()=>{const id=$('#kanTask').value;if(!id){toast('Pilih tugas terlebih dahulu.');return}proData.kanban[id]=$('#kanStatus').value;const t=data.tasks.find(x=>x.id==id);if(t)t.done=$('#kanStatus').value==='done';proSave();save();toast('Status Kanban diperbarui.')});
+function renderPro(){renderCalendar();renderKanban();const total=data.tasks.length,done=data.tasks.filter(t=>t.done).length;$('#proDone').textContent=done;$('#proRate').textContent=(total?Math.round(done/total*100):0)+'%';$('#proHabits').textContent=data.habits.filter(h=>h.doneDate===todayISO()).length;$('#productivityBars').innerHTML=[['Selesai',done,total],['Belum selesai',total-done,total],['Agenda 7 hari',proData.events.filter(e=>e.date>=todayISO()&&e.date<=new Date(Date.now()+6*86400000).toISOString().slice(0,10)).length,Math.max(1,proData.events.length)]].map(([n,v,max])=>`<div class="bar-line"><span>${n}</span><div class="bar-track"><span style="width:${Math.min(100,Math.round(v/Math.max(1,max)*100))}%"></span></div><strong>${v}</strong></div>`).join('');let streak=0;for(let i=0;i<365;i++){const d=new Date();d.setDate(d.getDate()-i);const iso=d.toISOString().slice(0,10);if(data.habits.some(h=>h.doneDate===iso))streak++;else if(i>0)break}$('#streakValue').textContent=streak+' hari';$('#streakText').textContent=streak?'Ada kebiasaan yang tercatat '+streak+' hari berturut-turut. Pertahankan dengan target yang realistis.':'Mulai streak dengan menandai setidaknya satu kebiasaan setiap hari.';
+const tx=data.transactions,month=todayISO().slice(0,7),prevDate=new Date();prevDate.setDate(1);prevDate.setMonth(prevDate.getMonth()-1);const prev=prevDate.toISOString().slice(0,7);const sum=(arr,type)=>arr.filter(t=>t.type===type).reduce((a,t)=>a+(Number(t.amount)||0),0),inc=sum(tx.filter(t=>t.date?.startsWith(month)),'income'),exp=sum(tx.filter(t=>t.date?.startsWith(month)),'expense'),prevExp=sum(tx.filter(t=>t.date?.startsWith(prev)),'expense');$('#proIncome').textContent=money(inc);$('#proExpense').textContent=money(exp);$('#proCompare').textContent=prevExp?`${Math.round((exp-prevExp)/prevExp*100)}%`:'—';const cats={};tx.filter(t=>t.type==='expense'&&t.date?.startsWith(month)).forEach(t=>cats[t.category||'Lainnya']=(cats[t.category||'Lainnya']||0)+Number(t.amount||0));const catEntries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);$('#financeBars').innerHTML=catEntries.length?catEntries.map(([n,v])=>`<div class="bar-line"><span>${safe(n)}</span><div class="bar-track"><span style="width:${Math.round(v/Math.max(1,...catEntries.map(x=>x[1]))*100)}%"></span></div><strong>${money(v)}</strong></div>`).join(''):'<div class="empty">Tambahkan transaksi pengeluaran untuk melihat analitik.</div>';$('#categoryBudgetList').innerHTML=Object.entries(proData.categoryBudgets).map(([n,v])=>{const spent=cats[n]||0,pct=Math.min(100,Math.round(spent/v*100));return `<div class="pro-item"><div style="flex:1"><strong>${safe(n)} · ${money(spent)} / ${money(v)}</strong><div class="bar-track" style="margin-top:7px"><span style="width:${pct}%;background:${spent>v?'#df5b71':''}"></span></div></div><button class="tiny-btn danger" data-budget-delete="${safe(n)}">×</button></div>`}).join('')||'<div class="empty">Belum ada anggaran kategori.</div>';$('#plannerList').innerHTML=proData.planner.slice().sort((a,b)=>a.time.localeCompare(b.time)).map(x=>`<div class="pro-item"><div><strong>${safe(x.time)} · ${safe(x.title)}</strong></div><button class="tiny-btn danger" data-plan-delete="${x.id}">Hapus</button></div>`).join('')||'<div class="empty">Susun blok waktu untuk hari ini.</div>';$('#smartInsights').innerHTML=[`<div class="pro-item">${total-done} tugas masih belum selesai.</div>`,`<div class="pro-item">Pengeluaran bulan ini: ${money(exp)}.</div>`,`<div class="pro-item">${data.moods.length?`Jurnal mood tersimpan ${data.moods.length} kali.`:'Belum ada jurnal mood. Coba check-in singkat hari ini.'}</div>`,`<div class="pro-item">${proData.events.filter(e=>e.date===todayISO()).length} agenda untuk hari ini.</div>`].join('');$('#notificationStatus').innerHTML=`<div class="pro-item">Status browser: <strong>${('Notification'in window)?Notification.permission:'tidak didukung'}</strong></div>`}
+$('#categoryBudgetForm').addEventListener('submit',e=>{e.preventDefault();proData.categoryBudgets[$('#budgetCategory').value.trim()] = Number($('#budgetCategoryAmount').value);e.target.reset();proSave();toast('Anggaran kategori disimpan.')});$('#categoryBudgetList').addEventListener('click',e=>{const b=e.target.closest('[data-budget-delete]');if(b){delete proData.categoryBudgets[b.dataset.budgetDelete];proSave()}});
+$('#plannerForm').addEventListener('submit',e=>{e.preventDefault();proData.planner.push({id:Date.now(),time:$('#planTime').value,title:$('#planTitle').value.trim()});e.target.reset();proSave()});$('#plannerList').addEventListener('click',e=>{const b=e.target.closest('[data-plan-delete]');if(b){proData.planner=proData.planner.filter(x=>x.id!=b.dataset.planDelete);proSave()}});$('#planClear').addEventListener('click',()=>{if(confirm('Hapus semua blok waktu hari ini?')){proData.planner=[];proSave()}});
+function assistantReply(q){q=q.toLowerCase();const open=data.tasks.filter(t=>!t.done),inc=data.transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0),exp=data.transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);if(q.includes('prioritas')||q.includes('tugas'))return open.length?'Saran: mulai dari tugas berprioritas Penting, lalu pilih satu tugas kecil. Tugas belum selesai: '+open.slice(0,4).map(t=>t.title).join(', '):'Semua tugas tercatat sudah selesai atau belum ada tugas. Bagus untuk membuat rencana realistis berikutnya.';if(q.includes('uang')||q.includes('keuangan')||q.includes('budget'))return `Total pemasukan tercatat ${money(inc)}, pengeluaran ${money(exp)}, saldo ${money(inc-exp)}. Catatan ini hanya berdasarkan transaksi yang kamu masukkan.`;if(q.includes('mood')||q.includes('perasaan'))return data.moods.length?`Ada ${data.moods.length} entri jurnal mood. Luangkan waktu membaca catatanmu dan perhatikan pola yang kamu rasakan.`:'Belum ada jurnal mood. Kamu bisa membuka MoodSpace dan menulis beberapa kalimat tentang harimu.';if(q.includes('ringkasan')||q.includes('hari'))return `Ringkasan: ${open.length} tugas belum selesai, ${data.habits.filter(h=>h.doneDate===todayISO()).length} kebiasaan ditandai hari ini, ${proData.events.filter(e=>e.date===todayISO()).length} agenda hari ini, dan ${data.moods.length} entri mood tersimpan.`;return 'Aku bisa membantu berdasarkan data lokal. Coba kata kunci: prioritas, tugas, keuangan, uang, mood, perasaan, ringkasan, atau hari ini.'}
+function sendAssistant(q){const box=$('#assistantChat');box.textContent+='\n\nKamu: '+q+'\nDaylight: '+assistantReply(q);box.scrollTop=box.scrollHeight}$('#assistantForm').addEventListener('submit',e=>{e.preventDefault();sendAssistant($('#assistantInput').value.trim());e.target.reset()});document.querySelectorAll('[data-ask]').forEach(b=>b.addEventListener('click',()=>sendAssistant(b.dataset.ask)));
+$('#enableNotifications').addEventListener('click',async()=>{if(!('Notification'in window)){toast('Browser ini tidak mendukung notifikasi.');return}try{await Notification.requestPermission();renderPro();toast('Status notifikasi diperbarui.')}catch(e){toast('Notifikasi tidak tersedia di konteks ini.')}});
+$('#proExport').addEventListener('click',()=>download('daylight-complete-backup-'+todayISO()+'.json',JSON.stringify({daylight:data,daylightPro:proData,exportedAt:new Date().toISOString()},null,2),'application/json'));$('#proImport').addEventListener('click',()=>$('#proImportFile').click());$('#proImportFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!confirm('Impor backup akan mengganti data Daylight saat ini. Lanjutkan?'))return;const d=x.daylight||x;if(!d||typeof d!=='object')throw Error();data={...fresh(),...d};if(x.daylightPro)proData={...proFresh(),...x.daylightPro};save();proSave();toast('Backup lengkap berhasil diimpor.')}catch(err){toast('Backup tidak valid atau tidak dapat dibaca.')}finally{e.target.value=''}});
+// Focus overlay has its own timer so it can be used independently of the original Pomodoro.
+let focusSecs=1500,focusTick=null;function paintFocus(){$('#focusClock').textContent=String(Math.floor(focusSecs/60)).padStart(2,'0')+':'+String(focusSecs%60).padStart(2,'0')}const focusOpen=document.createElement('button');focusOpen.className='btn secondary';focusOpen.textContent='⛶ Mode fokus layar penuh';focusOpen.style.margin='0 0 18px';focusOpen.addEventListener('click',()=>{$('#focusOverlay').classList.add('open')});$('#page-pro .welcome').after(focusOpen);$('#focusToggle').addEventListener('click',()=>{if(focusTick){clearInterval(focusTick);focusTick=null;$('#focusToggle').textContent='Lanjut fokus';return}$('#focusToggle').textContent='Jeda';focusTick=setInterval(()=>{focusSecs--;paintFocus();if(focusSecs<=0){clearInterval(focusTick);focusTick=null;focusSecs=0;paintFocus();$('#focusToggle').textContent='Sesi selesai';toast('Sesi fokus selesai!')}},1000)});$('#focusExit').addEventListener('click',()=>{$('#focusOverlay').classList.remove('open');clearInterval(focusTick);focusTick=null;focusSecs=1500;paintFocus();$('#focusToggle').textContent='Mulai fokus'});
+const originalSave=save;save=function(){originalSave();try{renderPro()}catch(e){}};
+renderPro();
+
+</script>
 </body>
-</html>
+  </html>
